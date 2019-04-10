@@ -1,0 +1,104 @@
+RUN	uk.gov.hmcts.ccd.financialremedy.simulation.FinancialRemedyPTSimulation		financialremedyptsimulation	1552421834206	 	2.0
+USER	Financial Remedy Solicitor User Journey	1	START	1552421834878	1552421834878
+REQUEST	Financial Remedy Solicitor User Journey	1		TX50_HMCTSReform_FinancialRemedy_Logout	1552421834904	1552421835343	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX50_HMCTSReform_FinancialRemedy_Logout_getLogout	1552421835379	1552421835429	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX50_HMCTSReform_FinancialRemedy_Logout_govuk-template-print.css	1552421835388	1552421835581	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX50_HMCTSReform_FinancialRemedy_Logout_gov.uk_logotype_crown_invert_trans.png	1552421835386	1552421835604	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX50_HMCTSReform_FinancialRemedy_Logout_govuk-template.js	1552421835387	1552421835610	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX50_HMCTSReform_FinancialRemedy_Logout_govuk-crest-2x.png	1552421835602	1552421835683	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX50_HMCTSReform_FinancialRemedy_Logout_open-government-licence_2x.png	1552421835605	1552421835691	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX50_HMCTSReform_FinancialRemedy_Logout_gov.uk_logotype_crown.png	1552421835611	1552421835698	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX50_HMCTSReform_FinancialRemedy_Logout_govuk-template.css	1552421835384	1552421835720	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX50_HMCTSReform_FinancialRemedy_Logout_getRedirectURL	1552421835381	1552421835770	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX50_HMCTSReform_FinancialRemedy_Logout_fonts.css	1552421835385	1552421836896	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login	1552421838206	1552421838714	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login_option_profile	1552421838723	1552421838882	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login_get_config	1552421838729	1552421838885	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login_govuk-template-print.css	1552421838728	1552421839015	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login_gov.uk_logotype_crown_invert_trans.png?	1552421838727	1552421839015	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login_govuk-template.js	1552421838728	1552421839018	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login_govuk-template.css	1552421838726	1552421839189	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login_govuk-crest-2x.png	1552421839017	1552421839189	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login_open-government-licence_2x.png	1552421839019	1552421839227	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login_gov.uk_logotype_crown.png	1552421839020	1552421839228	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login_redirectURL	1552421838724	1552421839187	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login_get_profile	1552421838723	1552421839433	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX01_HMCTSReform_FinancialRemedy_Login_fonts.css	1552421838726	1552421839965	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin	1552421841521	1552421842102	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_config	1552421842108	1552421842157	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_option_oauth2redirect	1552421842161	1552421842233	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_oauth2redirect	1552421842234	1552421842364	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_config	1552421842365	1552421842395	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_option_profile	1552421842396	1552421842437	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_profile	1552421842438	1552421843496	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_option_case-types_access_read	1552421845487	1552421845540	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_gov.uk_logotype_crown_invert_trans.png	1552421845541	1552421845576	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_case-types_access_read	1552421845579	1552421848253	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_options_work-basket-inputs	1552421850255	1552421850321	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_options_pagination_metadata?state=caseAdded	1552421850325	1552421850432	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_options_casesview_WORKBASKET&state=caseAdded&page=1	1552421850324	1552421850435	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_pagination_metadata?state=caseAdded	1552421850326	1552421850701	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_casesview_WORKBASKET&state=caseAdded&page=1	1552421850326	1552421850702	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_work-basket-inputs	1552421850325	1552421850831	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX03_HMCTSReform_FinancialRemedy_CreateCase_ClickCreqteCaseButton_options_case-types?access=create	1552421854796	1552421854844	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX03_HMCTSReform_FinancialRemedy_CreateCase_ClickCreqteCaseButton_get_case-types?access=create	1552421854846	1552421856168	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX04_HMCTSReform_FinancialRemedy_CreateCase_SolicitorstartCaseCreation_options_ignore-warning=false	1552421858167	1552421858211	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX04_HMCTSReform_FinancialRemedy_CreateCase_SolicitorstartCaseCreation_get_ignore-warning=false	1552421858213	1552421859706	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX04_HMCTSReform_FinancialRemedy_CreateCase_SolicitorstartCaseCreation_get_II_ignore-warning=false	1552421858214	1552421859738	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX05_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_options_validateSolicitorPage	1552421861126	1552421861280	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX05_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_POST_validateSolicitorPage	1552421861286	1552421861577	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX06_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_Post_DevorceDocument	1552421862747	1552421863785	OK	 
+USER	Financial Remedy Solicitor User Journey	2	START	1552421864895	1552421864895
+REQUEST	Financial Remedy Solicitor User Journey	2		TX50_HMCTSReform_FinancialRemedy_Logout	1552421864896	1552421865012	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX50_HMCTSReform_FinancialRemedy_Logout_getLogout	1552421865015	1552421865050	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX07_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_options_validateDivorcePage	1552421865096	1552421865203	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX50_HMCTSReform_FinancialRemedy_Logout_govuk-template.js	1552421865018	1552421865284	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX50_HMCTSReform_FinancialRemedy_Logout_gov.uk_logotype_crown_invert_trans.png	1552421865017	1552421865286	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX50_HMCTSReform_FinancialRemedy_Logout_govuk-template-print.css	1552421865018	1552421865288	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX50_HMCTSReform_FinancialRemedy_Logout_open-government-licence_2x.png	1552421865287	1552421865331	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX50_HMCTSReform_FinancialRemedy_Logout_govuk-template.css	1552421865016	1552421865345	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX50_HMCTSReform_FinancialRemedy_Logout_gov.uk_logotype_crown.png	1552421865289	1552421865364	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX50_HMCTSReform_FinancialRemedy_Logout_govuk-crest-2x.png	1552421865285	1552421865384	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX50_HMCTSReform_FinancialRemedy_Logout_getRedirectURL	1552421865016	1552421865447	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX50_HMCTSReform_FinancialRemedy_Logout_fonts.css	1552421865017	1552421865782	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX07_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_POST_validateDivorcePage	1552421865205	1552421866265	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX08_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_options_validateApplicantDetail	1552421867406	1552421867455	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX08_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_POST_validateApplicantDetail	1552421867457	1552421867702	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login	1552421867765	1552421867948	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login_option_profile	1552421867953	1552421867986	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login_get_config	1552421867957	1552421867990	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login_gov.uk_logotype_crown_invert_trans.png?	1552421867956	1552421868008	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login_govuk-template-print.css	1552421867957	1552421868008	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login_govuk-template.js	1552421867956	1552421868011	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login_open-government-licence_2x.png	1552421868011	1552421868084	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login_govuk-template.css	1552421867955	1552421868084	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login_gov.uk_logotype_crown.png	1552421868012	1552421868110	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login_redirectURL	1552421867954	1552421868109	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login_govuk-crest-2x.png	1552421868010	1552421868133	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login_get_profile	1552421867954	1552421868183	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX01_HMCTSReform_FinancialRemedy_Login_fonts.css	1552421867955	1552421868568	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX09_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_options_validateRespondentDetail	1552421869606	1552421869654	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin	1552421869597	1552421869779	KO	headerRegex((Location,(?<=code=)(.*))).find.exists, found nothing
+REQUEST	Financial Remedy Solicitor User Journey	1		TX09_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_POST_validateRespondentDetail	1552421869656	1552421869818	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_config	1552421869790	1552421869818	OK	 
+GROUP	Failed to build request TX02_HMCTSReform_FinancialRemedy_submitLogin_option_oauth2redirect: No attribute named 'authCode' is defined 	1552421869820
+GROUP	Failed to build request TX02_HMCTSReform_FinancialRemedy_submitLogin_get_oauth2redirect: No attribute named 'authCode' is defined 	1552421869821
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_config	1552421869822	1552421869855	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_option_profile	1552421869856	1552421869888	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_profile	1552421869889	1552421869962	KO	status.find.in(200,304,201,202,203,204,205,206,207,208,209), but actually found 401
+REQUEST	Financial Remedy Solicitor User Journey	1		TX10_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_options_validateNatureOfApplicationDetail	1552421871736	1552421871786	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_option_case-types_access_read	1552421871947	1552421871979	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_gov.uk_logotype_crown_invert_trans.png	1552421871980	1552421872038	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX10_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_POST_validateNatureOfApplicationDetail	1552421871788	1552421872064	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_case-types_access_read	1552421872039	1552421872093	KO	status.find.in(200,304,201,202,203,204,205,206,207,208,209), but actually found 401
+REQUEST	Financial Remedy Solicitor User Journey	1		TX11_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_options_validateOrderForChildrenDetail	1552421873386	1552421873432	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX11_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_POST_validateOrderForChildrenDetail	1552421873434	1552421873638	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_options_work-basket-inputs	1552421874106	1552421874229	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_options_pagination_metadata?state=caseAdded	1552421874232	1552421874269	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_options_casesview_WORKBASKET&state=caseAdded&page=1	1552421874232	1552421874272	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_casesview_WORKBASKET&state=caseAdded&page=1	1552421874233	1552421874359	KO	status.find.in(200,304,201,202,203,204,205,206,207,208,209), but actually found 401
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_get_work-basket-inputs	1552421874232	1552421874361	KO	status.find.in(200,304,201,202,203,204,205,206,207,208,209), but actually found 401
+REQUEST	Financial Remedy Solicitor User Journey	2		TX02_HMCTSReform_FinancialRemedy_submitLogin_pagination_metadata?state=caseAdded	1552421874234	1552421874381	KO	status.find.in(200,304,201,202,203,204,205,206,207,208,209), but actually found 401
+REQUEST	Financial Remedy Solicitor User Journey	1		TX12_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_options_validateAuthorisationDetail	1552421875044	1552421875148	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX12_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_POST_validateAuthorisationDetail	1552421875150	1552421875319	OK	 
+REQUEST	Financial Remedy Solicitor User Journey	1		TX13_HMCTSReform_FinancialRemedy_CreateCase_ConsentOrderApplication_POST_ConsentOrderDocument	1552421876877	1552421877528	OK	 

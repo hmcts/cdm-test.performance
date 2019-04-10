@@ -1,0 +1,10 @@
+{
+  "simulation": "uk.gov.hmcts.ccd.corecasedata.simulations.CCDUIPTSimulation",
+  "simulationId": "ccduiptsimulation",
+  "start": 1554290758869,
+  "description": "",
+  "scenarios": ["CCDUI"],
+  "assertions": [
+
+  ]
+}
