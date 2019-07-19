@@ -12,9 +12,11 @@
 		<scala.version>2.12.3</scala.version>
 		<encoding>UTF-8</encoding>
 
-		<gatling.version>2.3.0</gatling.version>
+		<gatling.version>3.1.1</gatling.version>
 
 		<scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
+		<gatling-maven-plugin.version>3.0.1</gatling-maven-plugin.version>
+
 	</properties>
 
 	<dependencyManagement>
@@ -62,13 +64,18 @@
 	</dependencies>
 
 	<build>
-		<testSourceDirectory>src/test/scala</testSourceDirectory>
+		<testSourceDirectory>src/gatling</testSourceDirectory>
 		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>net.alchim31.maven</groupId>
 					<artifactId>scala-maven-plugin</artifactId>
 					<version>${scala-maven-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>io.gatling</groupId>
+					<artifactId>gatling-maven-plugin</artifactId>
+					<version>${gatling-maven-plugin.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
