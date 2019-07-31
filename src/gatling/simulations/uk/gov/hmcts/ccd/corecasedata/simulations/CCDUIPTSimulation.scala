@@ -33,6 +33,9 @@ class CCDUIPTSimulation extends Simulation  {
        Search.searchResult,
        SelectCase.selectAndViewCase,
        //Upload & Download document steps
+       Search.searchRequest,
+       Search.searchResult,
+       SelectCase.selectAndViewCase,
        Logout.ccdLogout)}
 
   //setUp(CCDUIScenario.inject(atOnceUsers(1))).protocols(httpProtocol)

@@ -25,6 +25,7 @@ object ExecuteLogin {
 
   val submitLogin = exec(http("CDM_020_005_Login")
 		.post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+		.post("https://idam-web-public.perftest.platform.hmcts.net/login?response_type=code&client_id=ccd_gateway&redirect_uri=https%3A%2F%2Fccd-case-management-web-perftest.service.core-compute-perftest.internal%2Foauth2redirect")
 		.disableFollowRedirect
 				.headers(idam_header)
 				.formParam("username", "${CCDUserName}")
