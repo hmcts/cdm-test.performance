@@ -34,7 +34,7 @@ object Browse {
       .check(CurrentPageUrl.save)
       .check(CsrfCheck.save))
 
-		//.pause(MinThinkTime seconds, MaxThinkTime seconds)
+		.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
 		.feed(CCDCreateCaseFeeder)
 		.feed(feedUserData)

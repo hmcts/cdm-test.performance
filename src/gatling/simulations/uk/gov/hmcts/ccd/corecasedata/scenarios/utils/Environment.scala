@@ -20,9 +20,9 @@ object Environment {
  // val baseURL = "https://gateway.ccd.demo.platform.hmcts.net"
   //val idamURL = "https://idam.preprod.ccidam.reform.hmcts.net"
   //val ccdEnvurl = "https://www.ccd.demo.platform.hmcts.net" 
-  val minThinkTime = 1
-  val maxThinkTime = 2
-  val constantthinkTime = 2
+  val minThinkTime = 5
+  val maxThinkTime = 12
+  val constantthinkTime = 7
   val minWaitForNextIteration = 1
   val maxWaitForNextIteration = 2
   val HttpProtocol = http

@@ -83,6 +83,6 @@ object ExecuteLogin {
 			.get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases/pagination_metadata?state=TODO")
 			.headers(CommonHeader))
 
-		//.pause(MinThinkTime seconds, MaxThinkTime seconds)
+		.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
 }
