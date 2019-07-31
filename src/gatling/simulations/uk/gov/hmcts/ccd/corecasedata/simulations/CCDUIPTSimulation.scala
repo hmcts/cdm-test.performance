@@ -14,7 +14,8 @@ class CCDUIPTSimulation extends Simulation  {
     
 	val httpProtocol = Environment.HttpProtocol
 		.baseUrl(BaseURL)
-	  .proxy(Proxy("proxyout.reform.hmcts.net", 8080))
+	  //.proxy(Proxy("proxyout.reform.hmcts.net", 8080)
+    )
 
   val CCDUIScenario = scenario("CCDUI").repeat(1) {
      exec(
