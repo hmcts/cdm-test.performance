@@ -42,6 +42,6 @@ object Environment {
     "Accept-Language" -> "en-US,en;q=0.9",
     "Cache-Control" -> "max-age=0",
     "Connection" -> "keep-alive",
-    "Origin" -> idamURL,
+    //"Origin" -> idamURL,
     "Upgrade-Insecure-Requests" -> "1")
 }
