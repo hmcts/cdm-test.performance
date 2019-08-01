@@ -31,7 +31,7 @@ object Browse {
     .exec(http("CDM_010_010_HomePage")
       .get(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
       .headers(idam_header)
-      .disableFollowRedirect
+//      .disableFollowRedirect
       .check(CurrentPageUrl.save)
       .check(CsrfCheck.save))
 
