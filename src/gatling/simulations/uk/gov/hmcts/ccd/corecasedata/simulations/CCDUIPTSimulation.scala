@@ -14,14 +14,15 @@ class CCDUIPTSimulation extends Simulation  {
     
 	val httpProtocol = Environment.HttpProtocol
 		.baseUrl(BaseURL)
-	  .proxy(Proxy("proxyout.reform.hmcts.net", 8080))
+	  .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
+    .doNotTrackHeader("1")
 
   val CCDUIScenario = scenario("CCDUI").repeat(1) {
      exec(
        //Logout.ccdLogout,
        Browse.Homepage,
        ExecuteLogin.submitLogin,
-       CreateCaseObj.selectJurisdiction,
+       /*CreateCaseObj.selectJurisdiction,
        CreateCaseObj.startNewCaseCreation,
        Validate.validateFirstPage,
        Validate.validateSecondPage,
@@ -35,7 +36,7 @@ class CCDUIPTSimulation extends Simulation  {
        //Upload & Download document steps
        Search.searchRequest,
        Search.searchResult,
-       SelectCase.selectAndViewCase,
+       SelectCase.selectAndViewCase,*/
        Logout.ccdLogout)}
 
   //setUp(CCDUIScenario.inject(atOnceUsers(1))).protocols(httpProtocol)
