@@ -31,6 +31,7 @@ object Browse {
     .exec(http("CDM_010_010_HomePage")
       .get(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
       .headers(idam_header)
+      .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
       .disableFollowRedirect
       .check(CurrentPageUrl.save)
       .check(CsrfCheck.save))
