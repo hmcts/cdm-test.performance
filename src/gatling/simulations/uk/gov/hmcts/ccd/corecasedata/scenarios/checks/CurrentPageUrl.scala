@@ -6,7 +6,9 @@ import io.gatling.http.Predef._
 import io.gatling.http.check.HttpCheck
 import jodd.lagarto.dom.NodeSelector
 import io.gatling.http.check.url.CurrentLocationCheckType
-import io.gatling.core.check.extractor.css.CssCheckType
+//import io.gatling.core.check.extractor.css.CssCheckType
+import io.gatling.core.check.css.CssCheckType
+
 
 
 /*object CurrentPageCheck {

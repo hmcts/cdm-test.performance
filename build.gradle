@@ -40,15 +40,15 @@ dependencies {
     compile 'org.scala-lang:scala-library:2.12.8'
 
     gatlingCompile 'com.warrenstrange:googleauth:1.1.5'
-    compile group: 'io.gatling', name: 'gatling-app', version: '3.1.1'
+    compile group: 'io.gatling', name: 'gatling-app', version: '3.2.0'
 
-    compile group: 'io.gatling', name: 'gatling-recorder', version: '3.1.1'
-    compile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: '3.1.1'
+    compile group: 'io.gatling', name: 'gatling-recorder', version: '3.2.0'
+    compile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: '3.2.0'
 
 }
 
 gatling {
-    toolVersion '3.1.1'
+    toolVersion '3.2.0'
     scalaVersion '2.12.8'
     simulations = [ 'uk.gov.hmcts.ccd.corecasedata.simulations.CCDUIPTSimulation'
     ]
