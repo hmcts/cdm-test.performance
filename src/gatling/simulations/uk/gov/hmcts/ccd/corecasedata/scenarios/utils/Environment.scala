@@ -40,7 +40,8 @@ object Environment {
     "Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
     "Accept-Encoding" -> "gzip, deflate, br",
     "Accept-Language" -> "en-US,en;q=0.9",
-    //"Origin" -> "https://idam-web-public.aat.platform.hmcts.net",
+    "Cache-Control" -> "max-age=0",
+    "Connection" -> "keep-alive",
     "Origin" -> idamURL,
     "Upgrade-Insecure-Requests" -> "1")
 }
