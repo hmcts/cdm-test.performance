@@ -22,7 +22,7 @@ class CCDUIPTSimulation extends Simulation  {
        //Logout.ccdLogout,
        Browse.Homepage,
        ExecuteLogin.submitLogin,
-       /*CreateCaseObj.selectJurisdiction,
+       CreateCaseObj.selectJurisdiction,
        CreateCaseObj.startNewCaseCreation,
        Validate.validateFirstPage,
        Validate.validateSecondPage,
@@ -36,7 +36,7 @@ class CCDUIPTSimulation extends Simulation  {
        //Upload & Download document steps
        Search.searchRequest,
        Search.searchResult,
-       SelectCase.selectAndViewCase,*/
+       SelectCase.selectAndViewCase,
        Logout.ccdLogout)}
 
   //setUp(CCDUIScenario.inject(atOnceUsers(1))).protocols(httpProtocol)
