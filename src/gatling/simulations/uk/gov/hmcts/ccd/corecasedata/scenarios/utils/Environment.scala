@@ -22,8 +22,8 @@ object Environment {
   val minThinkTime = 5
   val maxThinkTime = 12
   val constantthinkTime = 7
-  val minWaitForNextIteration = 1
-  val maxWaitForNextIteration = 2
+  val minWaitForNextIteration = 30
+  val maxWaitForNextIteration = 90
   val HttpProtocol = http
 
   val commonHeader = Map(
