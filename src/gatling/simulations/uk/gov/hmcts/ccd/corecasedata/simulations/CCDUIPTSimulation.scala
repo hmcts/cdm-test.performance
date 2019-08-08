@@ -17,7 +17,7 @@ class CCDUIPTSimulation extends Simulation  {
 	  //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
-  val CCDUIScenario = scenario("CCDUI").repeat(1)
+  val CCDUIScenario = scenario("CCDUI").repeat(1000)
   {
     exec(
       //Logout.ccdLogout,
@@ -44,7 +44,7 @@ class CCDUIPTSimulation extends Simulation  {
 
   //setUp(CCDUIScenario.inject(atOnceUsers(1))).protocols(httpProtocol)
   setUp(CCDUIScenario
-    .inject(rampUsers(1) during (20 minutes))
+    .inject(rampUsers(500) during (20 minutes))
     .protocols(httpProtocol))
     .maxDuration(80 minutes)
 }
