@@ -14,7 +14,7 @@ object Search {
   val searchRequest = exec(http("CDM_160_005_SearchRequest")
 		.options("/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases/pagination_metadata"))
 
-		.exec(http("CDM_160_005_SearchRequest")
+		.exec(http("CDM_160_010_SearchRequest")
 			.get("/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases/pagination_metadata")
 			.headers(CommonHeader))
 
