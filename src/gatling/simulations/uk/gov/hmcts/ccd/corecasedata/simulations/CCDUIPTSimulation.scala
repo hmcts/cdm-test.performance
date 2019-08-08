@@ -14,7 +14,7 @@ class CCDUIPTSimulation extends Simulation  {
     
 	val httpProtocol = Environment.HttpProtocol
 		.baseUrl(BaseURL)
-	  //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
+	  .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
   val CCDUIScenario = scenario("CCDUI").repeat(5000)
@@ -44,7 +44,7 @@ class CCDUIPTSimulation extends Simulation  {
 
   //setUp(CCDUIScenario.inject(atOnceUsers(1))).protocols(httpProtocol)
   setUp(CCDUIScenario
-    .inject(rampUsers(1000) during (20 minutes))
+    .inject(rampUsers(10) during (20 minutes))
     .protocols(httpProtocol))
     .maxDuration(60 minutes)
 }
