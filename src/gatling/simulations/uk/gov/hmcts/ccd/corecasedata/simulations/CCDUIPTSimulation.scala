@@ -9,12 +9,12 @@ import io.gatling.jdbc.Predef._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
 
 class CCDUIPTSimulation extends Simulation  {
-  
+
   val BaseURL = Environment.baseURL
-    
-	val httpProtocol = Environment.HttpProtocol
-		.baseUrl(BaseURL)
-	  //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
+
+  val httpProtocol = Environment.HttpProtocol
+    .baseUrl(BaseURL)
+    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
   val CCDUIScenario = scenario("CCDUI").repeat(1000)
@@ -44,7 +44,7 @@ class CCDUIPTSimulation extends Simulation  {
 
   //setUp(CCDUIScenario.inject(atOnceUsers(1))).protocols(httpProtocol)
   setUp(CCDUIScenario
-    .inject(rampUsers(500) during (20 minutes))
+    .inject(rampUsers(1) during (1 minutes))
     .protocols(httpProtocol))
-    .maxDuration(80 minutes)
+    .maxDuration(5 minutes)
 }
