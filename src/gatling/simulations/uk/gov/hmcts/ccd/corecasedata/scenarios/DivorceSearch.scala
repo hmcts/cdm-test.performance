@@ -7,25 +7,25 @@ import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
 
-object ProbateSearch {
+object DivorceSearch {
 
   val BaseURL = Environment.baseURL
   val IdamURL = Environment.idamURL
   val CCDEnvurl = Environment.ccdEnvurl
   val CommonHeader = Environment.commonHeader
   val idam_header = Environment.idam_header
-  val feedUserData = csv("ProbateUserData.csv").circular
+  val feedUserData = csv("DivorceUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
 
-  val ProbateLogin = group("PB_Login") {
+  val DivorceLogin = group("DIV_Login") {
 
     exec(http("CDM_020_005_Login")
       .post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
       .disableFollowRedirect
       .headers(idam_header)
-      .formParam("username", "${ProbateUserName}")
-      .formParam("password", "${ProbateUserPassword}")
+      .formParam("username", "${DivorceUserName}")
+      .formParam("password", "${DivorceUserPassword}")
       .formParam("save", "Sign in")
       .formParam("selfRegistrationEnabled", "false")
       .formParam("_csrf", "${csrf}")
@@ -54,54 +54,55 @@ object ProbateSearch {
       .headers(CommonHeader))
 
     .exec(http("CDM_020_040_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types?access=read")
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types?access=read")
       .resources(http("CDM_020_045_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types?access=read")
+        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types?access=read")
         .headers(CommonHeader)))
 
     .exec(http("CDM_020_050_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/Caveat/work-basket-inputs"))
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/work-basket-inputs"))
 
     .exec(http("CDM_020_055_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/Caveat/cases?view=WORKBASKET&state=TODO&page=1"))
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&state=Submitted&page=1"))
 
     .exec(http("CDM_020_060_Login")
-      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/Caveat/cases/pagination_metadata?state=TODO"))
+      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata?state=Submitted"))
 
     .exec(http("CDM_020_065_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/Caveat/work-basket-inputs")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/work-basket-inputs")
       .headers(CommonHeader))
 
     .exec(http("CDM_020_070_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/Caveat/cases?view=WORKBASKET&state=TODO&page=1")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&state=Submitted&page=1")
       .headers(CommonHeader))
 
     .exec(http("CDM_020_075_Login")
-      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/Caveat/cases/pagination_metadata?state=TODO")
+      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata?state=Submitted")
       .headers(CommonHeader))
   }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-  val SearchResult = group("PB_SearchResults") {
+  val SearchResult = group("DIV_SearchResults"){
 
-    exec(http("PB_SearchResults_005")
-      .options("/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/Caveat/cases?view=WORKBASKET&page=1")
+    exec(http("DIV_SearchResults_005")
+      .options("/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&page=1")
       .headers(CommonHeader))
 
-    .exec(http("PB_SearchResults_010")
-      .options("/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/Caveat/cases/pagination_metadata")
+    .exec(http("DIV_SearchResults_010")
+      .options("/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata")
       .headers(CommonHeader))
 
-    .exec(http("PB_SearchResults_015")
-      .get("/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/Caveat/cases/pagination_metadata")
+    .exec(http("DIV_SearchResults_015")
+      .get("/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata")
       .headers(CommonHeader))
 
-    .exec(http("PB_SearchResults_020")
-      .get("/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/Caveat/cases?view=WORKBASKET&page=1")
+    .exec(http("DIV_SearchResults_020")
+      .get("/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&page=1")
       .headers(CommonHeader)
-      //.check(jsonPath("$[*]").ofType[Map[String, Any]].findAll.saveAs("theArray"))
-      )
+      //.check(jsonPath("$[*]").ofType[Map[String,Any]].findAll.saveAs("theArray"))
+    )
+
   }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)

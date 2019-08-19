@@ -52,6 +52,7 @@ gatling {
     scalaVersion '2.12.8'
     simulations = [ 'uk.gov.hmcts.ccd.corecasedata.simulations.CCDUIPTSimulation'
                     //'uk.gov.hmcts.ccd.corecasedata.simulations.CCDProbateSimulation'
+                    //'uk.gov.hmcts.ccd.corecasedata.simulations.CCDDivorceSimulation'
     ]
 }
 

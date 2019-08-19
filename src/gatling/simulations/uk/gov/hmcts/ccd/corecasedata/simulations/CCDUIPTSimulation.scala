@@ -44,7 +44,7 @@ class CCDUIPTSimulation extends Simulation  {
 
   //setUp(CCDUIScenario.inject(atOnceUsers(1))).protocols(httpProtocol)
   setUp(CCDUIScenario
-    .inject(rampUsers(50) during (20 minutes))
+    .inject(rampUsers(10) during (5 minutes))
     .protocols(httpProtocol))
-    .maxDuration(60 minutes)
+    .maxDuration(30 minutes)
 }

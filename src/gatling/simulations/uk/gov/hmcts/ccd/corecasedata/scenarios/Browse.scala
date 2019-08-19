@@ -20,26 +20,30 @@ object Browse {
     
  val feedUserData = csv("CCDUserData.csv").circular
  val feedUserDataPB = csv("ProbateUserData.csv").circular
+ val feedUserDataDV = csv("DivorceUserData.csv").circular
  val CCDCreateCaseFeeder = csv("CCD_CreateCase_TestData.csv").circular
 
  val CommonHeader = Environment.commonHeader
  val idam_header = Environment.idam_header
 
- val Homepage = exec(http("CDM_010_005_HomePage")
-  .get(CCDEnvurl + "/")
-    .headers(CommonHeader))
+ val Homepage = group("CDM_HomePage") {
 
-  .exec(http("CDM_010_010_HomePage")
-    .get(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-    .headers(idam_header)
-//      .disableFollowRedirect
-    .check(CurrentPageUrl.save)
-    .check(CsrfCheck.save))
+   exec(http("CDM_005_HomePage")
+     .get(CCDEnvurl + "/")
+     .headers(CommonHeader))
+
+   .exec(http("CDM_010_HomePage")
+     .get(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+     .headers(idam_header)
+     .check(CurrentPageUrl.save)
+     .check(CsrfCheck.save))
+ }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-   .feed(CCDCreateCaseFeeder)
-   .feed(feedUserData)
-   .feed(feedUserDataPB)
+    .feed(CCDCreateCaseFeeder)
+    .feed(feedUserData)
+    .feed(feedUserDataPB)
+    .feed(feedUserDataDV)
 
 }
