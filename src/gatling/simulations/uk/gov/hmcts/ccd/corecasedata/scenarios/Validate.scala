@@ -1,13 +1,10 @@
 package uk.gov.hmcts.ccd.corecasedata.scenarios
 
-import scala.concurrent.duration._
-
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import io.gatling.jdbc.Predef._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
-import io.gatling.core.feeder.FeederStrategy
-import scala.util.Random
+
+import scala.concurrent.duration._
 
 object Validate {
   
@@ -27,8 +24,8 @@ object Validate {
 			.post("/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/validate")
 				.headers(CommonHeader)
 				.body(StringBody("""{"data": {"TextField": "Performance Testing First Page Text ${FirstpageText}","NumberField": "${FirstpageNumberField}","YesOrNoField": "Yes","PhoneUKField": "02020002002","EmailField": "confirmation${FirstpageEmailRandNumber}@confirmation.com"},"event": {"id": "${PickCaseEventType}","summary": "","description": ""},"event_token": """"  + "${New_Case_event_token}" +   """","ignore_warning": false} """) ))
-				.pause(MinThinkTime seconds, MaxThinkTime seconds)
-  	
+
+		.pause(MinThinkTime seconds, MaxThinkTime seconds)
 			
 	val validateSecondPage = exec(http("CDM_060_005_ValidateSecondPage")
 		.options("/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/validate"))
@@ -53,7 +50,6 @@ object Validate {
         .check(regex("""/documents/(.+)"""").saveAs("Document_ID")))
 
 		.pause(MinThinkTime seconds, MaxThinkTime seconds)
-        //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
 		.doIf(session => session("Document_ID").as[String].isEmpty())
 			{
