@@ -29,8 +29,8 @@ object Search {
 		.exec(http("CDM_170_015_SearchResult")
 			.get("/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases?view=WORKBASKET&page=1")
 			.headers(CommonHeader)
-			//.check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id"))
-			.check(jsonPath("\"CaseReference\":\"[*]\"}").saveAs("SearchParam_Case_Id"))
+			.check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id"))
+			//.check(jsonPath("\"CaseReference\":\"[*]\"}").saveAs("SearchParam_Case_Id"))
 		)
 
 		.exec(http("CDM_170_020_SearchResult")

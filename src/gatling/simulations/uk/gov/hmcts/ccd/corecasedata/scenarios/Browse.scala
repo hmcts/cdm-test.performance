@@ -21,7 +21,7 @@ object Browse {
  val feedUserData = csv("CCDUserData.csv").circular
  val feedUserDataPB = csv("ProbateUserData.csv").circular
  val feedUserDataDV = csv("DivorceUserData.csv").circular
- val CCDCreateCaseFeeder = csv("CCD_CreateCase_TestData.csv").circular
+ //val CCDCreateCaseFeeder = csv("CCD_CreateCase_TestData.csv").circular
 
  val CommonHeader = Environment.commonHeader
  val idam_header = Environment.idam_header
@@ -38,10 +38,9 @@ object Browse {
      .check(CurrentPageUrl.save)
      .check(CsrfCheck.save))
  }
-
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .feed(CCDCreateCaseFeeder)
+    //.feed(CCDCreateCaseFeeder)
     .feed(feedUserData)
     .feed(feedUserDataPB)
     .feed(feedUserDataDV)

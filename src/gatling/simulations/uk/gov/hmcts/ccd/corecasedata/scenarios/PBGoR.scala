@@ -1,10 +1,10 @@
 package uk.gov.hmcts.ccd.corecasedata.scenarios
 
 import scala.concurrent.duration._
-
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
+import uk.gov.hmcts.ccd.corecasedata.scenarios.ExecuteLogin.{MaxThinkTime, MinThinkTime}
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
 
 object PBGoR {
@@ -94,6 +94,8 @@ object PBGoR {
       .headers(CommonHeader)
       .check(status.is(403)))
 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
   val PBPaymentSuccessful = exec(http("PBGoR_040_005_PaymentSuccessful")
     .get("/data/internal/cases/${New_Case_Id}/event-triggers/paymentSuccessApp?ignore-warning=false")
     .headers(headers_0)
@@ -108,6 +110,8 @@ object PBGoR {
       .post("/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${New_Case_Id}/events")
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"applicationSubmittedDate\": \"2019-03-01\"\n  },\n  \"event\": {\n    \"id\": \"paymentSuccessApp\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val PBDocUpload = exec(http("PGBoR_050_005_DocumentUpload")
     .get("/data/internal/cases/${New_Case_Id}/event-triggers/boUploadDocumentsForCaseCreated?ignore-warning=false")
@@ -135,15 +139,29 @@ object PBGoR {
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"1MB.pdf\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
   val PBSearchAndView = exec(http("PBGoR_060_005_SearchAndView")
     .get("/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/pagination_metadata")//?case_reference=1566214443240990")
     .headers(CommonHeader))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("PBGoR_060_010_SearchAndView")
       .get("/data/internal/cases//${New_Case_Id}")
       .headers(headers_8))
 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
     .exec(http("PBGoR_060_015_SearchAndView")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_15))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+  val PrintCaseID = exec{
+    session =>
+      println(session("New_Case_Id").as[String])
+      session
+  }
 }

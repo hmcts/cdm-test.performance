@@ -1,10 +1,7 @@
 package uk.gov.hmcts.ccd.corecasedata.scenarios.utils
 
-import uk.gov.hmcts.ccd.corecasedata.scenarios._
-import scala.concurrent.duration._
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import io.gatling.jdbc.Predef._
 
 object Environment {
 
@@ -19,8 +16,8 @@ object Environment {
  // val baseURL = "https://gateway.ccd.demo.platform.hmcts.net"
   //val idamURL = "https://idam.preprod.ccidam.reform.hmcts.net"
   //val ccdEnvurl = "https://www.ccd.demo.platform.hmcts.net" 
-  val minThinkTime = 1
-  val maxThinkTime = 1
+  val minThinkTime = 5
+  val maxThinkTime = 12
   val constantthinkTime = 7
   val minWaitForNextIteration = 300
   val maxWaitForNextIteration = 600

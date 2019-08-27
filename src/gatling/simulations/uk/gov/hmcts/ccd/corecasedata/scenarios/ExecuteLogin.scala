@@ -18,7 +18,7 @@ object ExecuteLogin {
 	val MaxWaitForNextIteration = Environment.maxWaitForNextIteration
 
 	val feedUserData = csv("CCDUserData.csv").circular
-	val CCDCreateCaseFeeder = csv("CCD_CreateCase_TestData.csv").circular
+	//val CCDCreateCaseFeeder = csv("CCD_CreateCase_TestData.csv").circular
 
 	val CommonHeader = Environment.commonHeader
 	val idam_header = Environment.idam_header

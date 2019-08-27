@@ -17,15 +17,18 @@ class CCDDivorceSimulation extends Simulation  {
     .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
-  val CCDDivorceScenario = scenario("CCDUI").repeat(1000)
+  val CCDDivorceScenario = scenario("CCDUI").repeat(1)
   {
     exec(
       //Logout.ccdLogout,
       Browse.Homepage,
-      DivorceSearch.DivorceLogin,
-      DivorceSearch.SearchResult,
-      Logout.ccdLogout,
-      WaitforNextIteration.waitforNextIteration)
+      //DivorceSearch.DivorceLogin,
+      ExecuteLogin.submitLogin,
+      DVExcep.DVCreateCase,
+      //DivorceSearch.SearchResult,
+      //Logout.ccdLogout,
+      //WaitforNextIteration.waitforNextIteration
+     )
   }
 
   //setUp(CCDDivorceScenario.inject(atOnceUsers(1))).protocols(httpProtocol)

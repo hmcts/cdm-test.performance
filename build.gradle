@@ -53,6 +53,7 @@ gatling {
     simulations = [ 'uk.gov.hmcts.ccd.corecasedata.simulations.CCDUIPTSimulation'
                     //'uk.gov.hmcts.ccd.corecasedata.simulations.CCDProbateSimulation'
                     //'uk.gov.hmcts.ccd.corecasedata.simulations.CCDDivorceSimulation'
+                    //'uk.gov.hmcts.ccd.corecasedata.simulations.CCDSSCSSimulation'
     ]
 }
 
