@@ -47,4 +47,3 @@ class CCDUIPTSimulation extends Simulation  {
     .protocols(httpProtocol))
     .maxDuration(80 minutes)
 }
-
