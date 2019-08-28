@@ -30,20 +30,9 @@ class CCDUIPTSimulation extends Simulation  {
       Search.searchRequest,
       Search.searchResult,
       SelectCase.selectAndViewCase,
-<<<<<<< Updated upstream
       Logout.ccdLogout,
       WaitforNextIteration.waitforNextIteration
      )
-  }
-
-  //setUp(CCDUIScenario.inject(atOnceUsers(1))).protocols(httpProtocol)
-  setUp(CCDUIScenario
-    .inject(rampUsers(1000) during (20 minutes))
-    .protocols(httpProtocol))
-    .maxDuration(80 minutes)
-}
-=======
-      Logout.ccdLogout)
   }
 
   val CCDProbateScenario = scenario("CCDPB").repeat(1) {
@@ -76,4 +65,3 @@ class CCDUIPTSimulation extends Simulation  {
     .protocols(httpProtocol)
     //.maxDuration(1 minutes)
 }
->>>>>>> Stashed changes
