@@ -12,7 +12,7 @@ object SSCS {
   val CCDEnvurl = Environment.ccdEnvurl
   val CommonHeader = Environment.commonHeader
   val idam_header = Environment.idam_header
-  //val feedUserData = csv("ProbateUserData.csv").circular
+  val feedUserData = csv("SSCSUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
 
@@ -55,8 +55,8 @@ object SSCS {
       .post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
       .disableFollowRedirect
       .headers(idam_header)
-      .formParam("username", "kapil.jain@hmcts.net")
-      .formParam("password", "Password12")
+      .formParam("username", "${SSCSUserName}")
+      .formParam("password", "${SSCSUserPassword}")
       .formParam("save", "Sign in")
       .formParam("selfRegistrationEnabled", "false")
       .formParam("_csrf", "${csrf}")

@@ -1,11 +1,11 @@
 package uk.gov.hmcts.ccd.corecasedata.scenarios
 
-import scala.concurrent.duration._
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import io.gatling.jdbc.Predef._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.checks.{CsrfCheck, CurrentPageUrl}
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
+
+import scala.concurrent.duration._
 
 object Browse {
 
@@ -21,6 +21,7 @@ object Browse {
  val feedUserData = csv("CCDUserData.csv").circular
  val feedUserDataPB = csv("ProbateUserData.csv").circular
  val feedUserDataDV = csv("DivorceUserData.csv").circular
+ val feedUserDataSSCS = csv("SSCSUserData.csv").circular
  //val CCDCreateCaseFeeder = csv("CCD_CreateCase_TestData.csv").circular
 
  val CommonHeader = Environment.commonHeader
@@ -44,5 +45,6 @@ object Browse {
     .feed(feedUserData)
     .feed(feedUserDataPB)
     .feed(feedUserDataDV)
+    .feed(feedUserDataSSCS)
 
 }

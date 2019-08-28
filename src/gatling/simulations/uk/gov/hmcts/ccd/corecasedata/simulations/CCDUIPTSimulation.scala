@@ -2,8 +2,9 @@ package uk.gov.hmcts.ccd.corecasedata.simulations
 
 import io.gatling.core.Predef._
 import io.gatling.core.scenario.Simulation
+import io.gatling.http.Predef.Proxy
 import uk.gov.hmcts.ccd.corecasedata.scenarios._
-import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
+import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 
 import scala.concurrent.duration._
 
@@ -16,7 +17,7 @@ class CCDUIPTSimulation extends Simulation  {
     //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
-  val CCDUIScenario = scenario("CCDUI").repeat(1000)
+  val CCDUIScenario = scenario("CCDUI").repeat(1)
   {
     exec(
       Browse.Homepage,
@@ -31,7 +32,7 @@ class CCDUIPTSimulation extends Simulation  {
       Search.searchResult,
       SelectCase.selectAndViewCase,
       Logout.ccdLogout,
-      WaitforNextIteration.waitforNextIteration
+      //WaitforNextIteration.waitforNextIteration
      )
   }
 
@@ -43,7 +44,9 @@ class CCDUIPTSimulation extends Simulation  {
       PBGoR.PBPaymentSuccessful,
       PBGoR.PBDocUpload,
       PBGoR.PBSearchAndView,
-      Logout.ccdLogout)
+      Logout.ccdLogout
+      //WaitforNextIteration.waitforNextIteration
+    )
   }
 
   val CCDSSCSScenario = scenario("CCDSSCS").repeat(1)
@@ -55,7 +58,9 @@ class CCDUIPTSimulation extends Simulation  {
       SSCS.PrintCaseID,
       SSCS.SSCSDocUpload,
       SSCS.SSCSSearchAndView,
-      Logout.ccdLogout)
+      Logout.ccdLogout
+      //WaitforNextIteration.waitforNextIteration
+    )
   }
 
   setUp(
