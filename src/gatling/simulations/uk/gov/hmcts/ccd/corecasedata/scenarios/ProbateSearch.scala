@@ -1,11 +1,10 @@
 package uk.gov.hmcts.ccd.corecasedata.scenarios
 
-import scala.concurrent.duration._
-
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import io.gatling.jdbc.Predef._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
+
+import scala.concurrent.duration._
 
 object ProbateSearch {
 
@@ -79,9 +78,9 @@ object ProbateSearch {
     .exec(http("CDM_020_075_Login")
       .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/Caveat/cases/pagination_metadata?state=TODO")
       .headers(CommonHeader))
-  }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+  }
 
   val SearchResult = group("PB_SearchResults") {
 
@@ -102,8 +101,7 @@ object ProbateSearch {
       .headers(CommonHeader)
       //.check(jsonPath("$[*]").ofType[Map[String, Any]].findAll.saveAs("theArray"))
       )
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
 }

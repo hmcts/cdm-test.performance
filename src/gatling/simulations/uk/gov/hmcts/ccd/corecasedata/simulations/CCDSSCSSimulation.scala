@@ -1,12 +1,12 @@
 package uk.gov.hmcts.ccd.corecasedata.simulations
 
-import scala.concurrent.duration._
-import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import io.gatling.core.Predef._
-import io.gatling.http.Predef._
 import io.gatling.core.scenario.Simulation
-import io.gatling.jdbc.Predef._
+import io.gatling.http.Predef._
+import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
+
+import scala.concurrent.duration._
 
 class CCDSSCSSimulation extends Simulation {
 
@@ -21,19 +21,16 @@ class CCDSSCSSimulation extends Simulation {
   {
     exec(
       Browse.Homepage,
-      ExecuteLogin.submitLogin,
-      //ProbateSearch.ProbateLogin,
+      SSCS.SSCSLogin,
       SSCS.SSCSCreateCase,
-      //PBGoR.PrintCaseID,
-     // Logout.ccdLogout
+      SSCS.PrintCaseID,
+      SSCS.SSCSDocUpload,
+      SSCS.SSCSSearchAndView,
+      Logout.ccdLogout
     )
-    //WaitforNextIteration.waitforNextIteration)
   }
 
-  //setUp(CCDProbateScenario.inject(atOnceUsers(1))).protocols(httpProtocol)
   setUp(CCDSSCSScenario
     .inject(rampUsers(1) during (1 minutes))
     .protocols(httpProtocol))
-    .maxDuration(1 minutes)
-
 }

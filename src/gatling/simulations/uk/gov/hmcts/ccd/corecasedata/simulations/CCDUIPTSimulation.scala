@@ -19,7 +19,6 @@ class CCDUIPTSimulation extends Simulation  {
   val CCDUIScenario = scenario("CCDUI").repeat(1000)
   {
     exec(
-      //Logout.ccdLogout,
       Browse.Homepage,
       ExecuteLogin.submitLogin,
       CreateCaseObj.selectJurisdiction,
@@ -28,13 +27,10 @@ class CCDUIPTSimulation extends Simulation  {
       Validate.validateSecondPage,
       Validate.validateThirdPage,
       SubmitCase.checkyouranswersNSubmit,
-      /*Search.searchRequest,
-      Search.searchResult,
-      SelectCase.selectAndViewCase,*/
-      //Upload & Download document steps
       Search.searchRequest,
       Search.searchResult,
       SelectCase.selectAndViewCase,
+<<<<<<< Updated upstream
       Logout.ccdLogout,
       WaitforNextIteration.waitforNextIteration
      )
@@ -46,3 +42,38 @@ class CCDUIPTSimulation extends Simulation  {
     .protocols(httpProtocol))
     .maxDuration(80 minutes)
 }
+=======
+      Logout.ccdLogout)
+  }
+
+  val CCDProbateScenario = scenario("CCDPB").repeat(1) {
+    exec(
+      Browse.Homepage,
+      ProbateSearch.ProbateLogin,
+      PBGoR.PBCreateCase,
+      PBGoR.PBPaymentSuccessful,
+      PBGoR.PBDocUpload,
+      PBGoR.PBSearchAndView,
+      Logout.ccdLogout)
+  }
+
+  val CCDSSCSScenario = scenario("CCDSSCS").repeat(1)
+  {
+    exec(
+      Browse.Homepage,
+      SSCS.SSCSLogin,
+      SSCS.SSCSCreateCase,
+      SSCS.PrintCaseID,
+      SSCS.SSCSDocUpload,
+      SSCS.SSCSSearchAndView,
+      Logout.ccdLogout)
+  }
+
+  setUp(
+    CCDUIScenario.inject(rampUsers(1) during (1 minutes)),
+    CCDProbateScenario.inject(rampUsers(1) during (1 minutes)),
+    CCDSSCSScenario.inject(rampUsers(1) during (1 minutes)))
+    .protocols(httpProtocol)
+    //.maxDuration(1 minutes)
+}
+>>>>>>> Stashed changes

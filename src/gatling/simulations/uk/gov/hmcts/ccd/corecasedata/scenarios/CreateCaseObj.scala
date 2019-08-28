@@ -1,10 +1,10 @@
 package uk.gov.hmcts.ccd.corecasedata.scenarios
 
-import scala.concurrent.duration._
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import io.gatling.jdbc.Predef._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
+
+import scala.concurrent.duration._
 import scala.util.Random
 
 object CreateCaseObj {
@@ -30,40 +30,44 @@ object CreateCaseObj {
   private def caseSummaryText(): String = rng.alphanumeric.take(20).mkString
   private def caseDescriptionText(): String = rng.alphanumeric.take(30).mkString
     
-  val selectJurisdiction = exec(_.setAll(
-    ("FirstpageText", firstpageText()),
-    ("FirstpageNumberField", firstpageNumberField()),
-    ("FirstpageEmailRandNumber", firstpageEmailRandNumber()),
-    ("FirstpageMoneyField",firstpageMoneyField()),
-    ("SecondpageText",secondpageText()),
-    ("ThirdpageText",thirdpageText()),
-    ("ThirdpageNestedNumberField",thirdpageNestedNumberField()),
-    ("CaseSummaryText",caseSummaryText()),
-    ("CaseDescriptionText",caseDescriptionText()),
-    ("PickCaseEventType",PickCaseType())
+  val selectJurisdiction = group("AT_Create") {
+    exec(_.setAll(
+      ("FirstpageText", firstpageText()),
+      ("FirstpageNumberField", firstpageNumberField()),
+      ("FirstpageEmailRandNumber", firstpageEmailRandNumber()),
+      ("FirstpageMoneyField",firstpageMoneyField()),
+      ("SecondpageText",secondpageText()),
+      ("ThirdpageText",thirdpageText()),
+      ("ThirdpageNestedNumberField",thirdpageNestedNumberField()),
+      ("CaseSummaryText",caseSummaryText()),
+      ("CaseDescriptionText",caseDescriptionText()),
+      ("PickCaseEventType",PickCaseType())
     ))
 
-		.exec(http("CDM_030_005_SelectJurisdiction")
-			.options("/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=create"))
+      .exec(http("CDM_030_005_SelectJurisdiction")
+        .options("/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=create"))
 
-    .exec(http("CDM_030_010_SelectJurisdiction")
-      .get("/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=create")
-	  		.headers(CommonHeader))
-
-		.pause(MinThinkTime seconds, MaxThinkTime seconds)
-		
-  val startNewCaseCreation = exec(http("CDM_040_005_StartCreateCase")
-    .options("/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/event-triggers/${PickCaseEventType}?ignore-warning=false"))
-
-    .exec(http("CDM_040_010_StartCreateCase")
-      .get("/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/event-triggers/${PickCaseEventType}?ignore-warning=false")
+      .exec(http("CDM_030_010_SelectJurisdiction")
+        .get("/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=create")
         .headers(CommonHeader))
 
-    .exec(http("CDM_040_015_StartCreateCase")
-      .get("/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/event-triggers/${PickCaseEventType}?ignore-warning=false")
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+  }
+		
+  val startNewCaseCreation = group("AT_Create") {
+    exec(http("CDM_040_005_StartCreateCase")
+      .options("/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/event-triggers/${PickCaseEventType}?ignore-warning=false"))
+
+      .exec(http("CDM_040_010_StartCreateCase")
+        .get("/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/event-triggers/${PickCaseEventType}?ignore-warning=false")
+        .headers(CommonHeader))
+
+      .exec(http("CDM_040_015_StartCreateCase")
+        .get("/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/event-triggers/${PickCaseEventType}?ignore-warning=false")
         .check(jsonPath("$.event_token").saveAs("New_Case_event_token"))
         .headers(CommonHeader))
 
-		.pause(MinThinkTime seconds, MaxThinkTime seconds)
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+  }
   
 }
