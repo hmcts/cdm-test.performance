@@ -7,7 +7,7 @@ import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 
 import scala.concurrent.duration._
 
-class CCDUIPTSimulation extends Simulation  {
+class CCDUIPTSimulation extends Simulation {
 
   val BaseURL = Environment.baseURL
 

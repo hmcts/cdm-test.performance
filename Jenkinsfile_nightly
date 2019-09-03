@@ -17,7 +17,7 @@ properties([
 @Library("Infrastructure") 
 
 
-def product = "cdm"
+def product = "ccd"
 def component = "case-worker"
 
 withNightlyPipeline("java", product, component) {
@@ -34,10 +34,4 @@ withNightlyPipeline("java", product, component) {
 
     //enableSlackNotifications('#jui-nightly-builds')
 
-}
-
-withPipeline(type, product, component) {
-
-    // add this!
-    enablePerformanceTest()
 }
