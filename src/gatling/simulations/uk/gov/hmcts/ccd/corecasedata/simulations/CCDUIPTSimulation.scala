@@ -96,11 +96,11 @@ class CCDUIPTSimulation extends Simulation  {
   }
 
   setUp(
-    CCDUIScenario.inject(rampUsers(1) during (10 minutes)),
-    CCDProbateScenario.inject(rampUsers(1) during (10 minutes)),
-    CCDSSCSScenario.inject(rampUsers(1) during (10 minutes)),
-    CCDCMCScenario.inject(rampUsers(1) during (10 minutes)),
-    CCDDivScenario.inject(rampUsers(1) during (10 minutes))
+    CCDUIScenario.inject(rampUsers(10) during (10 minutes)),
+    CCDProbateScenario.inject(rampUsers(10) during (10 minutes)),
+    CCDSSCSScenario.inject(rampUsers(10) during (10 minutes)),
+    CCDCMCScenario.inject(rampUsers(10) during (10 minutes)),
+    CCDDivScenario.inject(rampUsers(10) during (10 minutes))
   )
     .protocols(httpProtocol)
   //.maxDuration(1 minutes)
