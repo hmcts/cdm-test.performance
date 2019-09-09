@@ -16,7 +16,7 @@ class CCDUIPTSimulation extends Simulation  {
     //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
-  val CCDUIScenario = scenario("CCDUI").repeat(1)
+  val CCDUIScenario = scenario("CCDUI").repeat(10)
   {
     exec(
       Browse.Homepage,
@@ -33,7 +33,7 @@ class CCDUIPTSimulation extends Simulation  {
       Search.searchResult,
       SelectCase.selectAndViewCase,
       Logout.ccdLogout,
-      //WaitforNextIteration.waitforNextIteration
+      WaitforNextIteration.waitforNextIteration
     )
   }
 
@@ -46,8 +46,8 @@ class CCDUIPTSimulation extends Simulation  {
       PBGoR.PBPaymentSuccessful,
       PBGoR.PBDocUpload,
       PBGoR.PBSearchAndView,
-      Logout.ccdLogout
-      //WaitforNextIteration.waitforNextIteration
+      Logout.ccdLogout,
+      WaitforNextIteration.waitforNextIteration
     )
   }
 
@@ -61,8 +61,8 @@ class CCDUIPTSimulation extends Simulation  {
       SSCS.PrintCaseID,
       SSCS.SSCSDocUpload,
       SSCS.SSCSSearchAndView,
-      Logout.ccdLogout
-      //WaitforNextIteration.waitforNextIteration
+      Logout.ccdLogout,
+      WaitforNextIteration.waitforNextIteration
     )
   }
 
@@ -77,8 +77,8 @@ class CCDUIPTSimulation extends Simulation  {
       CMC.CMCCreateCase,
       CMC.CMCSubmitPayment,
       CMC.CMCSearchAndView,
-      Logout.ccdLogout
-      //WaitforNextIteration.waitforNextIteration
+      Logout.ccdLogout,
+      WaitforNextIteration.waitforNextIteration
     )
   }
 
@@ -91,16 +91,16 @@ class CCDUIPTSimulation extends Simulation  {
       DVExcep.DVDocUpload,
       DVExcep.DVSearchAndView,
       Logout.ccdLogout,
-      //WaitforNextIteration.waitforNextIteration
+      WaitforNextIteration.waitforNextIteration
     )
   }
 
   setUp(
-    CCDUIScenario.inject(rampUsers(10) during (10 minutes)),
-    CCDProbateScenario.inject(rampUsers(10) during (10 minutes)),
-    CCDSSCSScenario.inject(rampUsers(10) during (10 minutes)),
-    CCDCMCScenario.inject(rampUsers(10) during (10 minutes)),
-    CCDDivScenario.inject(rampUsers(10) during (10 minutes))
+    //CCDUIScenario.inject(rampUsers(10) during (10 minutes)),
+    CCDProbateScenario.inject(rampUsers(30) during (20 minutes)),
+    CCDSSCSScenario.inject(rampUsers(30) during (20 minutes)),
+    CCDCMCScenario.inject(rampUsers(30) during (20 minutes)),
+    CCDDivScenario.inject(rampUsers(30) during (20 minutes))
   )
     .protocols(httpProtocol)
   //.maxDuration(1 minutes)
