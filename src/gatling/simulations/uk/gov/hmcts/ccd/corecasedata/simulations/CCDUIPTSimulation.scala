@@ -7,7 +7,7 @@ import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 
 import scala.concurrent.duration._
 
-class CCDUIPTSimulation extends Simulation {
+class CCDUIPTSimulation extends Simulation  {
 
   val BaseURL = Environment.baseURL
 
@@ -21,6 +21,8 @@ class CCDUIPTSimulation extends Simulation {
     exec(
       Browse.Homepage,
       ExecuteLogin.submitLogin,
+      CreateCaseObj.setJurisdiction,
+      CreateCaseObj.setCaseType,
       CreateCaseObj.selectJurisdiction,
       CreateCaseObj.startNewCaseCreation,
       Validate.validateFirstPage,
@@ -32,13 +34,14 @@ class CCDUIPTSimulation extends Simulation {
       SelectCase.selectAndViewCase,
       Logout.ccdLogout,
       //WaitforNextIteration.waitforNextIteration
-     )
+    )
   }
 
   val CCDProbateScenario = scenario("CCDPB").repeat(1) {
     exec(
       Browse.Homepage,
-      ProbateSearch.ProbateLogin,
+      ExecuteLogin.submitLogin,
+      //ProbateSearch.ProbateLogin,
       PBGoR.PBCreateCase,
       PBGoR.PBPaymentSuccessful,
       PBGoR.PBDocUpload,
@@ -52,7 +55,8 @@ class CCDUIPTSimulation extends Simulation {
   {
     exec(
       Browse.Homepage,
-      SSCS.SSCSLogin,
+      ExecuteLogin.submitLogin,
+      //SSCS.SSCSLogin,
       SSCS.SSCSCreateCase,
       SSCS.PrintCaseID,
       SSCS.SSCSDocUpload,
@@ -68,7 +72,8 @@ class CCDUIPTSimulation extends Simulation {
       Browse.Homepage,
       CMC.setJurisdiction,
       CMC.setCaseType,
-      CMC.CMCLogin,
+      ExecuteLogin.submitLogin,
+      //CMC.CMCLogin,
       CMC.CMCCreateCase,
       CMC.CMCSubmitPayment,
       CMC.CMCSearchAndView,
@@ -76,12 +81,27 @@ class CCDUIPTSimulation extends Simulation {
       //WaitforNextIteration.waitforNextIteration
     )
   }
+
+  val CCDDivScenario = scenario("CCDDIV").repeat(1)
+  {
+    exec(
+      Browse.Homepage,
+      ExecuteLogin.submitLogin,
+      DVExcep.DVCreateCase,
+      DVExcep.DVDocUpload,
+      DVExcep.DVSearchAndView,
+      Logout.ccdLogout,
+      //WaitforNextIteration.waitforNextIteration
+    )
+  }
+
   setUp(
-    CCDUIScenario.inject(rampUsers(1) during (1 minutes)),
-    CCDProbateScenario.inject(rampUsers(1) during (1 minutes)),
-    CCDSSCSScenario.inject(rampUsers(1) during (1 minutes)),
-    CCDCMCScenario.inject(rampUsers(1) during (1 minutes))
+    CCDUIScenario.inject(rampUsers(10) during (10 minutes)),
+    CCDProbateScenario.inject(rampUsers(10) during (10 minutes)),
+    CCDSSCSScenario.inject(rampUsers(10) during (10 minutes)),
+    CCDCMCScenario.inject(rampUsers(10) during (10 minutes)),
+    CCDDivScenario.inject(rampUsers(10) during (10 minutes))
   )
     .protocols(httpProtocol)
-    //.maxDuration(1 minutes)
+  //.maxDuration(1 minutes)
 }

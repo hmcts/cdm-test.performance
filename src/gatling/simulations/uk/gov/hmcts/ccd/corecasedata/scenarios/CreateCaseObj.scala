@@ -29,7 +29,23 @@ object CreateCaseObj {
   private def thirdpageNestedNumberField(): Int = rng.nextInt(99999999)
   private def caseSummaryText(): String = rng.alphanumeric.take(20).mkString
   private def caseDescriptionText(): String = rng.alphanumeric.take(30).mkString
-    
+
+  val setJurisdiction = exec(session => {
+    session.set("Jurisdiction", "AUTOTEST1")
+  })
+    .exec(session => {
+      println(session)
+      session
+    })
+
+  val setCaseType = exec(session => {
+    session.set("CaseType", "AAT_PRIVATE")
+  })
+    .exec(session => {
+      println(session)
+      session
+    })
+
   val selectJurisdiction = group("AT_Create") {
     exec(_.setAll(
       ("FirstpageText", firstpageText()),
