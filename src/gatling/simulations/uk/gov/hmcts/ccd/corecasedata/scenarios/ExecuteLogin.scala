@@ -38,70 +38,69 @@ object ExecuteLogin {
 			.check(status.in(200, 302)))
 			.exitHereIfFailed
 
-		.exec(http("CDM_020_010_Login")
-			.get(CCDEnvurl + "/config")
-			.headers(CommonHeader))
+			.exec(http("CDM_020_010_Login")
+				.get(CCDEnvurl + "/config")
+				.headers(CommonHeader))
 			.exitHereIfFailed
 
-		.exec(http("CDM_020_015_Login")
-			.options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-			.headers(CommonHeader))
+			.exec(http("CDM_020_015_Login")
+				.options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+				.headers(CommonHeader))
 			.exitHereIfFailed
 
-		.exec(http("CDM_020_020_Login")
-			.get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-			.headers(CommonHeader))
+			.exec(http("CDM_020_020_Login")
+				.get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+				.headers(CommonHeader))
 			.exitHereIfFailed
 
-		.exec(http("CDM_020_025_Login")
-			.get(CCDEnvurl + "/config")
-			.headers(CommonHeader))
+			.exec(http("CDM_020_025_Login")
+				.get(CCDEnvurl + "/config")
+				.headers(CommonHeader))
 			.exitHereIfFailed
 
-		.exec(http("CDM_020_030_Login")
-			.options(BaseURL + "/data/caseworkers/:uid/profile"))
+			.exec(http("CDM_020_030_Login")
+				.options(BaseURL + "/data/caseworkers/:uid/profile"))
 			.exitHereIfFailed
 
-		.exec(http("CDM_020_035_Login")
-			.get(BaseURL + "/data/caseworkers/:uid/profile")
-			.headers(CommonHeader))
+			.exec(http("CDM_020_035_Login")
+				.get(BaseURL + "/data/caseworkers/:uid/profile")
+				.headers(CommonHeader))
 			.exitHereIfFailed
 
-		.exec(http("CDM_020_040_Login")
-			.options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=read")
-			.resources(http("CDM_020_045_Login")
-				.get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=read")
-				.headers(CommonHeader)))
+			.exec(http("CDM_020_040_Login")
+				.options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=read")
+				.resources(http("CDM_020_045_Login")
+					.get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=read")
+					.headers(CommonHeader)))
 			.exitHereIfFailed
 
-		.exec(http("CDM_020_050_Login")
-			.options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/work-basket-inputs"))
+			.exec(http("CDM_020_050_Login")
+				.options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/work-basket-inputs"))
 			.exitHereIfFailed
 
-		.exec(http("CDM_020_055_Login")
-			.options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
+			.exec(http("CDM_020_055_Login")
+				.options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
 			.exitHereIfFailed
 
-		.exec(http("CDM_020_060_Login")
-			.options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases/pagination_metadata?state=TODO"))
+			.exec(http("CDM_020_060_Login")
+				.options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases/pagination_metadata?state=TODO"))
 			.exitHereIfFailed
 
-		.exec(http("CDM_020_065_Login")
-			.get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/work-basket-inputs")
-			.headers(CommonHeader))
+			.exec(http("CDM_020_065_Login")
+				.get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/work-basket-inputs")
+				.headers(CommonHeader))
 			.exitHereIfFailed
 
-		.exec(http("CDM_020_070_Login")
-			.get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases?view=WORKBASKET&state=TODO&page=1")
-			.headers(CommonHeader))
+			.exec(http("CDM_020_070_Login")
+				.get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases?view=WORKBASKET&state=TODO&page=1")
+				.headers(CommonHeader))
 			.exitHereIfFailed
 
 			.exec(http("CDM_020_075_Login")
-			.get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases/pagination_metadata?state=TODO")
-			.headers(CommonHeader))
+				.get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases/pagination_metadata?state=TODO")
+				.headers(CommonHeader))
 			.exitHereIfFailed
+
+			.pause(MinThinkTime seconds, MaxThinkTime seconds)
 	}
-
-		.pause(MinThinkTime seconds, MaxThinkTime seconds)
-
 }
