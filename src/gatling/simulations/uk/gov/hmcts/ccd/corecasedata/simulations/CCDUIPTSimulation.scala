@@ -1,7 +1,6 @@
 package uk.gov.hmcts.ccd.corecasedata.simulations
 
 import io.gatling.core.Predef._
-import io.gatling.http.Predef._
 import io.gatling.core.scenario.Simulation
 import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
@@ -17,8 +16,8 @@ class CCDUIPTSimulation extends Simulation  {
     //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
-  private val loadProfile = rampUsers(10) during (10 minutes)
-  private val repeatValue = 10
+  private val loadProfile = rampUsers(50) during (20 minutes)
+  private val repeatValue = 50
 
   val CCDUIScenario = scenario("CCDUI").repeat(repeatValue)
   {
