@@ -1,6 +1,7 @@
 package uk.gov.hmcts.ccd.corecasedata.simulations
 
 import io.gatling.core.Predef._
+import io.gatling.http.Predef._
 import io.gatling.core.scenario.Simulation
 import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
@@ -16,7 +17,10 @@ class CCDUIPTSimulation extends Simulation  {
     //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
-  val CCDUIScenario = scenario("CCDUI").repeat(1)
+  private val loadProfile = rampUsers(10) during (10 minutes)
+  private val repeatValue = 10
+
+  val CCDUIScenario = scenario("CCDUI").repeat(repeatValue)
   {
     exec(
       Browse.Homepage,
@@ -37,7 +41,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDProbateScenario = scenario("CCDPB").repeat(100)
+  val CCDProbateScenario = scenario("CCDPB").repeat(repeatValue)
   {
     exec(
       Browse.Homepage,
@@ -52,7 +56,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDSSCSScenario = scenario("CCDSSCS").repeat(100)
+  val CCDSSCSScenario = scenario("CCDSSCS").repeat(repeatValue)
   {
     exec(
       Browse.Homepage,
@@ -67,7 +71,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDCMCScenario = scenario("CCDCMC").repeat(100)
+  val CCDCMCScenario = scenario("CCDCMC").repeat(repeatValue)
   {
     exec(
       Browse.Homepage,
@@ -83,7 +87,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDDivScenario = scenario("CCDDIV").repeat(100)
+  val CCDDivScenario = scenario("CCDDIV").repeat(repeatValue)
   {
     exec(
       Browse.Homepage,
@@ -97,12 +101,12 @@ class CCDUIPTSimulation extends Simulation  {
   }
 
   setUp(
-    //CCDUIScenario.inject(rampUsers(10) during (10 minutes)),
-    CCDProbateScenario.inject(rampUsers(10) during (20 minutes)),
-    CCDSSCSScenario.inject(rampUsers(10) during (20 minutes)),
-    CCDCMCScenario.inject(rampUsers(10) during (20 minutes)),
-    CCDDivScenario.inject(rampUsers(10) during (20 minutes))
+    CCDUIScenario.inject(loadProfile),
+    CCDProbateScenario.inject(loadProfile),
+    CCDSSCSScenario.inject(loadProfile),
+    CCDCMCScenario.inject(loadProfile),
+    CCDDivScenario.inject(loadProfile)
   )
     .protocols(httpProtocol)
-    .maxDuration(60 minutes)
+    //.maxDuration(60 minutes)
 }

@@ -17,10 +17,10 @@ object Environment {
   //val idamURL = "https://idam.preprod.ccidam.reform.hmcts.net"
   //val ccdEnvurl = "https://www.ccd.demo.platform.hmcts.net" 
   val minThinkTime = 10
-  val maxThinkTime = 20
+  val maxThinkTime = 15
   val constantthinkTime = 7
-  val minWaitForNextIteration = 300
-  val maxWaitForNextIteration = 600
+  val minWaitForNextIteration = 60
+  val maxWaitForNextIteration = 300
   val HttpProtocol = http
 
   val commonHeader = Map(
