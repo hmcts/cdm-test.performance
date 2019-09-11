@@ -4,7 +4,6 @@ import io.gatling.core.Predef._
 import io.gatling.core.scenario.Simulation
 import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
-
 import scala.concurrent.duration._
 
 class CCDUIPTSimulation extends Simulation  {
@@ -13,11 +12,14 @@ class CCDUIPTSimulation extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
+    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //This import is required for Proxy to work, IntelliJ sometimes removes it: import io.gatling.http.Predef._
     .doNotTrackHeader("1")
 
-  private val loadProfile = rampUsers(50) during (20 minutes)
-  private val repeatValue = 50
+  //This val controls the load profile PER JURISDICTION; if you set it to 100 users then it will run 500 users as there are 5 jurisdictions
+  private val loadProfile = rampUsers(1) during (1 minutes)
+
+  //This val controls how many times each jurisdiction journey repeats
+  private val repeatValue = 1
 
   val CCDUIScenario = scenario("CCDUI").repeat(repeatValue)
   {
@@ -45,7 +47,6 @@ class CCDUIPTSimulation extends Simulation  {
     exec(
       Browse.Homepage,
       ExecuteLogin.submitLogin,
-      //ProbateSearch.ProbateLogin,
       PBGoR.PBCreateCase,
       PBGoR.PBPaymentSuccessful,
       PBGoR.PBDocUpload,
@@ -60,7 +61,6 @@ class CCDUIPTSimulation extends Simulation  {
     exec(
       Browse.Homepage,
       ExecuteLogin.submitLogin,
-      //SSCS.SSCSLogin,
       SSCS.SSCSCreateCase,
       SSCS.PrintCaseID,
       SSCS.SSCSDocUpload,
@@ -77,7 +77,6 @@ class CCDUIPTSimulation extends Simulation  {
       CMC.setJurisdiction,
       CMC.setCaseType,
       ExecuteLogin.submitLogin,
-      //CMC.CMCLogin,
       CMC.CMCCreateCase,
       CMC.CMCSubmitPayment,
       CMC.CMCSearchAndView,
@@ -107,5 +106,5 @@ class CCDUIPTSimulation extends Simulation  {
     CCDDivScenario.inject(loadProfile)
   )
     .protocols(httpProtocol)
-    //.maxDuration(60 minutes)
+    //.maxDuration(80 minutes) //Enable this if you want to run for 1 hour and filter out the ramp up (usually 20 mins)
 }

@@ -12,16 +12,13 @@ object CreateUser {
   val CCDAPIEnvurl = Environment.baseURL
   val feedUserData = csv("CCDUserData.csv").circular
 
-  val headers_1 = Map( //ServiceAuthorization token can be called from http://rpe-service-auth-provider-perftest.service.core-compute-perftest.internal/testing-support/lease
-    "ServiceAuthorization" -> "Bearer ****copy token in here*****",
-    "Content-Type" -> "application/json",
-    "Accept" -> "application/json")
-
   val headers_0 = Map( //Authorization token needs to be provided by idam team
     "Authorization" -> "AdminApiAuthToken ****copy token in here*****",
     "Content-Type" -> "application/json")
 
-
+  //These requests assign the role to the user in idam
+  //Don't forget to obtain the AdminApiAuthToken from Shravan and insert into headers_0 above
+  //If a request fails, it is because that role has already been assigned to the user (usually returns a 415)
   val IdamUser = feed(feedUserData)
 
     .exec(http("request_1")
@@ -84,18 +81,33 @@ object CreateUser {
 
     .pause(5)
 
-
+  //These requests generate the bearer token and then assign the viewable roles in CCD
   val CreateUserProfile = feed(feedUserData)
 
-    .exec(http("request_4")
+    .exec(http("get_bearer_token")
+      .post("http://rpe-service-auth-provider-perftest.service.core-compute-perftest.internal/testing-support/lease")
+      .header("Content-Type", "application/json")
+      .body(StringBody("{\n\t\"microservice\": \"ccd_definition\"\n}"))
+      //.check(jsonPath("(.*)").saveAs("token"))
+      .check(bodyString.saveAs("token")))
+
+    /*.exec {
+      session =>
+        println(session("token").as[String])
+        session
+    }*/
+
+    .exec(http("ccd_userRole")
       .post("http://ccd-user-profile-api-perftest.service.core-compute-perftest.internal/user-profile/users")
-      .headers(headers_1)
+      //.headers(headers_1)
+      .header("Content-Type", "application/json")
+      .header("Accept", "application/json")
+      .header("ServiceAuthorization", "Bearer ${token}")
       .body(StringBody("{\n    \"id\": \"${CCDUserName}\",\n    \"jurisdictions\": [{\"id\": \"DIVORCE\"},{\"id\": \"AUTOTEST1\"},{\"id\": \"CMC\"},{\"id\": \"PROBATE\"},{\"id\": \"SSCS\"}],\n    \"work_basket_default_jurisdiction\": \"DIVORCE\",\n    \"work_basket_default_case_type\": \"DIVORCE\",\n    \"work_basket_default_state\": \"Submitted\"\n}")))
 
-    .exec {
+    /*.exec {
       session =>
         println(session("CCDUserName").as[String])
         session
-    }
-
+    }*/
 }
