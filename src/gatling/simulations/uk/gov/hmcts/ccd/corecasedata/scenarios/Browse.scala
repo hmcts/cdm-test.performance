@@ -23,6 +23,7 @@ object Browse {
  val feedUserDataPB = csv("ProbateUserData.csv").circular
  val feedUserDataDV = csv("DivorceUserData.csv").circular
  val feedUserDataSSCS = csv("SSCSUserData.csv").circular
+ val feedUserDataEthos = csv("EthosUserData.csv").circular
  //val CCDCreateCaseFeeder = csv("CCD_CreateCase_TestData.csv").circular
 
  val CommonHeader = Environment.commonHeader
@@ -48,5 +49,6 @@ object Browse {
     .feed(feedUserDataPB)
     .feed(feedUserDataDV)
     .feed(feedUserDataSSCS)
+    .feed(feedUserDataEthos)
 
 }

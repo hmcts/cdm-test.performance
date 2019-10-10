@@ -17,10 +17,10 @@ class CreateUser extends Simulation  {
     .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
-  val CreateIdam = scenario("CCDCreate").repeat(1)
+  val CreateIdam = scenario("CCDCreate").repeat(500)
   {
     exec(
-      CreateUser.IdamUser, //These requests add the roles in idam for the user
+      //CreateUser.IdamUser, //These requests add the roles in idam for the user
       CreateUser.CreateUserProfile //This requests sets the user profile in CCD, which controls what jurisdictions are visible to the user
     )
   }
@@ -28,4 +28,5 @@ class CreateUser extends Simulation  {
   setUp(
     CreateIdam.inject(rampUsers(1) during (1 minutes)))
     .protocols(httpProtocol)
+  //.maxDuration(1 minutes)
 }

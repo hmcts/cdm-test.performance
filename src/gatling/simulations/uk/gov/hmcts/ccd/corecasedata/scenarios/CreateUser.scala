@@ -12,13 +12,16 @@ object CreateUser {
   val CCDAPIEnvurl = Environment.baseURL
   val feedUserData = csv("CCDUserData.csv").circular
 
+  val headers_1 = Map( //ServiceAuthorization token can be called from http://rpe-service-auth-provider-perftest.service.core-compute-perftest.internal/testing-support/lease
+    "ServiceAuthorization" -> "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjY2RfZGVmaW5pdGlvbiIsImV4cCI6MTU3MDcyNjgwMn0.ku3UBt-yGuAyDBaicV7rP5DNSssARe342KC0mN1m2j-erar37iZQ47Cfi6UpXBzh-r3hiy7XruEIpNAzaWEPyg",
+    "Content-Type" -> "application/json",
+    "Accept" -> "application/json")
+
   val headers_0 = Map( //Authorization token needs to be provided by idam team
-    "Authorization" -> "AdminApiAuthToken ****copy token in here*****",
+    "Authorization" -> "AdminApiAuthToken ****** ",
     "Content-Type" -> "application/json")
 
-  //These requests assign the role to the user in idam
-  //Don't forget to obtain the AdminApiAuthToken from Shravan and insert into headers_0 above
-  //If a request fails, it is because that role has already been assigned to the user (usually returns a 415)
+
   val IdamUser = feed(feedUserData)
 
     .exec(http("request_1")
@@ -27,7 +30,9 @@ object CreateUser {
       .headers(headers_0)
       .check(jsonPath("$.id").saveAs("userId")))
 
-    .exec(http("1_caseworker")
+    //4708 failed
+
+    /*.exec(http("1_caseworker")
       .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/f05a01aa-e242-40a7-8ee5-41abe95bac3e")
       .headers(headers_0))
 
@@ -73,41 +78,56 @@ object CreateUser {
 
     .exec(http("12_caseworker-divorce-courtadmin")
       .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/75a1264c-603c-4109-beff-00eacc9a1ff4")
-      .headers(headers_0))
+      .headers(headers_0))*/
 
     .exec(http("13_payments")
-      .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/3b8f1382-cd90-4fb0-96e8-82d3eb537e26")
+    .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/3b8f1382-cd90-4fb0-96e8-82d3eb537e26")
+    .headers(headers_0))
+
+    /*.exec(http("1_caseworker-employment")
+      .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/c3d17c1b-0426-4e6f-8367-002947097959")
       .headers(headers_0))
 
-    .pause(5)
+    .exec(http("2_caseworker-employment-tribunal-manchester")
+      .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/5bb6d816-8b30-44bf-b327-c85d20b39339")
+      .headers(headers_0))
 
-  //These requests generate the bearer token and then assign the viewable roles in CCD
+    .exec(http("3_caseworker-employment-tribunal-manchester-caseofficer")
+      .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/f262de91-cf3d-4e99-b769-20e1c97d3772")
+      .headers(headers_0))
+
+    .exec(http("4_caseworker-employment-tribunal-manchester-casesupervisor")
+      .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/17bb9101-0e71-4422-aefb-635dfc978383")
+      .headers(headers_0))
+
+    .exec(http("5_caseworker-employment-tribunal-glasgow")
+      .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/9536acf3-b18b-4dc7-aaed-2e028959cf89")
+      .headers(headers_0))
+
+    .exec(http("6_caseworker-employment-tribunal-glasgow-caseofficer")
+      .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/0c2c24c9-bbc0-403f-b6a4-d202bdac8506")
+      .headers(headers_0))
+
+    .exec(http("7_caseworker-employment-tribunal-glasgow-casesupervisor")
+      .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/16c3c33c-c880-4a20-9b09-6eabbd6f7ef2")
+      .headers(headers_0))*/
+
+    .pause(1)
+
+
   val CreateUserProfile = feed(feedUserData)
 
-    .exec(http("get_bearer_token")
-      .post("http://rpe-service-auth-provider-perftest.service.core-compute-perftest.internal/testing-support/lease")
-      .header("Content-Type", "application/json")
-      .body(StringBody("{\n\t\"microservice\": \"ccd_definition\"\n}"))
-      //.check(jsonPath("(.*)").saveAs("token"))
-      .check(bodyString.saveAs("token")))
-
-    /*.exec {
-      session =>
-        println(session("token").as[String])
-        session
-    }*/
-
-    .exec(http("ccd_userRole")
+    .exec(http("request_4")
       .post("http://ccd-user-profile-api-perftest.service.core-compute-perftest.internal/user-profile/users")
-      //.headers(headers_1)
-      .header("Content-Type", "application/json")
-      .header("Accept", "application/json")
-      .header("ServiceAuthorization", "Bearer ${token}")
-      .body(StringBody("{\n    \"id\": \"${CCDUserName}\",\n    \"jurisdictions\": [{\"id\": \"DIVORCE\"},{\"id\": \"AUTOTEST1\"},{\"id\": \"CMC\"},{\"id\": \"PROBATE\"},{\"id\": \"SSCS\"}],\n    \"work_basket_default_jurisdiction\": \"DIVORCE\",\n    \"work_basket_default_case_type\": \"DIVORCE\",\n    \"work_basket_default_state\": \"Submitted\"\n}")))
+      .headers(headers_1)
+      .body(StringBody("{\n    \"id\": \"${CCDUserName}\",\n    \"jurisdictions\": [{\"id\": \"DIVORCE\"},{\"id\": \"AUTOTEST1\"},{\"id\": \"CMC\"},{\"id\": \"PROBATE\"},{\"id\": \"SSCS\"},{\"id\": \"TRIBUNALS\"},{\"id\": \"EMPLOYMENT\"}],\n    \"work_basket_default_jurisdiction\": \"DIVORCE\",\n    \"work_basket_default_case_type\": \"DIVORCE\",\n    \"work_basket_default_state\": \"Submitted\"\n}")))
 
-    /*.exec {
+    .exec {
       session =>
         println(session("CCDUserName").as[String])
         session
-    }*/
+    }
+
+    .pause(1)
+
 }
