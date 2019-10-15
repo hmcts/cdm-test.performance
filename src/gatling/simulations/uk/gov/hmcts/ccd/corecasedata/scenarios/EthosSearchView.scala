@@ -148,14 +148,16 @@ object EthosSearchView {
       .exec(http("ET_030_020_SearchCases")
         .get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1")
         .headers(headers_2)
-        .check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id")))
+        //.check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id"))
+      )
   }
 
   val OpenCase = group("Ethos_View") {
 
     exec {
       session =>
-        println(session("CaseRef").as[String])
+        println(session("EthosCaseType").as[String])
+        println(session("EthosCaseRef").as[String])
         session
     }
 
@@ -167,8 +169,9 @@ object EthosSearchView {
       .get("/data/internal/cases/${EthosCaseRef}")
       .headers(headers_7)
       .check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID")))
+      .exitHereIfFailed
 
-    .exec(http("ET_040_010_OpenDocument")
+      .exec(http("ET_040_010_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_19))
   }
