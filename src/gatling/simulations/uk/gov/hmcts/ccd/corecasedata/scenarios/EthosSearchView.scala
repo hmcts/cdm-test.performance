@@ -12,7 +12,8 @@ object EthosSearchView {
   val CCDEnvurl = Environment.ccdEnvurl
   val CommonHeader = Environment.commonHeader
   val idam_header = Environment.idam_header
-  val feedUserData = csv("EthosUserData.csv").circular
+  //val feedUserData = csv("EthosUserData.csv").circular
+  //val feedEthosSearchData = csv("EthosSearchData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
 
@@ -133,30 +134,37 @@ object EthosSearchView {
   val Search = group("Ethos_View") {
 
     exec(http("ET_030_005_SearchCases")
-      .options("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester_Dev/cases?view=WORKBASKET&page=1")
+      .options("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1")
       .headers(headers_0))
 
       .exec(http("ET_030_010_SearchCases")
-        .options("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester_Dev/cases/pagination_metadata")
+        .options("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases/pagination_metadata")
         .headers(headers_0))
 
       .exec(http("ET_030_015_SearchCases")
-        .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester_Dev/cases/pagination_metadata")
+        .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases/pagination_metadata")
         .headers(headers_2))
 
       .exec(http("ET_030_020_SearchCases")
-        .get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester_Dev/cases?view=WORKBASKET&page=1")
-        .headers(headers_2))
+        .get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1")
+        .headers(headers_2)
+        .check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id")))
   }
 
   val OpenCase = group("Ethos_View") {
 
-    exec(http("ET_040_005_OpenCase")
-      .options("/data/internal/cases/1570717306042133")
-      .headers(headers_6))
+    exec {
+      session =>
+        println(session("CaseRef").as[String])
+        session
+    }
 
     .exec(http("ET_040_005_OpenCase")
-      .get("/data/internal/cases/1570717306042133")
+      .options("/data/internal/cases/${EthosCaseRef}")
+      .headers(headers_6))
+
+    .exec(http("ET_040_010_OpenCase")
+      .get("/data/internal/cases/${EthosCaseRef}")
       .headers(headers_7)
       .check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID")))
 

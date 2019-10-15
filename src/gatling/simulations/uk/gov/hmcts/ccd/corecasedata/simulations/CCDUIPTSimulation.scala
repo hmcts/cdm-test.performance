@@ -101,7 +101,9 @@ class CCDUIPTSimulation extends Simulation  {
       Browse.Homepage,
       EthosSearchView.submitLogin,
       EthosSearchView.Search,
-      EthosSearchView.OpenCase
+      EthosSearchView.OpenCase,
+      Logout.ccdLogout,
+      //WaitforNextIteration.waitforNextIteration
     )
   }
 
