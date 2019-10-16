@@ -21,9 +21,9 @@ class CCDCMCSimulation extends Simulation {
   {
     exec(
       Browse.Homepage,
-      CMC.setJurisdiction,
-      CMC.setCaseType,
-      CMC.CMCLogin,
+      //CMC.setJurisdiction,
+      //CMC.setCaseType,
+      //CMC.CMCLogin,
       CMC.CMCCreateCase,
       CMC.CMCSubmitPayment,
       CMC.CMCSearchAndView,

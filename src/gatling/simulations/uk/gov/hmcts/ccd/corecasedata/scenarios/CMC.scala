@@ -31,6 +31,13 @@ object CMC {
     "Sec-Fetch-Mode" -> "cors",
     "experimental" -> "true")
 
+  val headers_3 = Map(
+    "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.case-data-validate.v2+json;charset=UTF-8",
+    "Content-Type" -> "application/json",
+    "Origin" -> "https://ccd-case-management-web-perftest.service.core-compute-perftest.internal",
+    "Sec-Fetch-Mode" -> "cors",
+    "experimental" -> "true")
+
   val headers_8 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-case-view.v2+json",
     "Content-Type" -> "application/json",
@@ -42,86 +49,6 @@ object CMC {
     "Sec-Fetch-Mode" -> "cors",
     "experimental" -> "true")
 
-  val setJurisdiction = exec(session => {
-    session.set("Jurisdiction", "CMC")
-  })
-    .exec(session => {
-      println(session)
-      session
-    })
-
-  val setCaseType = exec(session => {
-    session.set("CaseType", "MoneyClaimCase")
-  })
-    .exec(session => {
-      println(session)
-      session
-    })
-
-  val CMCLogin = group("CMC_Login") {
-
-    exec(http("CDM_020_005_Login")
-      .post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-      .disableFollowRedirect
-      .headers(idam_header)
-      .formParam("username", "${CMCUserName}")
-      .formParam("password", "${CMCUserPassword}")
-      .formParam("save", "Sign in")
-      .formParam("selfRegistrationEnabled", "false")
-      .formParam("_csrf", "${csrf}")
-      .check(headerRegex("Location", "(?<=code=)(.*)&scope").saveAs("authCode"))
-      .check(status.in(200, 302))
-
-      .resources(http("CDM_020_010_Login")
-        .get(CCDEnvurl + "/config")
-        .headers(CommonHeader)))
-
-      .exec(http("CDM_020_015_Login")
-        .options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-        .headers(CommonHeader))
-      .exec(http("CDM_020_020_Login")
-        .get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-        .headers(CommonHeader))
-      .exec(http("CDM_020_025_Login")
-        .get(CCDEnvurl + "/config")
-        .headers(CommonHeader))
-
-      .exec(http("CDM_020_030_Login")
-        .options(BaseURL + "/data/caseworkers/:uid/profile"))
-
-      .exec(http("CDM_020_035_Login")
-        .get(BaseURL + "/data/caseworkers/:uid/profile")
-        .headers(CommonHeader))
-
-      .exec(http("CDM_020_040_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=read")
-        .resources(http("CDM_020_045_Login")
-          .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=read")
-          .headers(CommonHeader)))
-
-      .exec(http("CDM_020_050_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/work-basket-inputs"))
-
-      .exec(http("CDM_020_055_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
-
-      .exec(http("CDM_020_060_Login")
-        .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases/pagination_metadata?state=TODO"))
-
-      .exec(http("CDM_020_065_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/work-basket-inputs")
-        .headers(CommonHeader))
-
-      .exec(http("CDM_020_070_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases?view=WORKBASKET&state=TODO&page=1")
-        .headers(CommonHeader))
-
-      .exec(http("CDM_020_075_Login")
-        .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases/pagination_metadata?state=TODO")
-        .headers(CommonHeader))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
-  }
 
   val CMCCreateCase = group("CMC_Create") {
 
@@ -139,9 +66,15 @@ object CMC {
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("CMC_030_015_CreateCase")
-      .post(BaseURL + "/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases?ignore-warning=false")
+      //.post(BaseURL + "/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases?ignore-warning=false")
+      .post(BaseURL + "/data/case-types/MoneyClaimCase/validate?pageId=SubmitPrePayment1")
+      .headers(headers_3)
+      .body(StringBody("{\n  \"data\": {\n    \"externalId\": \"cmc-id\"\n  },\n  \"event\": {\n    \"id\": \"SubmitPrePayment\",\n    \"summary\": \"cmc-create-case\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}")))
+
+    .exec(http("CMC_030_020_CreateCase")
+      .post("/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases?ignore-warning=false")
       .headers(CommonHeader)
-      .body(StringBody("{\n  \"data\": {\n    \"externalId\": \"cmc-id\"\n  },\n  \"event\": {\n    \"id\": \"SubmitPrePayment\",\n    \"summary\": \"cmc-create-case\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
+      .body(StringBody("{\n  \"data\": {\n    \"externalId\": null\n  },\n  \"event\": {\n    \"id\": \"SubmitPrePayment\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
 
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -162,10 +95,15 @@ object CMC {
 
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("CMC_040_010_SubmitPayment")
+    /*.exec(http("CMC_040_010_SubmitPayment")
       .post(BaseURL + "/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases/${New_Case_Id}/events")
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"interestDateType\": \"CUSTOM\",\n    \"interestType\": \"BREAKDOWN\",\n    \"subjectType\": \"CLAIMANT\",\n    \"amountType\": \"NOT_KNOWN\",\n    \"interestEndDateType\": \"SUBMISSION\",\n    \"evidence\": [],\n    \"defendants\": [],\n    \"claimants\": [],\n    \"timeline\": [],\n    \"feeCode\": null,\n    \"interestRate\": null,\n    \"interestReason\": null,\n    \"interestBreakDownAmount\": null,\n    \"interestBreakDownExplanation\": null,\n    \"interestSpecificDailyAmount\": null,\n    \"interestClaimStartDate\": \"2019-08-01\",\n    \"interestStartDateReason\": null,\n    \"housingDisrepairOtherDamages\": null,\n    \"housingDisrepairCostOfRepairDamages\": null,\n    \"personalInjuryGeneralDamages\": null,\n    \"issuedOn\": \"2019-08-30\",\n    \"submittedOn\": \"2019-08-30T12:00:00.000\",\n    \"submitterEmail\": null,\n    \"id\": null,\n    \"features\": null,\n    \"subjectName\": null,\n    \"paymentId\": null,\n    \"paymentAmount\": null,\n    \"paymentReference\": null,\n    \"paymentStatus\": null,\n    \"submitterId\": null,\n    \"paymentDateCreated\": \"2019-08-30\",\n    \"externalId\": \"cmc-id\",\n    \"referenceNumber\": null,\n    \"feeAmountInPennies\": null,\n    \"reason\": null,\n    \"sotSignerName\": null,\n    \"sotSignerRole\": null,\n    \"feeAccountNumber\": null,\n    \"externalReferenceNumber\": null,\n    \"preferredCourt\": null\n  },\n  \"event\": {\n    \"id\": \"SubmitPostPayment\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+*/
+    .exec(http("CMC_040_010_SubmitPayment")
+      .post("/data/case-types/MoneyClaimCase/validate?pageId=SubmitPostPayment1")
+      .headers(headers_3)
+      .body(StringBody("{\n  \"data\": {\n    \"interestDateType\": null,\n    \"interestType\": null,\n    \"subjectType\": null,\n    \"amountType\": null,\n    \"interestEndDateType\": null,\n    \"evidence\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"type\": null,\n          \"description\": null\n        }\n      }\n    ],\n    \"defendants\": [],\n    \"claimants\": [],\n    \"timeline\": [],\n    \"feeCode\": null,\n    \"interestRate\": null,\n    \"interestReason\": null,\n    \"interestBreakDownAmount\": null,\n    \"interestBreakDownExplanation\": null,\n    \"interestSpecificDailyAmount\": null,\n    \"interestClaimStartDate\": null,\n    \"interestStartDateReason\": null,\n    \"housingDisrepairOtherDamages\": null,\n    \"housingDisrepairCostOfRepairDamages\": null,\n    \"personalInjuryGeneralDamages\": null,\n    \"issuedOn\": null,\n    \"submittedOn\": null,\n    \"submitterEmail\": null,\n    \"id\": null,\n    \"features\": null,\n    \"subjectName\": null,\n    \"paymentId\": null,\n    \"paymentAmount\": null,\n    \"paymentReference\": null,\n    \"paymentStatus\": null,\n    \"submitterId\": null,\n    \"paymentDateCreated\": null,\n    \"externalId\": null,\n    \"referenceNumber\": null,\n    \"feeAmountInPennies\": null,\n    \"reason\": null,\n    \"sotSignerName\": null,\n    \"sotSignerRole\": null,\n    \"feeAccountNumber\": null,\n    \"externalReferenceNumber\": null,\n    \"preferredCourt\": null\n  },\n  \"event\": {\n    \"id\": \"SubmitPostPayment\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"interestDateType\": null,\n    \"interestType\": null,\n    \"subjectType\": null,\n    \"amountType\": null,\n    \"interestEndDateType\": null,\n    \"evidence\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"type\": null,\n          \"description\": null\n        }\n      }\n    ],\n    \"defendants\": [],\n    \"claimants\": [],\n    \"timeline\": [],\n    \"feeCode\": null,\n    \"interestRate\": null,\n    \"interestReason\": null,\n    \"interestBreakDownAmount\": null,\n    \"interestBreakDownExplanation\": null,\n    \"interestSpecificDailyAmount\": null,\n    \"interestClaimStartDate\": null,\n    \"interestStartDateReason\": null,\n    \"housingDisrepairOtherDamages\": null,\n    \"housingDisrepairCostOfRepairDamages\": null,\n    \"personalInjuryGeneralDamages\": null,\n    \"issuedOn\": null,\n    \"submittedOn\": null,\n    \"submitterEmail\": null,\n    \"id\": null,\n    \"features\": null,\n    \"subjectName\": null,\n    \"paymentId\": null,\n    \"paymentAmount\": null,\n    \"paymentReference\": null,\n    \"paymentStatus\": null,\n    \"submitterId\": null,\n    \"paymentDateCreated\": null,\n    \"externalId\": null,\n    \"referenceNumber\": null,\n    \"feeAmountInPennies\": null,\n    \"reason\": null,\n    \"sotSignerName\": null,\n    \"sotSignerRole\": null,\n    \"feeAccountNumber\": null,\n    \"externalReferenceNumber\": null,\n    \"preferredCourt\": null\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))
 
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
