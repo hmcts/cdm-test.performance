@@ -18,12 +18,12 @@ object Browse {
  val MinWaitForNextIteration = Environment.minWaitForNextIteration
  val MaxWaitForNextIteration = Environment.maxWaitForNextIteration
 
- val feedUserData = csv("CCDUserData.csv").queue
+ val feedUserData = csv("CCDUserData.csv").circular
  //val feedUserDataCMC = csv("CMCUserData.csv").circular
  //val feedUserDataPB = csv("ProbateUserData.csv").circular
  //val feedUserDataDV = csv("DivorceUserData.csv").circular
  //val feedUserDataSSCS = csv("SSCSUserData.csv").circular
- val feedUserDataEthos = csv("EthosUserData.csv").queue
+ val feedUserDataEthos = csv("EthosUserData.csv").circular
  val feedEthosSearchData = csv("EthosSearchData.csv").random
  //val CCDCreateCaseFeeder = csv("CCD_CreateCase_TestData.csv").circular
 
