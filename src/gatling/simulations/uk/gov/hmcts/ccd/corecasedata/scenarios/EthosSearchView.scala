@@ -56,8 +56,8 @@ object EthosSearchView {
       .post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
       .disableFollowRedirect
       .headers(idam_header)
-      .formParam("username", "${CCDUserName}")
-      .formParam("password", "${CCDUserPassword}")
+      .formParam("username", "${EthosUserName}")
+      .formParam("password", "${EthosUserPassword}")
       .formParam("save", "Sign in")
       .formParam("selfRegistrationEnabled", "false")
       .formParam("_csrf", "${csrf}")
@@ -95,36 +95,36 @@ object EthosSearchView {
       //.exitHereIfFailed
 
       .exec(http("CDM_020_040_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=read")
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types?access=read")
       .resources(http("CDM_020_045_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=read")
+        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types?access=read")
         .headers(CommonHeader)))
       //.exitHereIfFailed
 
       .exec(http("CDM_020_050_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/work-basket-inputs"))
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/work-basket-inputs"))
       //.exitHereIfFailed
 
       .exec(http("CDM_020_055_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
       //.exitHereIfFailed
 
       .exec(http("CDM_020_060_Login")
-      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases/pagination_metadata?state=TODO"))
+      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO"))
       //.exitHereIfFailed
 
       .exec(http("CDM_020_065_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/work-basket-inputs")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/work-basket-inputs")
       .headers(CommonHeader))
       //.exitHereIfFailed
 
       .exec(http("CDM_020_070_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases?view=WORKBASKET&state=TODO&page=1")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?view=WORKBASKET&state=TODO&page=1")
       .headers(CommonHeader))
       //.exitHereIfFailed
 
       .exec(http("CDM_020_075_Login")
-      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases/pagination_metadata?state=TODO")
+      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO")
       .headers(CommonHeader))
       //.exitHereIfFailed
 

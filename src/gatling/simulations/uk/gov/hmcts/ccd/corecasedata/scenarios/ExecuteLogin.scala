@@ -67,10 +67,11 @@ object ExecuteLogin {
 			//.exitHereIfFailed
 
 			.exec(http("CDM_020_040_Login")
-				.options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=read")
-				.resources(http("CDM_020_045_Login")
-					.get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=read")
-					.headers(CommonHeader)))
+				.options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=read"))
+
+			.exec(http("CDM_020_045_Login")
+				.get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types?access=read")
+				.headers(CommonHeader))
 			//.exitHereIfFailed
 
 			.exec(http("CDM_020_050_Login")
