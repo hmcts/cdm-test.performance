@@ -154,14 +154,14 @@ object EthosSearchView {
 
   val OpenCase = group("Ethos_View") {
 
-    exec {
+    /*exec {
       session =>
         println(session("EthosCaseType").as[String])
         println(session("EthosCaseRef").as[String])
         session
-    }
+    }*/
 
-    .exec(http("ET_040_005_OpenCase")
+    exec(http("ET_040_005_OpenCase")
       .options("/data/internal/cases/${EthosCaseRef}")
       .headers(headers_6))
 
