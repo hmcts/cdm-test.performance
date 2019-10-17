@@ -150,6 +150,8 @@ object EthosSearchView {
         .headers(headers_2)
         //.check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id"))
       )
+
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
 
   val OpenCase = group("Ethos_View") {
@@ -171,9 +173,13 @@ object EthosSearchView {
       .check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID")))
       .exitHereIfFailed
 
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
       .exec(http("ET_040_010_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_19))
+
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
 }
 
