@@ -171,11 +171,11 @@ object EthosSearchView {
       .get("/data/internal/cases/${EthosCaseRef}")
       .headers(headers_7)
       .check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID")))
-      .exitHereIfFailed
+      //.exitHereIfFailed
 
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("ET_040_010_OpenDocument")
+    .exec(http("ET_040_010_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_19))
 
