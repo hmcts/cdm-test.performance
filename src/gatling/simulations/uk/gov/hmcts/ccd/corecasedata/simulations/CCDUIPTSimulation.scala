@@ -38,7 +38,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDProbateScenario = scenario("CCDPB").repeat(7) {
+  val CCDProbateScenario = scenario("CCDPB").repeat(6) {
     exec(
       Browse.Homepage,
       ExecuteLogin.submitLogin,
@@ -83,7 +83,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDDivScenario = scenario("CCDDIV").repeat(7)
+  val CCDDivScenario = scenario("CCDDIV").repeat(6)
   {
     exec(
       Browse.Homepage,
@@ -96,7 +96,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDEthosScenario = scenario("CCDEthos").repeat(11)
+  val CCDEthosScenario = scenario("CCDEthos").repeat(12)
   {
     exec(
       Browse.Homepage,
