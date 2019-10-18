@@ -110,9 +110,9 @@ object SSCS {
       .exec(http("CDM_020_075_Login")
         .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${Jurisdiction}/case-types/${CaseType}/cases/pagination_metadata?state=TODO")
         .headers(CommonHeader))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
+
+  .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val SSCSCreateCase = group("SSCS_Create") {
 
@@ -137,9 +137,9 @@ object SSCS {
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"caseReference\": null,\n    \"caseCreated\": \"2019-08-22\",\n    \"region\": \"London\",\n    \"appeal\": {\n      \"receivedVia\": \"Online\",\n      \"mrnDetails\": {\n        \"dwpIssuingOffice\": null,\n        \"mrnDate\": null,\n        \"mrnLateReason\": \"Test\",\n        \"mrnMissingReason\": null\n      },\n      \"appellant\": {\n        \"name\": {\n          \"title\": \"Mr\",\n          \"firstName\": \"Dan\",\n          \"middleName\": null,\n          \"lastName\": \"Gleeballs\"\n        },\n        \"identity\": {\n          \"dob\": \"1970-10-02\",\n          \"nino\": \"ab123456z\"\n        },\n        \"address\": {\n          \"line1\": \"5 test street\",\n          \"line2\": null,\n          \"line3\": null,\n          \"town\": \"london\",\n          \"county\": null,\n          \"postcode\": \"kt25bu\",\n          \"country\": \"uk\"\n        },\n        \"contact\": {\n          \"phone\": \"07123456789\",\n          \"mobile\": null,\n          \"email\": \"test@test.com\"\n        },\n        \"isAppointee\": null,\n        \"appointee\": {\n          \"name\": {\n            \"title\": null,\n            \"firstName\": null,\n            \"middleName\": null,\n            \"lastName\": null\n          },\n          \"identity\": {\n            \"dob\": null,\n            \"nino\": null\n          },\n          \"address\": {\n            \"line1\": null,\n            \"line2\": null,\n            \"line3\": null,\n            \"town\": null,\n            \"county\": null,\n            \"postcode\": null,\n            \"country\": null\n          },\n          \"contact\": {\n            \"phone\": null,\n            \"mobile\": null,\n            \"email\": null\n          }\n        },\n        \"isAddressSameAsAppointee\": null\n      },\n      \"benefitType\": {\n        \"code\": \"DWP\",\n        \"description\": null\n      },\n      \"hearingType\": \"cor\",\n      \"hearingOptions\": {\n        \"wantsToAttend\": \"No\",\n        \"languageInterpreter\": \"No\",\n        \"other\": null,\n        \"signLanguageType\": null\n      },\n      \"appealReasons\": {\n        \"reasons\": [],\n        \"otherReasons\": null\n      },\n      \"supporter\": {\n        \"name\": {\n          \"title\": null,\n          \"firstName\": null,\n          \"middleName\": null,\n          \"lastName\": null\n        },\n        \"contact\": {\n          \"phone\": null,\n          \"mobile\": null,\n          \"email\": null\n        }\n      },\n      \"rep\": {\n        \"hasRepresentative\": null\n      },\n      \"signer\": null\n    },\n    \"regionalProcessingCenter\": {\n      \"name\": null,\n      \"address1\": null,\n      \"address2\": null,\n      \"address3\": null,\n      \"address4\": null,\n      \"postcode\": null,\n      \"city\": null,\n      \"phoneNumber\": null,\n      \"faxNumber\": null\n    },\n    \"panel\": {\n      \"assignedTo\": null,\n      \"medicalMember\": null,\n      \"disabilityQualifiedMember\": null\n    }\n  },\n  \"event\": {\n    \"id\": \"appealCreated\",\n    \"summary\": \"test create case\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
+
+  .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val PrintCaseID = exec {
     session =>
@@ -156,29 +156,29 @@ object SSCS {
 
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("SSCS_040_010_DocumentUpload")
-        .post(BaseURL + "/documents")
-        .bodyPart(RawFileBodyPart("files", "1MB.pdf")
-          .fileName("1MB.pdf")
-          .transferEncoding("binary"))
-        .asMultipartForm
-        .formParam("classification", "PUBLIC")
-        .check(status.is(200))
-        .check(regex("""http://(.+)/""").saveAs("DMURL"))
-        .check(regex("""/documents/(.+)"""").saveAs("Document_ID")))
+    .exec(http("SSCS_040_010_DocumentUpload")
+      .post(BaseURL + "/documents")
+      .bodyPart(RawFileBodyPart("files", "1MB.pdf")
+        .fileName("1MB.pdf")
+        .transferEncoding("binary"))
+      .asMultipartForm
+      .formParam("classification", "PUBLIC")
+      .check(status.is(200))
+      .check(regex("""http://(.+)/""").saveAs("DMURL"))
+      .check(regex("""/documents/(.+)"""").saveAs("Document_ID")))
 
-      /*.exec(http("request_19")
-        .post("/data/case-types/Benefit/validate?pageId=uploadDocument1.0")
-        .headers(headers_2)
-        .body(StringBody("{\n  \"data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-08-22\",\n          \"documentComment\": \"test upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"1111004.pdf\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-08-22\",\n          \"documentComment\": \"test upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"1MB.pdf\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))*/
+    /*.exec(http("request_19")
+      .post("/data/case-types/Benefit/validate?pageId=uploadDocument1.0")
+      .headers(headers_2)
+      .body(StringBody("{\n  \"data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-08-22\",\n          \"documentComment\": \"test upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"1111004.pdf\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-08-22\",\n          \"documentComment\": \"test upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"1MB.pdf\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))*/
 
-      .exec(http("SSCS_040_015_DocumentUpload")
+    .exec(http("SSCS_040_015_DocumentUpload")
       .post("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/${New_Case_Id}/events")
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-08-22\",\n          \"documentComment\": \"test upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"1MB.pdf\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"test upload doc\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
+
+  .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val SSCSSearchAndView = group("SSCS_View") {
     exec(http("SSCS_050_005_SearchPage")
@@ -187,28 +187,28 @@ object SSCS {
 
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("SSCS_050_010_SearchAndView")
-        .get("/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?view=WORKBASKET&page=1&case_reference=${New_Case_Id}")
-        .headers(CommonHeader))
+    .exec(http("SSCS_050_010_SearchAndView")
+      .get("/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?view=WORKBASKET&page=1&case_reference=${New_Case_Id}")
+      .headers(CommonHeader))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("SSCS_050_015_SearchAndView")
-        .get("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/pagination_metadata?case_reference=${New_Case_Id}")
-        .headers(CommonHeader))
+    .exec(http("SSCS_050_015_SearchAndView")
+      .get("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/pagination_metadata?case_reference=${New_Case_Id}")
+      .headers(CommonHeader))
 
-      .exec(http("SSCS_050_020_SearchAndView")
-        .get("/data/internal/cases/${New_Case_Id}")
-        .headers(headers_8))
+    .exec(http("SSCS_050_020_SearchAndView")
+      .get("/data/internal/cases/${New_Case_Id}")
+      .headers(headers_8))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("SSCS_050_025_SearchAndOpenDoc")
-        .get("/documents/${Document_ID}/binary")
-        .headers(headers_15))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .exec(http("SSCS_050_025_SearchAndOpenDoc")
+      .get("/documents/${Document_ID}/binary")
+      .headers(headers_15))
   }
+
+  .pause(MinThinkTime seconds, MaxThinkTime seconds)
 }
 
 

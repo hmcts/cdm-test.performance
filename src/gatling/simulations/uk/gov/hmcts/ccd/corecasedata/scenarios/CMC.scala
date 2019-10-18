@@ -76,9 +76,9 @@ object CMC {
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"externalId\": null\n  },\n  \"event\": {\n    \"id\": \"SubmitPrePayment\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
+
+  .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val PrintCaseID = exec {
     session =>
@@ -104,31 +104,31 @@ object CMC {
       .post("/data/case-types/MoneyClaimCase/validate?pageId=SubmitPostPayment1")
       .headers(headers_3)
       .body(StringBody("{\n  \"data\": {\n    \"interestDateType\": null,\n    \"interestType\": null,\n    \"subjectType\": null,\n    \"amountType\": null,\n    \"interestEndDateType\": null,\n    \"evidence\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"type\": null,\n          \"description\": null\n        }\n      }\n    ],\n    \"defendants\": [],\n    \"claimants\": [],\n    \"timeline\": [],\n    \"feeCode\": null,\n    \"interestRate\": null,\n    \"interestReason\": null,\n    \"interestBreakDownAmount\": null,\n    \"interestBreakDownExplanation\": null,\n    \"interestSpecificDailyAmount\": null,\n    \"interestClaimStartDate\": null,\n    \"interestStartDateReason\": null,\n    \"housingDisrepairOtherDamages\": null,\n    \"housingDisrepairCostOfRepairDamages\": null,\n    \"personalInjuryGeneralDamages\": null,\n    \"issuedOn\": null,\n    \"submittedOn\": null,\n    \"submitterEmail\": null,\n    \"id\": null,\n    \"features\": null,\n    \"subjectName\": null,\n    \"paymentId\": null,\n    \"paymentAmount\": null,\n    \"paymentReference\": null,\n    \"paymentStatus\": null,\n    \"submitterId\": null,\n    \"paymentDateCreated\": null,\n    \"externalId\": null,\n    \"referenceNumber\": null,\n    \"feeAmountInPennies\": null,\n    \"reason\": null,\n    \"sotSignerName\": null,\n    \"sotSignerRole\": null,\n    \"feeAccountNumber\": null,\n    \"externalReferenceNumber\": null,\n    \"preferredCourt\": null\n  },\n  \"event\": {\n    \"id\": \"SubmitPostPayment\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"interestDateType\": null,\n    \"interestType\": null,\n    \"subjectType\": null,\n    \"amountType\": null,\n    \"interestEndDateType\": null,\n    \"evidence\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"type\": null,\n          \"description\": null\n        }\n      }\n    ],\n    \"defendants\": [],\n    \"claimants\": [],\n    \"timeline\": [],\n    \"feeCode\": null,\n    \"interestRate\": null,\n    \"interestReason\": null,\n    \"interestBreakDownAmount\": null,\n    \"interestBreakDownExplanation\": null,\n    \"interestSpecificDailyAmount\": null,\n    \"interestClaimStartDate\": null,\n    \"interestStartDateReason\": null,\n    \"housingDisrepairOtherDamages\": null,\n    \"housingDisrepairCostOfRepairDamages\": null,\n    \"personalInjuryGeneralDamages\": null,\n    \"issuedOn\": null,\n    \"submittedOn\": null,\n    \"submitterEmail\": null,\n    \"id\": null,\n    \"features\": null,\n    \"subjectName\": null,\n    \"paymentId\": null,\n    \"paymentAmount\": null,\n    \"paymentReference\": null,\n    \"paymentStatus\": null,\n    \"submitterId\": null,\n    \"paymentDateCreated\": null,\n    \"externalId\": null,\n    \"referenceNumber\": null,\n    \"feeAmountInPennies\": null,\n    \"reason\": null,\n    \"sotSignerName\": null,\n    \"sotSignerRole\": null,\n    \"feeAccountNumber\": null,\n    \"externalReferenceNumber\": null,\n    \"preferredCourt\": null\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
+
+  .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val CMCSearchAndView = group("CMC_View") {
     exec(http("CMC_050_005_SearchPage")
       .get("/data/internal/case-types/MoneyClaimCase/work-basket-inputs")
       .headers(headers_0))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("CMC_050_010_SearchAndView")
-        .get("/aggregated/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases?view=WORKBASKET&page=1&case_reference=${New_Case_Id}")
-        .headers(CommonHeader))
+    .exec(http("CMC_050_010_SearchAndView")
+      .get("/aggregated/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases?view=WORKBASKET&page=1&case_reference=${New_Case_Id}")
+      .headers(CommonHeader))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("CMC_050_015_SearchAndView")
-        .get("/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases/pagination_metadata?case_reference=${New_Case_Id}")
-        .headers(CommonHeader))
+    .exec(http("CMC_050_015_SearchAndView")
+      .get("/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases/pagination_metadata?case_reference=${New_Case_Id}")
+      .headers(CommonHeader))
 
-      .exec(http("CMC_050_020_SearchAndView")
-        .get("/data/internal/cases/${New_Case_Id}")
-        .headers(headers_8))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .exec(http("CMC_050_020_SearchAndView")
+      .get("/data/internal/cases/${New_Case_Id}")
+      .headers(headers_8))
   }
+
+  .pause(MinThinkTime seconds, MaxThinkTime seconds)
 }

@@ -66,23 +66,23 @@ object DVExcep {
       .get("/aggregated/caseworkers/:uid/jurisdictions?access=create")
       .headers(CommonHeader))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("DIV_030_010_CreateCase")
-        .get("/data/internal/case-types/DIVORCE_ExceptionRecord/event-triggers/createException?ignore-warning=false")
-        .headers(headers_1)
-        .check(jsonPath("$.event_token").saveAs("New_Case_event_token")))
+    .exec(http("DIV_030_010_CreateCase")
+      .get("/data/internal/case-types/DIVORCE_ExceptionRecord/event-triggers/createException?ignore-warning=false")
+      .headers(headers_1)
+      .check(jsonPath("$.event_token").saveAs("New_Case_event_token")))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("DIV_030_015_CreateCase")
-        .post("/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE_ExceptionRecord/cases?ignore-warning=false")
-        .headers(CommonHeader)
-        .body(StringBody("{\n  \"data\": {\n    \"journeyClassification\": \"Exception\",\n    \"poBox\": \"PO1234\",\n    \"poBoxJurisdiction\": \"Divorce\",\n    \"deliveryDate\": \"2019-09-01T12:00:00.000\",\n    \"openingDate\": null,\n    \"scannedDocuments\": [],\n    \"scanOCRData\": []\n  },\n  \"event\": {\n    \"id\": \"createException\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
-        .check(jsonPath("$.id").saveAs("New_Case_Id")))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .exec(http("DIV_030_015_CreateCase")
+      .post("/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE_ExceptionRecord/cases?ignore-warning=false")
+      .headers(CommonHeader)
+      .body(StringBody("{\n  \"data\": {\n    \"journeyClassification\": \"Exception\",\n    \"poBox\": \"PO1234\",\n    \"poBoxJurisdiction\": \"Divorce\",\n    \"deliveryDate\": \"2019-09-01T12:00:00.000\",\n    \"openingDate\": null,\n    \"scannedDocuments\": [],\n    \"scanOCRData\": []\n  },\n  \"event\": {\n    \"id\": \"createException\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
+      .check(jsonPath("$.id").saveAs("New_Case_Id")))
   }
+
+  .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val DVDocUpload = group("DIV_DocUpload") {
 
@@ -91,26 +91,26 @@ object DVExcep {
       .headers(headers_5)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("DIV_040_010_DocumentUpload")
-        .post(BaseURL + "/documents")
-        .bodyPart(RawFileBodyPart("files", "1MB.pdf")
-          .fileName("1MB.pdf")
-          .transferEncoding("binary"))
-        .asMultipartForm
-        .formParam("classification", "PUBLIC")
-        .check(status.is(200))
-        .check(regex("""http://(.+)/""").saveAs("DMURL"))
-        .check(regex("""/documents/(.+)"""").saveAs("Document_ID")))
+    .exec(http("DIV_040_010_DocumentUpload")
+      .post(BaseURL + "/documents")
+      .bodyPart(RawFileBodyPart("files", "1MB.pdf")
+        .fileName("1MB.pdf")
+        .transferEncoding("binary"))
+      .asMultipartForm
+      .formParam("classification", "PUBLIC")
+      .check(status.is(200))
+      .check(regex("""http://(.+)/""").saveAs("DMURL"))
+      .check(regex("""/documents/(.+)"""").saveAs("Document_ID")))
 
-      .exec(http("DIV_040_015_DocumentUpload")
-        .post("/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE_ExceptionRecord/cases/${New_Case_Id}/events")
-        .headers(CommonHeader)
-        .body(StringBody("{\n  \"data\": {\n    \"attachToCaseReference\": \"${New_Case_Id}\",\n    \"scannedDocuments\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"type\": \"other\",\n          \"subtype\": null,\n          \"controlNumber\": null,\n          \"fileName\": null,\n          \"scannedDate\": \"2019-09-02T12:00:00.000\",\n          \"url\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"1MB.pdf\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"attachToExistingCase\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .exec(http("DIV_040_015_DocumentUpload")
+      .post("/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE_ExceptionRecord/cases/${New_Case_Id}/events")
+      .headers(CommonHeader)
+      .body(StringBody("{\n  \"data\": {\n    \"attachToCaseReference\": \"${New_Case_Id}\",\n    \"scannedDocuments\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"type\": \"other\",\n          \"subtype\": null,\n          \"controlNumber\": null,\n          \"fileName\": null,\n          \"scannedDate\": \"2019-09-02T12:00:00.000\",\n          \"url\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"1MB.pdf\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"attachToExistingCase\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
   }
+
+  .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val DVSearchAndView = group ("DIV_View") {
 
@@ -118,24 +118,24 @@ object DVExcep {
       .get("/data/internal/case-types/DIVORCE_ExceptionRecord/work-basket-inputs")
       .headers(headers_0))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("DIV_050_010_SearchAndView")
-        .get("/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE_ExceptionRecord/cases?view=WORKBASKET&page=1")
-        .headers(CommonHeader))
+    .exec(http("DIV_050_010_SearchAndView")
+      .get("/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE_ExceptionRecord/cases?view=WORKBASKET&page=1")
+      .headers(CommonHeader))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("DIV_050_015_SearchAndView")
-        .get("/data/internal/cases/${New_Case_Id}")
-        .headers(headers_6))
+    .exec(http("DIV_050_015_SearchAndView")
+      .get("/data/internal/cases/${New_Case_Id}")
+      .headers(headers_6))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("DIV_050_020_SearchAndOpenDoc")
-        .get("/documents/${Document_ID}/binary")
-        .headers(headers_7))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .exec(http("DIV_050_020_SearchAndOpenDoc")
+      .get("/documents/${Document_ID}/binary")
+      .headers(headers_7))
   }
+
+  .pause(MinThinkTime seconds, MaxThinkTime seconds)`
 }

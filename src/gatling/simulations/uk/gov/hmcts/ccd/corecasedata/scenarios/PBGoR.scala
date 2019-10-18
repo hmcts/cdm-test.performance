@@ -87,9 +87,9 @@ object PBGoR {
         .get("/payments/cases/${New_Case_Id}/payments")
         .headers(CommonHeader)
         .check(status.is(403)))*/
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val PBPaymentSuccessful = group("PB_Payment") {
     exec(http("PBGoR_040_005_PaymentSuccessful")
@@ -108,9 +108,9 @@ object PBGoR {
       .post("/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${New_Case_Id}/events")
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"applicationSubmittedDate\": \"2019-03-01\"\n  },\n  \"event\": {\n    \"id\": \"paymentSuccessApp\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+  }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
-  }
 
   val PBDocUpload = group("PB_DocUpload") {
     exec(http("PGBoR_050_005_DocumentUpload")
@@ -140,9 +140,9 @@ object PBGoR {
       .post("/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${New_Case_Id}/events")
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"1MB.pdf\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+  }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
-  }
 
   val PBSearchAndView = group("PB_View") {
     exec(http("PBGoR_060_005_SearchAndView")
@@ -160,9 +160,9 @@ object PBGoR {
     .exec(http("PBGoR_060_015_SearchAndView")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_15))
+  }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
-  }
 
   val PrintCaseID = exec{
     session =>

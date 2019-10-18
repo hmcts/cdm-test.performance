@@ -127,9 +127,9 @@ object EthosSearchView {
       .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO")
       .headers(CommonHeader))
       //.exitHereIfFailed
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val Search = group("Ethos_View") {
 
@@ -150,9 +150,8 @@ object EthosSearchView {
         .headers(headers_2)
         //.check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id"))
       )
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val OpenCase = group("Ethos_View") {
 
@@ -167,19 +166,19 @@ object EthosSearchView {
       .options("/data/internal/cases/${EthosCaseRef}")
       .headers(headers_6))
 
-    .exec(http("ET_040_010_OpenCase")
-      .get("/data/internal/cases/${EthosCaseRef}")
-      .headers(headers_7)
-      .check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID")))
+      .exec(http("ET_040_010_OpenCase")
+        .get("/data/internal/cases/${EthosCaseRef}")
+        .headers(headers_7)
+        .check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID")))
       //.exitHereIfFailed
 
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ET_040_010_OpenDocument")
-      .get("/documents/${Document_ID}/binary")
-      .headers(headers_19))
+      .exec(http("ET_040_010_OpenDocument")
+        .get("/documents/${Document_ID}/binary")
+        .headers(headers_19))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 }
 
