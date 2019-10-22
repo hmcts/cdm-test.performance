@@ -128,7 +128,6 @@ object EthosSearchView {
       .headers(CommonHeader))
       //.exitHereIfFailed
   }
-
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val Search = group("Ethos_View") {
@@ -162,22 +161,21 @@ object EthosSearchView {
         session
     }*/
 
-    exec(http("ET_040_005_OpenCase")
+    /*exec(http("ET_040_005_OpenCase")
       .options("/data/internal/cases/${EthosCaseRef}")
-      .headers(headers_6))
+      .headers(headers_6))*/
 
-      .exec(http("ET_040_010_OpenCase")
-        .get("/data/internal/cases/${EthosCaseRef}")
-        .headers(headers_7)
-        .check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID")))
-      //.exitHereIfFailed
+    exec(http("ET_040_010_OpenCase")
+      .get("/data/internal/cases/${EthosCaseRef}")
+      .headers(headers_7)
+      .check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID")))
+    //.exitHereIfFailed
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("ET_040_010_OpenDocument")
-        .get("/documents/${Document_ID}/binary")
-        .headers(headers_19))
-
+    .exec(http("ET_040_010_OpenDocument")
+      .get("/documents/${Document_ID}/binary")
+      .headers(headers_19))
   }
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 }

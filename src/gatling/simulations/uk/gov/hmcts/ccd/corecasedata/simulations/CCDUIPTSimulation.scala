@@ -1,7 +1,7 @@
 package uk.gov.hmcts.ccd.corecasedata.simulations
 
 import io.gatling.core.Predef._
-//import io.gatling.http.Predef._
+import io.gatling.http.Predef._ //required for proxy, comment out for VM runs
 import io.gatling.core.scenario.Simulation
 import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
@@ -14,7 +14,7 @@ class CCDUIPTSimulation extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
+    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
   val CCDUIScenario = scenario("CCDUI").repeat(500)
@@ -34,11 +34,11 @@ class CCDUIPTSimulation extends Simulation  {
       Search.searchResult,
       SelectCase.selectAndViewCase,
       Logout.ccdLogout,
-      WaitforNextIteration.waitforNextIteration
+      //WaitforNextIteration.waitforNextIteration
     )
   }
 
-  val CCDProbateScenario = scenario("CCDPB").repeat(6) {
+  val CCDProbateScenario = scenario("CCDPB").repeat(6) { //repeat 6 times
     exec(
       Browse.Homepage,
       ExecuteLogin.submitLogin,
@@ -47,12 +47,12 @@ class CCDUIPTSimulation extends Simulation  {
       PBGoR.PBPaymentSuccessful,
       PBGoR.PBDocUpload,
       PBGoR.PBSearchAndView,
-      Logout.ccdLogout
-      //WaitforNextIteration.waitforNextIteration
+      Logout.ccdLogout,
+      WaitforNextIteration.waitforNextIteration
     )
   }
 
-  val CCDSSCSScenario = scenario("CCDSSCS").repeat(7)
+  val CCDSSCSScenario = scenario("CCDSSCS").repeat(7) //repeat 7 times
   {
     exec(
       Browse.Homepage,
@@ -62,12 +62,12 @@ class CCDUIPTSimulation extends Simulation  {
       //SSCS.PrintCaseID,
       SSCS.SSCSDocUpload,
       SSCS.SSCSSearchAndView,
-      Logout.ccdLogout
-      //WaitforNextIteration.waitforNextIteration
+      Logout.ccdLogout,
+      WaitforNextIteration.waitforNextIteration
     )
   }
 
-  val CCDCMCScenario = scenario("CCDCMC").repeat(7)
+  val CCDCMCScenario = scenario("CCDCMC").repeat(7) //repeat 7 times
   {
     exec(
       Browse.Homepage,
@@ -78,12 +78,12 @@ class CCDUIPTSimulation extends Simulation  {
       CMC.CMCCreateCase,
       CMC.CMCSubmitPayment,
       CMC.CMCSearchAndView,
-      Logout.ccdLogout
-      //WaitforNextIteration.waitforNextIteration
+      Logout.ccdLogout,
+      WaitforNextIteration.waitforNextIteration
     )
   }
 
-  val CCDDivScenario = scenario("CCDDIV").repeat(6)
+  val CCDDivScenario = scenario("CCDDIV").repeat(6) //repeat 6 times
   {
     exec(
       Browse.Homepage,
@@ -92,11 +92,11 @@ class CCDUIPTSimulation extends Simulation  {
       DVExcep.DVDocUpload,
       DVExcep.DVSearchAndView,
       Logout.ccdLogout,
-      //WaitforNextIteration.waitforNextIteration
+      WaitforNextIteration.waitforNextIteration
     )
   }
 
-  val CCDEthosScenario = scenario("CCDEthos").repeat(12)
+  val CCDEthosScenario = scenario("CCDEthos").repeat(11) //repeat 11 times
   {
     exec(
       Browse.Homepage,
@@ -112,9 +112,10 @@ class CCDUIPTSimulation extends Simulation  {
       //CCDUIScenario.inject(rampUsers(200) during (20 minutes)),
       CCDProbateScenario.inject(rampUsers(100) during (20 minutes)),
       CCDSSCSScenario.inject(rampUsers(100) during (20 minutes)),
-      CCDEthosScenario.inject(rampUsers(500) during (20 minutes)),
+      CCDEthosScenario.inject(rampUsers(100) during (20 minutes)),
       CCDCMCScenario.inject(rampUsers(100) during (20 minutes)),
       CCDDivScenario.inject(rampUsers(100) during (20 minutes))
+      //CCDEthosScenario.inject(rampUsers(1) during (1 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)

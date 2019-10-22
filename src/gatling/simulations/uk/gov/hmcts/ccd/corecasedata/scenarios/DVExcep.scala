@@ -62,13 +62,13 @@ object DVExcep {
 
   val DVCreateCase = group ("DIV_Create") {
 
-    exec(http("DIV_030_005_CreateCase")
+    exec(http("DIV_030_005_CreateCasePage")
       .get("/aggregated/caseworkers/:uid/jurisdictions?access=create")
       .headers(CommonHeader))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("DIV_030_010_CreateCase")
+    .exec(http("DIV_030_010_CreateCaseEnterDetails")
       .get("/data/internal/case-types/DIVORCE_ExceptionRecord/event-triggers/createException?ignore-warning=false")
       .headers(headers_1)
       .check(jsonPath("$.event_token").saveAs("New_Case_event_token")))
@@ -86,14 +86,14 @@ object DVExcep {
 
   val DVDocUpload = group("DIV_DocUpload") {
 
-    exec(http("DIV_040_005_DocumentUpload")
+    exec(http("DIV_040_005_DocumentUploadPage")
       .get("/data/internal/cases/${New_Case_Id}/event-triggers/attachToExistingCase?ignore-warning=false")
       .headers(headers_5)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("DIV_040_010_DocumentUpload")
+    .exec(http("DIV_040_010_DocumentUploadToDM")
       .post(BaseURL + "/documents")
       .bodyPart(RawFileBodyPart("files", "1MB.pdf")
         .fileName("1MB.pdf")
@@ -120,19 +120,19 @@ object DVExcep {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("DIV_050_010_SearchAndView")
+    .exec(http("DIV_050_010_SearchForCase")
       .get("/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE_ExceptionRecord/cases?view=WORKBASKET&page=1")
       .headers(CommonHeader))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("DIV_050_015_SearchAndView")
+    .exec(http("DIV_050_015_OpenCase")
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_6))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("DIV_050_020_SearchAndOpenDoc")
+    .exec(http("DIV_050_020_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_7))
   }

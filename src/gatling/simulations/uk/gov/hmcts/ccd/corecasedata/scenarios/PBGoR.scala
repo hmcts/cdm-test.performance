@@ -145,19 +145,19 @@ object PBGoR {
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val PBSearchAndView = group("PB_View") {
-    exec(http("PBGoR_060_005_SearchAndView")
+    exec(http("PBGoR_060_005_SearchForCase")
       .get("/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/pagination_metadata")//?case_reference=1566214443240990")
       .headers(CommonHeader))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("PBGoR_060_010_SearchAndView")
+    .exec(http("PBGoR_060_010_OpenCase")
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_8))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("PBGoR_060_015_SearchAndView")
+    .exec(http("PBGoR_060_015_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_15))
   }
