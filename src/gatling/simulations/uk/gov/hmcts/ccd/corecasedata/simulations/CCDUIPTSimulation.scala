@@ -17,7 +17,7 @@ class CCDUIPTSimulation extends Simulation  {
     //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
-  val CCDUIScenario = scenario("CCDUI").repeat(500)
+  val CCDUIScenario = scenario("CCDUI").repeat(1)
   {
     exec(
       Browse.Homepage,
@@ -52,7 +52,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDSSCSScenario = scenario("CCDSSCS").repeat(7) //repeat 7 times
+  val CCDSSCSScenario = scenario("CCDSSCS").repeat(6) //repeat 6 times
   {
     exec(
       Browse.Homepage,
@@ -67,7 +67,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDCMCScenario = scenario("CCDCMC").repeat(7) //repeat 7 times
+  val CCDCMCScenario = scenario("CCDCMC").repeat(6) //repeat 6 times
   {
     exec(
       Browse.Homepage,
@@ -83,7 +83,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDDivScenario = scenario("CCDDIV").repeat(6) //repeat 6 times
+  val CCDDivScenario = scenario("CCDDIV").repeat(5) //repeat 5 times
   {
     exec(
       Browse.Homepage,
@@ -115,7 +115,7 @@ class CCDUIPTSimulation extends Simulation  {
       CCDEthosScenario.inject(rampUsers(100) during (20 minutes)),
       CCDCMCScenario.inject(rampUsers(100) during (20 minutes)),
       CCDDivScenario.inject(rampUsers(100) during (20 minutes))
-      //CCDEthosScenario.inject(rampUsers(1) during (1 minutes))
+      //CCDUIScenario.inject(rampUsers(1) during (1 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)

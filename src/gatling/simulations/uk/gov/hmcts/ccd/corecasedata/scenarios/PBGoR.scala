@@ -67,7 +67,7 @@ object PBGoR {
       .headers(headers_1)
       .check(jsonPath("$.event_token").saveAs("New_Case_event_token")))
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("PBGoR_030_015_CreateCase")
       .post("/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases?ignore-warning=false")
@@ -97,7 +97,7 @@ object PBGoR {
       .headers(headers_0)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("PBGoR_040_010_PaymentSuccessful")
       .post("/data/case-types/GrantOfRepresentation/validate?pageId=paymentSuccessAppboPaymentSuccessfulAppPage1")
@@ -118,7 +118,7 @@ object PBGoR {
       .headers(headers_0)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("PGBoR_050_010_DocumentUpload")
       .post(BaseURL + "/documents")
@@ -149,13 +149,13 @@ object PBGoR {
       .get("/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/pagination_metadata")//?case_reference=1566214443240990")
       .headers(CommonHeader))
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("PBGoR_060_010_OpenCase")
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_8))
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("PBGoR_060_015_OpenDocument")
       .get("/documents/${Document_ID}/binary")
