@@ -17,7 +17,7 @@ class CCDUIPTSimulation extends Simulation  {
     //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
-  val CCDUIScenario = scenario("CCDUI").repeat(1)
+  val CCDUIScenario = scenario("CCDUI").repeat(100)
   {
     exec(
       Browse.Homepage,
@@ -38,7 +38,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDProbateScenario = scenario("CCDPB").repeat(6) { //repeat 6 times
+  val CCDProbateScenario = scenario("CCDPB").repeat(7) { //repeat 7 times
     exec(
       Browse.Homepage,
       ExecuteLogin.submitLogin,
