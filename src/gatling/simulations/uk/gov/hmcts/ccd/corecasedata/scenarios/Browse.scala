@@ -22,7 +22,7 @@ object Browse {
  //val feedUserDataCMC = csv("CMCUserData.csv").circular
  //val feedUserDataPB = csv("ProbateUserData.csv").circular
  //val feedUserDataDV = csv("DivorceUserData.csv").circular
- //val feedUserDataSSCS = csv("SSCSUserData.csv").circular
+ val feedUserDataSSCS = csv("SSCSUserData.csv").circular
  val feedUserDataEthos = csv("EthosUserData.csv").circular
  val feedEthosSearchData = csv("EthosSearchData.csv").random
  //val CCDCreateCaseFeeder = csv("CCD_CreateCase_TestData.csv").circular
@@ -49,7 +49,7 @@ object Browse {
     //.feed(feedUserDataCMC)
     //.feed(feedUserDataPB)
     //.feed(feedUserDataDV)
-    //.feed(feedUserDataSSCS)
+    .feed(feedUserDataSSCS)
     .feed(feedUserDataEthos)
     .feed(feedEthosSearchData)
 }

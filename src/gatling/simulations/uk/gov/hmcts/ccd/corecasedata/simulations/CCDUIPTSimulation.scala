@@ -1,7 +1,7 @@
 package uk.gov.hmcts.ccd.corecasedata.simulations
 
 import io.gatling.core.Predef._
-//import io.gatling.http.Predef._ //required for proxy, comment out for VM runs
+import io.gatling.http.Predef._ //required for proxy, comment out for VM runs
 import io.gatling.core.scenario.Simulation
 import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
@@ -14,10 +14,10 @@ class CCDUIPTSimulation extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
+    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
-  val CCDUIScenario = scenario("CCDUI").repeat(100)
+  val CCDUIScenario = scenario("CCDUI").repeat(1)
   {
     exec(
       Browse.Homepage,
@@ -56,14 +56,13 @@ class CCDUIPTSimulation extends Simulation  {
   {
     exec(
       Browse.Homepage,
-      ExecuteLogin.submitLogin,
-      //SSCS.SSCSLogin,
+      //ExecuteLogin.submitLogin,
+      SSCS.SSCSLogin,
       SSCS.SSCSCreateCase,
-      //SSCS.PrintCaseID,
       SSCS.SSCSDocUpload,
       SSCS.SSCSSearchAndView,
       Logout.ccdLogout,
-      WaitforNextIteration.waitforNextIteration
+      //WaitforNextIteration.waitforNextIteration
     )
   }
 
@@ -71,10 +70,7 @@ class CCDUIPTSimulation extends Simulation  {
   {
     exec(
       Browse.Homepage,
-      //CMC.setJurisdiction,
-      //CMC.setCaseType,
       ExecuteLogin.submitLogin,
-      //CMC.CMCLogin,
       CMC.CMCCreateCase,
       CMC.CMCSubmitPayment,
       CMC.CMCSearchAndView,
@@ -115,7 +111,7 @@ class CCDUIPTSimulation extends Simulation  {
       CCDEthosScenario.inject(rampUsers(500) during (20 minutes)),
       CCDCMCScenario.inject(rampUsers(100) during (20 minutes)),
       CCDDivScenario.inject(rampUsers(100) during (20 minutes))
-      //CCDUIScenario.inject(rampUsers(1) during (1 minutes))
+    //CCDSSCSScenario.inject(rampUsers(1) during (1 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)
