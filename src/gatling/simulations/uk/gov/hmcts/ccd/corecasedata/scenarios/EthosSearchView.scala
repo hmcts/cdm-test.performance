@@ -102,29 +102,29 @@ object EthosSearchView {
       //.exitHereIfFailed
 
       .exec(http("CDM_020_050_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/work-basket-inputs"))
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/Manchester/work-basket-inputs"))
       //.exitHereIfFailed
 
       .exec(http("CDM_020_055_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/Manchester/cases?view=WORKBASKET&state=TODO&page=1"))
       //.exitHereIfFailed
 
       .exec(http("CDM_020_060_Login")
-      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO"))
+      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/Manchester/cases/pagination_metadata?state=TODO"))
       //.exitHereIfFailed
 
       .exec(http("CDM_020_065_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/work-basket-inputs")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/Manchester/work-basket-inputs")
       .headers(CommonHeader))
       //.exitHereIfFailed
 
       .exec(http("CDM_020_070_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?view=WORKBASKET&state=TODO&page=1")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/Manchester/cases?view=WORKBASKET&state=TODO&page=1")
       .headers(CommonHeader))
       //.exitHereIfFailed
 
       .exec(http("CDM_020_075_Login")
-      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO")
+      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/Manchester/cases/pagination_metadata?state=TODO")
       .headers(CommonHeader))
       //.exitHereIfFailed
   }
@@ -133,19 +133,19 @@ object EthosSearchView {
   val Search = group("Ethos_View") {
 
     exec(http("ET_030_005_SearchCases")
-      .options("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1")
+      .options("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester/cases?view=WORKBASKET&page=1")
       .headers(headers_0))
 
       .exec(http("ET_030_010_SearchCases")
-        .options("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases/pagination_metadata")
+        .options("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester/cases/pagination_metadata")
         .headers(headers_0))
 
       .exec(http("ET_030_015_SearchCases")
-        .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases/pagination_metadata")
+        .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester/cases/pagination_metadata")
         .headers(headers_2))
 
       .exec(http("ET_030_020_SearchCases")
-        .get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1")
+        .get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester/cases?view=WORKBASKET&page=1")
         .headers(headers_2)
         //.check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id"))
       )
