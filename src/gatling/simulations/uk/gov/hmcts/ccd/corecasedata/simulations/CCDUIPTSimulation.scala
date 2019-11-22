@@ -62,7 +62,7 @@ class CCDUIPTSimulation extends Simulation  {
       SSCS.SSCSDocUpload,
       SSCS.SSCSSearchAndView,
       Logout.ccdLogout,
-      //WaitforNextIteration.waitforNextIteration
+      WaitforNextIteration.waitforNextIteration
     )
   }
 
@@ -70,12 +70,17 @@ class CCDUIPTSimulation extends Simulation  {
   {
     exec(
       Browse.Homepage,
-      ExecuteLogin.submitLogin,
+      CMC.CMCLogin,
+      //ExecuteLogin.submitLogin,
       CMC.CMCCreateCase,
-      CMC.CMCSubmitPayment,
+      CMC.CMCStayCase,
+      CMC.CMCWaitingTransfer,
+      CMC.CMCTransfer,
+      CMC.CMCAttachScannedDocs,
+      CMC.CMCSupportUpdate,
       CMC.CMCSearchAndView,
       Logout.ccdLogout,
-      WaitforNextIteration.waitforNextIteration
+      //WaitforNextIteration.waitforNextIteration
     )
   }
 
@@ -111,7 +116,7 @@ class CCDUIPTSimulation extends Simulation  {
       CCDEthosScenario.inject(rampUsers(500) during (20 minutes)),
       CCDCMCScenario.inject(rampUsers(100) during (20 minutes)),
       CCDDivScenario.inject(rampUsers(100) during (20 minutes))
-    //CCDSSCSScenario.inject(rampUsers(1) during (1 minutes))
+    //CCDCMCScenario.inject(rampUsers(1) during (1 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)
