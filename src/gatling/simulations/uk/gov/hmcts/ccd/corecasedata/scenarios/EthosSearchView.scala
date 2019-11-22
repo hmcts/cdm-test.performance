@@ -178,7 +178,7 @@ object EthosSearchView {
       .check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID")))
     //.exitHereIfFailed
 
-    //.pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("ET_040_010_OpenDocument")
       .get("/documents/${Document_ID}/binary")

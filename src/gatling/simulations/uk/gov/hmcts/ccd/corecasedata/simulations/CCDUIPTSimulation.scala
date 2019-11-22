@@ -66,7 +66,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDCMCScenario = scenario("CCDCMC").repeat(6) //repeat 6 times
+  val CCDCMCScenario = scenario("CCDCMC").repeat(4) //repeat 6 times
   {
     exec(
       Browse.Homepage,
@@ -97,7 +97,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDEthosScenario = scenario("CCDEthos").repeat(11) //repeat 11 times
+  val CCDEthosScenario = scenario("CCDEthos").repeat(10) //repeat 11 times
   {
     exec(
       Browse.Homepage,
@@ -116,7 +116,7 @@ class CCDUIPTSimulation extends Simulation  {
       CCDEthosScenario.inject(rampUsers(500) during (20 minutes)),
       CCDCMCScenario.inject(rampUsers(100) during (20 minutes)),
       CCDDivScenario.inject(rampUsers(100) during (20 minutes))
-    //CCDCMCScenario.inject(rampUsers(1) during (1 minutes))
+    //CCDEthosScenario.inject(rampUsers(1) during (1 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)
