@@ -12,8 +12,8 @@ object EthosSearchView {
   val CCDEnvurl = Environment.ccdEnvurl
   val CommonHeader = Environment.commonHeader
   val idam_header = Environment.idam_header
-  //val feedUserData = csv("EthosUserData.csv").circular
-  //val feedEthosSearchData = csv("EthosSearchData.csv").circular
+  val feedUserData = csv("EthosUserData.csv").circular
+  val feedEthosSearchData = csv("EthosSearchData.csv").random
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
 
@@ -41,6 +41,13 @@ object EthosSearchView {
     "Origin" -> "https://ccd-case-management-web-perftest.service.core-compute-perftest.internal",
     "Sec-Fetch-Mode" -> "cors",
     "experimental" -> "true")
+
+  val headers_8 = Map(
+    "Access-Control-Request-Headers" -> "content-type,experimental",
+    "Access-Control-Request-Method" -> "GET",
+    "Origin" -> "https://ccd-case-management-web-perftest.service.core-compute-perftest.internal",
+    "Sec-Fetch-Mode" -> "cors",
+    "Sec-Fetch-Site" -> "cross-site")
 
   val headers_19 = Map(
     "Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
@@ -161,11 +168,11 @@ object EthosSearchView {
         session
     }*/
 
-    /*exec(http("ET_040_005_OpenCase")
+    exec(http("ET_040_005_OpenCase")
       .options("/data/internal/cases/${EthosCaseRef}")
-      .headers(headers_6))*/
+      .headers(headers_6))
 
-    exec(http("ET_040_010_OpenCase")
+    .exec(http("ET_040_010_OpenCase")
       .get("/data/internal/cases/${EthosCaseRef}")
       .headers(headers_7)
       .check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID")))
@@ -179,4 +186,3 @@ object EthosSearchView {
   }
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 }
-
