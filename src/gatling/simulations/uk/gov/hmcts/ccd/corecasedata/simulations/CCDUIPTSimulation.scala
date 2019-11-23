@@ -52,7 +52,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDSSCSScenario = scenario("CCDSSCS").repeat(3) //repeat 6 times
+  val CCDSSCSScenario = scenario("CCDSSCS").repeat(5) //repeat 6 times
   {
     exec(
       Browse.Homepage,
@@ -84,7 +84,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDDivScenario = scenario("CCDDIV").repeat(3) //repeat 5 times
+  val CCDDivScenario = scenario("CCDDIV").repeat(5) //repeat 5 times
   {
     exec(
       Browse.Homepage,
