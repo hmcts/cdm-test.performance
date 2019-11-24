@@ -28,7 +28,7 @@ object ExecuteLogin {
 			.post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
 			.disableFollowRedirect
 			.headers(idam_header)
-			.formParam("username", "ccdloadtest1@gmail.com") //${CCDUserName}
+			.formParam("username", "${CCDUserName}") //${CCDUserName}
 			.formParam("password", "${CCDUserPassword}")
 			.formParam("save", "Sign in")
 			.formParam("selfRegistrationEnabled", "false")
