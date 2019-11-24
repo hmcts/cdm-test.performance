@@ -97,7 +97,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDEthosScenario = scenario("CCDEthos").repeat(8) //repeat 10 times
+  val CCDEthosScenario = scenario("CCDEthos").repeat(9) //repeat 9 times
   {
     exec(
       Browse.Homepage,
