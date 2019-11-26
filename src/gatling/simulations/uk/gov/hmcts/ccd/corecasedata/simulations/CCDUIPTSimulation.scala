@@ -1,12 +1,11 @@
 package uk.gov.hmcts.ccd.corecasedata.simulations
 
 import io.gatling.core.Predef._
+import scala.concurrent.duration._
 //import io.gatling.http.Predef._ //required for proxy, comment out for VM runs
 import io.gatling.core.scenario.Simulation
 import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
-
-import scala.concurrent.duration._
 
 class CCDUIPTSimulation extends Simulation  {
 
@@ -110,13 +109,13 @@ class CCDUIPTSimulation extends Simulation  {
   }
 
   setUp(
-      //CCDUIScenario.inject(rampUsers(200) during (20 minutes)),
-      CCDProbateScenario.inject(rampUsers(100) during (20 minutes)),
-      CCDSSCSScenario.inject(rampUsers(100) during (20 minutes)),
-      CCDEthosScenario.inject(rampUsers(100) during (20 minutes)),
-      CCDCMCScenario.inject(rampUsers(100) during (20 minutes)),
-      CCDDivScenario.inject(rampUsers(100) during (20 minutes))
-    //CCDDivScenario.inject(rampUsers(1) during (1 minutes))
+    //CCDUIScenario.inject(rampUsers(200) during (20 minutes)),
+    CCDProbateScenario.inject(rampUsers(100) during (20 minutes)),
+    CCDSSCSScenario.inject(rampUsers(100) during (20 minutes)),
+    CCDEthosScenario.inject(rampUsers(200) during (20 minutes)),
+    CCDCMCScenario.inject(rampUsers(100) during (20 minutes)),
+    CCDDivScenario.inject(rampUsers(100) during (20 minutes))
+    //CCDDivScenario.inject(rampUsers(1) during(1 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)
