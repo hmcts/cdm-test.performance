@@ -13,7 +13,7 @@ class CCDUIPTSimulation extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
+    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
   val CCDUIScenario = scenario("CCDUI").repeat(1)
@@ -37,7 +37,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDProbateScenario = scenario("CCDPB").repeat(7) { //repeat 7 times
+  val CCDProbateScenario = scenario("CCDPB").repeat(8) { //repeat 7 times
     exec(
       Browse.Homepage,
       ExecuteLogin.submitLogin,
@@ -65,7 +65,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDCMCScenario = scenario("CCDCMC").repeat(3) //repeat 4 times
+  val CCDCMCScenario = scenario("CCDCMC").repeat(4) //repeat 4 times
   {
     exec(
       Browse.Homepage,
@@ -96,7 +96,7 @@ class CCDUIPTSimulation extends Simulation  {
     )
   }
 
-  val CCDEthosScenario = scenario("CCDEthos").repeat(9) //repeat 9 times
+  val CCDEthosScenario = scenario("CCDEthos").repeat(11) //repeat 9 times
   {
     exec(
       Browse.Homepage,
