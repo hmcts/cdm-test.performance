@@ -179,33 +179,6 @@ object SSCS {
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-11-12\",\n          \"documentComment\": \"${FileName1} upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"${FileName1} upload doc\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
-    /*
-    .exec { session =>
-      val s1 = new File("src/gatling/resources/SSCSData.csv")
-      val writer = new PrintWriter(new FileOutputStream(new File("src/gatling/resources/SSCSData.csv"), true))
-      writer.write(session("New_Case_Id").as[String].trim)
-      writer.write(",")
-      writer.write(session("FileName1").as[String].trim)
-      writer.write(",")
-      writer.write(session("Document_ID").as[String].trim)
-      writer.write(",")
-      writer.write(session("FileName2").as[String].trim)
-      writer.write(",")
-      writer.write(session("Document_ID1").as[String].trim)
-      writer.write(",")
-      writer.write(session("FileName3").as[String].trim)
-      writer.write(",")
-      writer.write(session("Document_ID2").as[String].trim)
-      writer.write(",")
-      writer.write(session("FileName4").as[String].trim)
-      writer.write(",")
-      writer.write(session("Document_ID3").as[String].trim)
-      writer.write("\n")
-      writer.close()
-      session
-    }
-*/
-
   .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val SSCSSearchAndView = group("SSCS_View") {
