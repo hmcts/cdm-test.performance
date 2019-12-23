@@ -10,11 +10,11 @@ import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 class CCDUIPTSimulation extends Simulation  {
 
   val BaseURL = Environment.baseURL
-  val PBiteration = 8
-  val SSCSiteration = 5
-  val CMCiteration = 4
-  val Diviteration = 5
-  val Ethositeration = 11
+  val PBiteration = 7
+  val SSCSiteration = 6
+  val CMCiteration = 5
+  val Diviteration = 6
+  val Ethositeration = 12
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)

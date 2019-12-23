@@ -131,8 +131,6 @@ object PBGoR {
         .check(regex("""http://(.+)/""").saveAs("DMURL"))
         .check(regex("""/documents/(.+)"""").saveAs("Document_ID")))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
       .exec(http("PGBoR_050_015_DocumentUploadProcess")
         .post("/data/case-types/GrantOfRepresentation/validate?pageId=boUploadDocumentsForCaseCreatedboUploadDocumentPage1")
         .headers(headers_4)
