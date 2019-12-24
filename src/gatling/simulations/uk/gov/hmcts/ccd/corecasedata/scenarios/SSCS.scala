@@ -157,7 +157,7 @@ object SSCS {
         .headers(headers_9)
         .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(session => {
       session.set("FileName1", "1MB.pdf")
@@ -209,7 +209,7 @@ object SSCS {
       .headers(headers_15))
   }
 
-  .pause(MinThinkTime seconds, MaxThinkTime seconds)
+  //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 }
 
 
