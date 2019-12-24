@@ -13,8 +13,8 @@ class CCDUIPTSimulation extends Simulation  {
   val PBiteration = 7
   val SSCSiteration = 6
   val CMCiteration = 5
-  val Diviteration = 6
-  val Ethositeration = 12
+  val Diviteration = 7
+  val Ethositeration = 25
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
