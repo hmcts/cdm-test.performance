@@ -30,7 +30,7 @@ class CCDUIPTSimulation extends Simulation  {
         .exec(PBGoR.PBPaymentSuccessful)
         .exec(PBGoR.PBDocUpload)
         .exec(PBGoR.PBSearchAndView)
-        //.exec(WaitforNextIteration.waitforNextIteration)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
@@ -43,7 +43,7 @@ class CCDUIPTSimulation extends Simulation  {
         exec(SSCS.SSCSCreateCase)
         .exec(SSCS.SSCSDocUpload)
         .exec(SSCS.SSCSSearchAndView)
-      //.exec(WaitforNextIteration.waitforNextIteration)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
     }
@@ -60,7 +60,7 @@ class CCDUIPTSimulation extends Simulation  {
         .exec(CMC.CMCAttachScannedDocs)
         .exec(CMC.CMCSupportUpdate)
         .exec(CMC.CMCSearchAndView)
-        //.exec(WaitforNextIteration.waitforNextIteration)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
@@ -73,7 +73,7 @@ class CCDUIPTSimulation extends Simulation  {
         exec(DVExcep.DVCreateCase)
         .exec(DVExcep.DVDocUpload)
         .exec(DVExcep.DVSearchAndView)
-        //.exec(WaitforNextIteration.waitforNextIteration)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
@@ -85,17 +85,17 @@ class CCDUIPTSimulation extends Simulation  {
       .repeat(Ethositeration) {
         exec(EthosSearchView.Search)
         .exec(EthosSearchView.OpenCase)
-        //.exec(WaitforNextIteration.waitforNextIteration)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
 
   setUp(
-    CCDProbateScenario.inject(rampUsers(100) during (20 minutes)),
-    CCDSSCSScenario.inject(rampUsers(100) during (20 minutes)),
-    CCDEthosScenario.inject(rampUsers(500) during (20 minutes)),
-    CCDCMCScenario.inject(rampUsers(100) during (20 minutes)),
-    CCDDivScenario.inject(rampUsers(100) during (20 minutes))
+    CCDProbateScenario.inject(rampUsers(120) during (20 minutes)),
+    CCDSSCSScenario.inject(rampUsers(120) during (20 minutes)),
+    CCDEthosScenario.inject(rampUsers(400) during (20 minutes)),
+    CCDCMCScenario.inject(rampUsers(120) during (20 minutes)),
+    CCDDivScenario.inject(rampUsers(120) during (20 minutes))
     //CCDSSCSScenario.inject(rampUsers(1) during(1 minutes))
   )
     .protocols(httpProtocol)
