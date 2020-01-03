@@ -241,5 +241,4 @@ object CMC {
       .get("/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases/pagination_metadata?case_reference=${New_Case_Id}")
       .headers(CommonHeader))
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 }

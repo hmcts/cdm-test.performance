@@ -11,7 +11,7 @@ class CCDUIPTSimulation extends Simulation  {
 
   val BaseURL = Environment.baseURL
   val PBiteration = 7
-  val SSCSiteration = 8
+  val SSCSiteration = 9
   val CMCiteration = 5
   val Diviteration = 8
   val Ethositeration = 24

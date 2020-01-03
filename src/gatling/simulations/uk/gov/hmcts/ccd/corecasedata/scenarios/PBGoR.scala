@@ -162,6 +162,5 @@ object PBGoR {
         .get("/documents/${Document_ID}/binary")
         .headers(headers_15))
   }
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
 }
