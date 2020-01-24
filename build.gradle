@@ -13,6 +13,10 @@ apply plugin: 'scala'
 group 'uk.gov.hmcts.reform'
 version = '1.0'
 
+tasks.withType(JavaExec) {
+    jvmArgs = ['-Xms512m', '-Xmx2048m']
+}
+
 jar {
     manifest {
         attributes 'Implementation-Title': 'CCD UI Performance Tests',
