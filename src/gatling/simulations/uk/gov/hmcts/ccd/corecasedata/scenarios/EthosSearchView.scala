@@ -143,19 +143,19 @@ object EthosSearchView {
       .options("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester/cases?view=WORKBASKET&page=1")
       .headers(headers_0))
 
-      .exec(http("ET_030_010_SearchCases")
-        .options("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester/cases/pagination_metadata")
-        .headers(headers_0))
+    .exec(http("ET_030_010_SearchCases")
+      .options("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester/cases/pagination_metadata")
+      .headers(headers_0))
 
-      .exec(http("ET_030_015_SearchCases")
-        .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester/cases/pagination_metadata")
-        .headers(headers_2))
+    .exec(http("ET_030_015_SearchCases")
+      .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester/cases/pagination_metadata")
+      .headers(headers_2))
 
-      .exec(http("ET_030_020_SearchCases")
-        .get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester/cases?view=WORKBASKET&page=1")
-        .headers(headers_2)
-        //.check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id"))
-      )
+    .exec(http("ET_030_020_SearchCases")
+      .get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Manchester/cases?view=WORKBASKET&page=1")
+      .headers(headers_2)
+      //.check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id"))
+    )
   }
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
