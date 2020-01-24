@@ -10,11 +10,12 @@ import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 class CCDUIPTSimulation extends Simulation  {
 
   val BaseURL = Environment.baseURL
-  val PBiteration = 7
-  val SSCSiteration = 10
+  val PBiteration = 7 //7
+  val SSCSiteration = 10 //10
   val CMCiteration = 5
   val Diviteration = 8
   val Ethositeration = 24
+  val LFUiteration = 7 //7
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
@@ -43,7 +44,7 @@ class CCDUIPTSimulation extends Simulation  {
         exec(SSCS.SSCSCreateCase)
         .exec(SSCS.SSCSDocUpload)
         .exec(SSCS.SSCSSearchAndView)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        //.exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
     }
@@ -90,13 +91,27 @@ class CCDUIPTSimulation extends Simulation  {
       .exec(Logout.ccdLogout)
   }
 
+  val CCDLargeFileUpload = scenario("CCDLFU")
+      .repeat(1) {
+        exec(Browse.Homepage)
+        .exec(LargeFileUpload.LFULogin)
+        .repeat(LFUiteration) {
+          exec(LargeFileUpload.LFU_CreateCase)
+          .exec(LargeFileUpload.LFUDocUpload)
+          .exec(LargeFileUpload.LFUSearchAndView)
+          .exec(WaitforNextIteration.waitforNextIteration)
+          }
+          .exec(Logout.ccdLogout)
+      }
+
   setUp(
-    CCDProbateScenario.inject(rampUsers(120) during (20 minutes)),
-    CCDSSCSScenario.inject(rampUsers(120) during (20 minutes)),
+    CCDProbateScenario.inject(rampUsers(125) during (20 minutes)),
+    CCDSSCSScenario.inject(rampUsers(125) during (20 minutes)),
     CCDEthosScenario.inject(rampUsers(400) during (20 minutes)),
-    CCDCMCScenario.inject(rampUsers(120) during (20 minutes)),
-    CCDDivScenario.inject(rampUsers(120) during (20 minutes))
-    //CCDSSCSScenario.inject(rampUsers(1) during(1 minutes))
+    CCDCMCScenario.inject(rampUsers(125) during (20 minutes)),
+    CCDDivScenario.inject(rampUsers(125) during (20 minutes)),
+    CCDLargeFileUpload.inject(rampUsers(5) during(20 minutes))
+    //CCDLargeFileUpload.inject(rampUsers(1) during(1 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)
