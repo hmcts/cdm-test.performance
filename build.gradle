@@ -14,7 +14,7 @@ group 'uk.gov.hmcts.reform'
 version = '1.0'
 
 tasks.withType(JavaExec) {
-    jvmArgs = ['-Xms3072m', '-Xmx3072m', '-XX:+UseConcMarkSweepGC']
+    jvmArgs = ['-Xms2000m', '-Xmx2500m', '-XX:+UseConcMarkSweepGC']
 }
 
 jar {
