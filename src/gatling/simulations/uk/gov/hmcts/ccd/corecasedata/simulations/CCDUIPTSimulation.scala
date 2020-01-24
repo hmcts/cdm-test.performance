@@ -105,13 +105,13 @@ class CCDUIPTSimulation extends Simulation  {
       }
 
   setUp(
-    CCDProbateScenario.inject(rampUsers(125) during (20 minutes)),
+    /*CCDProbateScenario.inject(rampUsers(125) during (20 minutes)),
     CCDSSCSScenario.inject(rampUsers(125) during (20 minutes)),
     CCDEthosScenario.inject(rampUsers(400) during (20 minutes)),
     CCDCMCScenario.inject(rampUsers(125) during (20 minutes)),
     CCDDivScenario.inject(rampUsers(125) during (20 minutes)),
-    CCDLargeFileUpload.inject(rampUsers(5) during(20 minutes))
-    //CCDLargeFileUpload.inject(rampUsers(1) during(1 minutes))
+    CCDLargeFileUpload.inject(rampUsers(5) during(20 minutes))*/
+    CCDLargeFileUpload.inject(rampUsers(5) during(5 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)
