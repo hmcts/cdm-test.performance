@@ -135,7 +135,7 @@ object LargeFileUpload {
   //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(session => {
-      session.set("FileName1", "460mbaudio.mp3")
+      session.set("FileName1", "200mbaudio.mp3")
     })
 
     .exec(http("LFU_040_010_DocumentUploadToDM1")
