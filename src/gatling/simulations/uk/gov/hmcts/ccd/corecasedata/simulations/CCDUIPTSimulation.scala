@@ -105,12 +105,12 @@ class CCDUIPTSimulation extends Simulation  {
       }
 
   setUp(
-    CCDProbateScenario.inject(rampUsers(120) during (15 minutes)),
+    CCDProbateScenario.inject(rampUsers(125) during (15 minutes)),
     CCDSSCSScenario.inject(rampUsers(120) during (15 minutes)),
     CCDEthosScenario.inject(rampUsers(400) during (15 minutes)),
     CCDCMCScenario.inject(rampUsers(120) during (15 minutes)),
     CCDDivScenario.inject(rampUsers(120) during (15 minutes)),
-    CCDLargeFileUpload.inject(rampUsers(20) during(15 minutes))
+    CCDLargeFileUpload.inject(rampUsers(15) during(15 minutes))
     //CCDDivScenario.inject(rampUsers(1) during(1 minutes))
   )
     .protocols(httpProtocol)
