@@ -159,7 +159,7 @@ object SSCS {
     //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(session => {
-      session.set("FileName1", "1MB.pdf")
+      session.set("FileName1", "3MB.pdf")
     })
 
     .exec(http("SSCS_040_010_DocumentUploadToDM1")

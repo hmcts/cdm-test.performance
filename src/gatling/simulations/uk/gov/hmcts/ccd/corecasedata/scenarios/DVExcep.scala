@@ -95,8 +95,8 @@ object DVExcep {
 
     .exec(http("DIV_040_010_DocumentUploadToDM")
       .post(BaseURL + "/documents")
-      .bodyPart(RawFileBodyPart("files", "1MB.pdf")
-        .fileName("1MB.pdf")
+      .bodyPart(RawFileBodyPart("files", "3MB.pdf")
+        .fileName("3MB.pdf")
         .transferEncoding("binary"))
       .asMultipartForm
       .formParam("classification", "PUBLIC")
@@ -107,7 +107,7 @@ object DVExcep {
     .exec(http("DIV_040_015_DocumentUploadSubmit")
       .post("/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE_ExceptionRecord/cases/${New_Case_Id}/events")
       .headers(CommonHeader)
-      .body(StringBody("{\n  \"data\": {\n    \"attachToCaseReference\": \"${New_Case_Id}\",\n    \"scannedDocuments\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"type\": \"other\",\n          \"subtype\": null,\n          \"controlNumber\": null,\n          \"fileName\": null,\n          \"scannedDate\": \"2019-09-02T12:00:00.000\",\n          \"url\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"1MB.pdf\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"attachToExistingCase\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+      .body(StringBody("{\n  \"data\": {\n    \"attachToCaseReference\": \"${New_Case_Id}\",\n    \"scannedDocuments\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"type\": \"other\",\n          \"subtype\": null,\n          \"controlNumber\": null,\n          \"fileName\": null,\n          \"scannedDate\": \"2019-09-02T12:00:00.000\",\n          \"url\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"3MB.pdf\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"attachToExistingCase\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
   }
 
   .pause(MinThinkTime seconds, MaxThinkTime seconds)
