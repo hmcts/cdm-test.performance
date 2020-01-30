@@ -13,7 +13,7 @@ class CCDUIPTSimulation extends Simulation  {
   val PBiteration = 7 //7
   val SSCSiteration = 10 //10
   val CMCiteration = 5
-  val Diviteration = 8
+  val Diviteration = 8 //8
   val Ethositeration = 23
   val LFUiteration = 8 //8
 
@@ -105,13 +105,13 @@ class CCDUIPTSimulation extends Simulation  {
       }
 
   setUp(
-    CCDProbateScenario.inject(rampUsers(125) during (15 minutes)),
-    CCDSSCSScenario.inject(rampUsers(125) during (15 minutes)),
+    CCDProbateScenario.inject(rampUsers(120) during (15 minutes)),
+    CCDSSCSScenario.inject(rampUsers(120) during (15 minutes)),
     CCDEthosScenario.inject(rampUsers(400) during (15 minutes)),
-    CCDCMCScenario.inject(rampUsers(125) during (15 minutes)),
-    CCDDivScenario.inject(rampUsers(125) during (15 minutes)),
-    CCDLargeFileUpload.inject(rampUsers(5) during(15 minutes))
-    //CCDLargeFileUpload.inject(rampUsers(5) during(5 minutes))
+    CCDCMCScenario.inject(rampUsers(120) during (15 minutes)),
+    CCDDivScenario.inject(rampUsers(120) during (15 minutes)),
+    CCDLargeFileUpload.inject(rampUsers(20) during(15 minutes))
+    //CCDDivScenario.inject(rampUsers(1) during(1 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)
