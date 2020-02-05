@@ -126,5 +126,5 @@ class CCDUIPTSimulation extends Simulation  {
     CCDProbateScenario2.inject(rampUsers(20) during(5 minutes))
   )
     .protocols(httpProtocol)
-    .maxDuration(20 minutes)
+    .maxDuration(15 minutes)
 }
