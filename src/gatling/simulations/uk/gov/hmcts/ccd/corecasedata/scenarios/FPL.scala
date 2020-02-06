@@ -175,7 +175,9 @@ object FPL {
       .headers(headers_3)
       .check(jsonPath("$.event_token").saveAs("New_Case_event_token")))
 
-//    .exec(http("FPL_030_015_CreateCasePageDetails")
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    //    .exec(http("FPL_030_015_CreateCasePageDetails")
 //      .get("/data/case-types/CARE_SUPERVISION_EPO/validate?pageId=openCase1")
 //      .headers(headers_5)
 //      .body(StringBody("{\n  \"data\": {\n    \"caseName\": \"test123\"\n  },\n  \"event\": {\n    \"id\": \"openCase\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"caseName\": \"test123\"\n  }\n}")))
@@ -186,11 +188,14 @@ object FPL {
       .body(StringBody("{\n  \"data\": {\n    \"caseName\": \"test12345\"\n  },\n  \"event\": {\n    \"id\": \"openCase\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val FPLDocumentUpload = exec(http("FPL_040_005_DocumentUpload")
     .get("/data/internal/cases/${New_Case_Id}/event-triggers/uploadDocuments?ignore-warning=false")
     .headers(headers_11)
     .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(session => {
       session.set("FileName1", "2MB.pdf")
@@ -207,6 +212,8 @@ object FPL {
       .check(regex("""http://(.+)/""").saveAs("DMURL"))
       .check(regex("""/documents/(.+)"""").saveAs("Document_ID")))
 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
     .exec(http("FPL_040_015_DocumentUploadSubmit")
       .post("/data/case-types/CARE_SUPERVISION_EPO/validate?pageId=uploadDocuments1")
       .headers(headers_5)
@@ -216,4 +223,7 @@ object FPL {
       .post("/data/cases/${New_Case_Id}/events")
       .headers(headers_16)
       .body(StringBody("{\n  \"data\": {\n    \"documents_socialWorkChronology_document\": {\n      \"documentStatus\": null,\n      \"typeOfDocument\": {\n        \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}\",\n        \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}/binary\",\n        \"document_filename\": \"${FileName1}\"\n      }\n    },\n    \"documents_socialWorkStatement_document\": {\n      \"documentStatus\": null\n    },\n    \"documents_socialWorkAssessment_document\": {\n      \"documentStatus\": null\n    },\n    \"documents_socialWorkCarePlan_document\": {\n      \"documentStatus\": null\n    },\n    \"documents_socialWorkEvidenceTemplate_document\": {\n      \"documentStatus\": null\n    },\n    \"documents_threshold_document\": {\n      \"documentStatus\": null\n    },\n    \"documents_checklist_document\": {\n      \"documentStatus\": null\n    },\n    \"documents_socialWorkOther\": []\n  },\n  \"event\": {\n    \"id\": \"uploadDocuments\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
 }

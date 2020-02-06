@@ -141,5 +141,5 @@ class CCDUIPTSimulation extends Simulation  {
     CCDFPLScenario.inject(rampUsers(50) during(10 minutes))
   )
     .protocols(httpProtocol)
-    //.maxDuration(120 minutes)
+    .maxDuration(60 minutes)
 }
