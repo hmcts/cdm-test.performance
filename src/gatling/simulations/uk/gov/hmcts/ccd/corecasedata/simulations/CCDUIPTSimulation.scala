@@ -11,6 +11,7 @@ class CCDUIPTSimulation extends Simulation  {
 
   val BaseURL = Environment.baseURL
   val PBiteration = 7 //7
+  val PBiteration2 = 70 //7
   val SSCSiteration = 10 //10
   val CMCiteration = 5
   val Diviteration = 2 //8
@@ -40,7 +41,7 @@ class CCDUIPTSimulation extends Simulation  {
     .repeat(1) {
       exec(Browse.Homepage)
         .exec(ExecuteLogin.submitLogin)
-        .repeat(PBiteration) {
+        .repeat(PBiteration2) {
           exec(PBGoR2.PBCreateCase)
           .exec(PBGoR2.PBPrintCase)
           .exec(WaitforNextIteration.waitforNextIteration)
@@ -123,8 +124,8 @@ class CCDUIPTSimulation extends Simulation  {
     CCDCMCScenario.inject(rampUsers(125) during (15 minutes)),
     CCDDivScenario.inject(rampUsers(125) during (15 minutes))*/
     //CCDLargeFileUpload.inject(rampUsers(15) during(15 minutes))
-    CCDProbateScenario2.inject(rampUsers(20) during(5 minutes))
+    CCDProbateScenario2.inject(rampUsers(80) during(15 minutes))
   )
     .protocols(httpProtocol)
-    .maxDuration(30 minutes)
+    .maxDuration(120 minutes)
 }
