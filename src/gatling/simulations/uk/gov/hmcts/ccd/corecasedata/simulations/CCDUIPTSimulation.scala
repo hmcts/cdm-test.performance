@@ -15,6 +15,7 @@ class CCDUIPTSimulation extends Simulation  {
   val SSCSiteration = 10 //10
   val CMCiteration = 5
   val Diviteration = 2 //8
+  val Fpliteration = 50 //10
   val Ethositeration = 23
   val LFUiteration = 10 //8
 
@@ -82,15 +83,27 @@ class CCDUIPTSimulation extends Simulation  {
   val CCDDivScenario = scenario("CCDDIV")
     .repeat(1) {
       exec(Browse.Homepage)
-      .exec(ExecuteLogin.submitLogin)
-      .repeat(Diviteration) {
-        exec(DVExcep.DVCreateCase)
-        .exec(DVExcep.DVDocUpload)
-        .exec(DVExcep.DVSearchAndView)
-        .exec(WaitforNextIteration.waitforNextIteration)
-      }
-      .exec(Logout.ccdLogout)
-  }
+        .exec(ExecuteLogin.submitLogin)
+        .repeat(Diviteration) {
+          exec(DVExcep.DVCreateCase)
+            .exec(DVExcep.DVDocUpload)
+            .exec(DVExcep.DVSearchAndView)
+            .exec(WaitforNextIteration.waitforNextIteration)
+        }
+        .exec(Logout.ccdLogout)
+    }
+
+  val CCDFPLScenario = scenario("CCDFPL")
+    .repeat(1) {
+      exec(Browse.Homepage)
+        .exec(FPL.FPLLogin)
+        .repeat(Fpliteration) {
+          exec(FPL.FPLCreateCase)
+          .exec(FPL.FPLDocumentUpload)
+          .exec(WaitforNextIteration.waitforNextIteration)
+        }
+        .exec(Logout.ccdLogout)
+    }
 
   val CCDEthosScenario = scenario("CCDEthos")
     .repeat(1) {
@@ -124,8 +137,9 @@ class CCDUIPTSimulation extends Simulation  {
     CCDCMCScenario.inject(rampUsers(125) during (15 minutes)),
     CCDDivScenario.inject(rampUsers(125) during (15 minutes))*/
     //CCDLargeFileUpload.inject(rampUsers(15) during(15 minutes))
-    CCDProbateScenario2.inject(rampUsers(80) during(15 minutes))
+    //CCDProbateScenario2.inject(rampUsers(80) during(15 minutes))
+    CCDFPLScenario.inject(rampUsers(50) during(10 minutes))
   )
     .protocols(httpProtocol)
-    .maxDuration(120 minutes)
+    //.maxDuration(120 minutes)
 }

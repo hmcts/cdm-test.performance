@@ -24,6 +24,7 @@ object Browse {
  //val feedUserDataDV = csv("DivorceUserData.csv").circular
  val feedUserDataSSCS = csv("SSCSUserData.csv").circular
  val feedUserDataIAC = csv("IACUserData.csv").circular
+ val feedUserDataFPL = csv("FPLUserData.csv").circular
  val feedUserDataLarge = csv("LargeUserData.csv").circular
  val feedUserDataEthos = csv("EthosUserData.csv").circular
  val feedEthosSearchData = csv("EthosSearchData.csv").random
@@ -53,6 +54,7 @@ object Browse {
     //.feed(feedUserDataDV)
     .feed(feedUserDataSSCS)
     .feed(feedUserDataIAC)
+    .feed(feedUserDataFPL)
     .feed(feedUserDataLarge)
     .feed(feedUserDataEthos)
     .feed(feedEthosSearchData)
