@@ -20,32 +20,32 @@ object EthosSearchView {
   val headers_0 = Map(
     "Access-Control-Request-Headers" -> "content-type",
     "Access-Control-Request-Method" -> "GET",
-    "Origin" -> "https://ccd-case-management-web-perftest.service.core-compute-perftest.internal",
+    "Origin" -> CCDEnvurl,
     "Sec-Fetch-Mode" -> "no-cors")
 
   val headers_2 = Map(
     "Accept" -> "application/json",
     "Content-Type" -> "application/json",
-    "Origin" -> "https://ccd-case-management-web-perftest.service.core-compute-perftest.internal",
+    "Origin" -> CCDEnvurl,
     "Sec-Fetch-Mode" -> "cors")
 
   val headers_6 = Map(
     "Access-Control-Request-Headers" -> "content-type,experimental",
     "Access-Control-Request-Method" -> "GET",
-    "Origin" -> "https://ccd-case-management-web-perftest.service.core-compute-perftest.internal",
+    "Origin" -> CCDEnvurl,
     "Sec-Fetch-Mode" -> "no-cors")
 
   val headers_7 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-case-view.v2+json",
     "Content-Type" -> "application/json",
-    "Origin" -> "https://ccd-case-management-web-perftest.service.core-compute-perftest.internal",
+    "Origin" -> CCDEnvurl,
     "Sec-Fetch-Mode" -> "cors",
     "experimental" -> "true")
 
   val headers_8 = Map(
     "Access-Control-Request-Headers" -> "content-type,experimental",
     "Access-Control-Request-Method" -> "GET",
-    "Origin" -> "https://ccd-case-management-web-perftest.service.core-compute-perftest.internal",
+    "Origin" -> CCDEnvurl,
     "Sec-Fetch-Mode" -> "cors",
     "Sec-Fetch-Site" -> "cross-site")
 
@@ -68,69 +68,69 @@ object EthosSearchView {
       .formParam("save", "Sign in")
       .formParam("selfRegistrationEnabled", "false")
       .formParam("_csrf", "${csrf}")
-      .check(headerRegex("Location", "(?<=code=)(.*)&scope").saveAs("authCode"))
+      .check(headerRegex("Location", "(?<=code=)(.*)&client").saveAs("authCode"))
       .check(status.in(200, 302)))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_010_Login")
+    .exec(http("CDM_020_010_Login")
       .get(CCDEnvurl + "/config")
       .headers(CommonHeader))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_015_Login")
+    .exec(http("CDM_020_015_Login")
       .options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
       .headers(CommonHeader))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_020_Login")
+    .exec(http("CDM_020_020_Login")
       .get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
       .headers(CommonHeader))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_025_Login")
+    .exec(http("CDM_020_025_Login")
       .get(CCDEnvurl + "/config")
       .headers(CommonHeader))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_030_Login")
+    .exec(http("CDM_020_030_Login")
       .options(BaseURL + "/data/caseworkers/:uid/profile"))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_035_Login")
+    .exec(http("CDM_020_035_Login")
       .get(BaseURL + "/data/caseworkers/:uid/profile")
       .headers(CommonHeader))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_040_Login")
+    .exec(http("CDM_020_040_Login")
       .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types?access=read")
       .resources(http("CDM_020_045_Login")
         .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types?access=read")
         .headers(CommonHeader)))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_050_Login")
+    .exec(http("CDM_020_050_Login")
       .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/Manchester/work-basket-inputs"))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_055_Login")
+    .exec(http("CDM_020_055_Login")
       .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/Manchester/cases?view=WORKBASKET&state=TODO&page=1"))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_060_Login")
+    .exec(http("CDM_020_060_Login")
       .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/Manchester/cases/pagination_metadata?state=TODO"))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_065_Login")
+    .exec(http("CDM_020_065_Login")
       .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/Manchester/work-basket-inputs")
       .headers(CommonHeader))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_070_Login")
+    .exec(http("CDM_020_070_Login")
       .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/Manchester/cases?view=WORKBASKET&state=TODO&page=1")
       .headers(CommonHeader))
       //.exitHereIfFailed
 
-      .exec(http("CDM_020_075_Login")
+    .exec(http("CDM_020_075_Login")
       .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/Manchester/cases/pagination_metadata?state=TODO")
       .headers(CommonHeader))
       //.exitHereIfFailed
