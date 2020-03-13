@@ -16,11 +16,11 @@ object Environment {
  // val baseURL = "https://gateway.ccd.demo.platform.hmcts.net"
   //val idamURL = "https://idam.preprod.ccidam.reform.hmcts.net"
   //val ccdEnvurl = "https://www.ccd.demo.platform.hmcts.net" 
-  val minThinkTime = 30 //40
-  val maxThinkTime = 50 //80
+  val minThinkTime = 40 //40
+  val maxThinkTime = 80 //80
   val constantthinkTime = 7
-  val minWaitForNextIteration = 12 //120
-  val maxWaitForNextIteration = 24 //240
+  val minWaitForNextIteration = 120 //120
+  val maxWaitForNextIteration = 240 //240
   val HttpProtocol = http
 
   val commonHeader = Map(
@@ -33,9 +33,15 @@ object Environment {
     "Origin" -> ccdEnvurl)
 
   val idam_header = Map(
-    "Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+    //"Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+    "accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
     "Accept-Encoding" -> "gzip, deflate, br",
     "Accept-Language" -> "en-US,en;q=0.9",
     "Origin" -> idamURL,
-    "Upgrade-Insecure-Requests" -> "1")
+    "Upgrade-Insecure-Requests" -> "1",
+    "sec-fetch-dest" -> "document",
+    "sec-fetch-mode" -> "navigate",
+    "sec-fetch-site" -> "same-origin",
+    "sec-fetch-user" -> "?1",
+    "cache-control" -> "max-age=0")
 }
