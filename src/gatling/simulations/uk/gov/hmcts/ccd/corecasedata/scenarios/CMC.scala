@@ -35,7 +35,7 @@ object CMC {
   val headers_3 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.case-data-validate.v2+json;charset=UTF-8",
     "Content-Type" -> "application/json",
-    "Origin" -> "https://ccd-case-management-web-perftest.service.core-compute-perftest.internal",
+    "Origin" -> CCDEnvurl,
     "Sec-Fetch-Mode" -> "cors",
     "experimental" -> "true")
 
@@ -48,7 +48,7 @@ object CMC {
   val headers_9 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.create-event.v2+json;charset=UTF-8",
     "Content-Type" -> "application/json",
-    "Origin" -> "https://ccd-case-management-web-perftest.service.core-compute-perftest.internal",
+    "Origin" -> CCDEnvurl,
     "Sec-Fetch-Mode" -> "cors",
     "Sec-Fetch-Site" -> "cross-site",
     "experimental" -> "true")
@@ -69,7 +69,7 @@ object CMC {
       .formParam("save", "Sign in")
       .formParam("selfRegistrationEnabled", "false")
       .formParam("_csrf", "${csrf}")
-      .check(headerRegex("Location", "(?<=code=)(.*)&scope").saveAs("authCode"))
+      .check(headerRegex("Location", "(?<=code=)(.*)&client").saveAs("authCode"))
       .check(status.in(200, 302))
 
       .resources(http("CMC_020_010_Login")
@@ -94,30 +94,30 @@ object CMC {
         .headers(CommonHeader))
 
       .exec(http("CMC_020_040_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/CMC/case-types?access=read")
+        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types?access=read")
         .resources(http("CMC_020_045_Login")
-          .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/CMC/case-types?access=read")
+          .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types?access=read")
           .headers(CommonHeader)))
 
       .exec(http("CMC_020_050_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/work-basket-inputs"))
+        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/work-basket-inputs"))
 
       .exec(http("CMC_020_055_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases?view=WORKBASKET&state=TODO&page=1"))
+        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
 
       .exec(http("CMC_020_060_Login")
-        .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases/pagination_metadata?state=TODO"))
+        .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/pagination_metadata?state=TODO"))
 
       .exec(http("CMC_020_065_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/work-basket-inputs")
+        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/work-basket-inputs")
         .headers(CommonHeader))
 
       .exec(http("CMC_020_070_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases?view=WORKBASKET&state=TODO&page=1")
+        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases?view=WORKBASKET&state=TODO&page=1")
         .headers(CommonHeader))
 
       .exec(http("CMC_020_075_Login")
-        .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases/pagination_metadata?state=TODO")
+        .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/pagination_metadata?state=TODO")
         .headers(CommonHeader))
   }
 
@@ -130,15 +130,15 @@ object CMC {
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("CMC_030_010_CreateCaseDetails")
-      .get(BaseURL + "/data/internal/case-types/MoneyClaimCase/event-triggers/CreateClaim?ignore-warning=false")
+      .get(BaseURL + "/data/internal/case-types/${CMCCaseType}/event-triggers/CreateClaim?ignore-warning=false")
       .headers(headers_1)
       .check(jsonPath("$.event_token").saveAs("New_Case_event_token")))
 
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("CMC_030_015_CreateCaseSubmit")
-      .post(BaseURL + "/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases?ignore-warning=false")
-      //.post(BaseURL + "/data/case-types/MoneyClaimCase/validate?pageId=SubmitPrePayment1")
+      .post(BaseURL + "/data/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases?ignore-warning=false")
+      //.post(BaseURL + "/data/case-types/${CMCCaseType}/validate?pageId=SubmitPrePayment1")
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"CreateClaim\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
@@ -226,19 +226,19 @@ object CMC {
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val CMCSearchAndView = exec(http("CMC_090_005_SearchPage")
-      .get("/data/internal/case-types/MoneyClaimCase/work-basket-inputs")
+      .get("/data/internal/case-types/${CMCCaseType}/work-basket-inputs")
       .headers(headers_0))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("CMC_090_010_SearchForCase")
-      .get("/aggregated/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases?view=WORKBASKET&page=1&case_reference=${New_Case_Id}")
+      .get("/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases?view=WORKBASKET&page=1&case_reference=${New_Case_Id}")
       .headers(CommonHeader))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("CMC_090_015_OpenCase")
-      .get("/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases/pagination_metadata?case_reference=${New_Case_Id}")
+      .get("/data/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/pagination_metadata?case_reference=${New_Case_Id}")
       .headers(CommonHeader))
 
 }
