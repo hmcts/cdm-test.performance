@@ -60,15 +60,16 @@ object SSCS {
   val SSCSLogin = group("SSCS_Login") {
 
     exec(http("SSCS_020_005_Login")
-      .post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+      //.post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+      .post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=https%3A%2F%2Fccd-case-management-web-perftest.service.core-compute-perftest.internal%2Foauth2redirect")
       .disableFollowRedirect
       .headers(idam_header)
-      .formParam("username", "${SSCSUserName}")
-      .formParam("password", "${SSCSUserPassword}")
+      .formParam("username", "ccdloadtest3@gmail.com")  //ccdloadtest1@gmail.com,Password12 ${SSCSUserName}
+      .formParam("password", "Password12") //${SSCSUserPassword}
       .formParam("save", "Sign in")
       .formParam("selfRegistrationEnabled", "false")
       .formParam("_csrf", "${csrf}")
-      .check(headerRegex("Location", "(?<=code=)(.*)&scope").saveAs("authCode"))
+      .check(headerRegex("Location", "(?<=code=)(.*)&client").saveAs("authCode"))
       .check(status.in(200, 302))
 
       .resources(http("SSCS_020_010_Login")
