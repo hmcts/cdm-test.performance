@@ -64,8 +64,8 @@ object SSCS {
       .post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=https%3A%2F%2Fccd-case-management-web-perftest.service.core-compute-perftest.internal%2Foauth2redirect")
       .disableFollowRedirect
       .headers(idam_header)
-      .formParam("username", "ccdloadtest3@gmail.com")  //ccdloadtest1@gmail.com,Password12 ${SSCSUserName}
-      .formParam("password", "Password12") //${SSCSUserPassword}
+      .formParam("username", "${SSCSUserName}")  //ccdloadtest1@gmail.com,Password12 ${SSCSUserName}
+      .formParam("password", "${SSCSUserPassword}") //${SSCSUserPassword}
       .formParam("save", "Sign in")
       .formParam("selfRegistrationEnabled", "false")
       .formParam("_csrf", "${csrf}")
@@ -119,6 +119,14 @@ object SSCS {
       .exec(http("SSCS_020_075_Login")
         .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/pagination_metadata?state=TODO")
         .headers(CommonHeader))
+
+//      .pause(10)
+//
+//      .exec(http("User-Profile-GET")
+//        .get("http://ccd-api-gateway-web-perftest.service.core-compute-perftest.internal/users?jurisdiction=DIVORCE")
+//        .header("ServiceAuthorization", "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiOHAyaWo4NktKU3hDSnhnL3lKL1dsN043MTFzPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJjY2RpbXBvcnRkb21haW5AZ21haWwuY29tIiwiY3RzIjoiT0FVVEgyX1NUQVRFTEVTU19HUkFOVCIsImF1dGhfbGV2ZWwiOjAsImF1ZGl0VHJhY2tpbmdJZCI6IjhlODU0MzJiLWM1MmEtNDMzYy05NmE2LTk0NzI3NjI3NzI1ZS0xNDA1NTA0OCIsImlzcyI6Imh0dHBzOi8vZm9yZ2Vyb2NrLWFtLnNlcnZpY2UuY29yZS1jb21wdXRlLWlkYW0tcGVyZnRlc3QuaW50ZXJuYWw6ODQ0My9vcGVuYW0vb2F1dGgyL3JlYWxtcy9yb290L3JlYWxtcy9obWN0cyIsInRva2VuTmFtZSI6ImFjY2Vzc190b2tlbiIsInRva2VuX3R5cGUiOiJCZWFyZXIiLCJhdXRoR3JhbnRJZCI6ImxkcTg3X2taQ1NYaHZRRzVfNkcwZUdCbkdIMCIsImF1ZCI6ImNjZF9hZG1pbiIsIm5iZiI6MTU4NDM1NzM3NiwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb25fY29kZSIsInNjb3BlIjpbIm9wZW5pZCIsInByb2ZpbGUiLCJyb2xlcyJdLCJhdXRoX3RpbWUiOjE1ODQzNTczNzUsInJlYWxtIjoiL2htY3RzIiwiZXhwIjoxNTg0Mzg2MTc2LCJpYXQiOjE1ODQzNTczNzYsImV4cGlyZXNfaW4iOjI4ODAwLCJqdGkiOiI1dGJHOEYzT2FoRFJmRjk4cFhVNWV1b1o2eDAifQ.HhRpT8K9BxTuviHJzkVrvGIUJ2isy2AOTEuCsHqAHhR9xLKphu1cy_PAYd6odIWrZ5sb-RWClzEPhUuLZxv_x9eeOVVR-zZyEVHtSEX-ZuZNnuTCu2a6KMQNV5mINq5_qBjoiBAkBAmKbr0rFV0alEFmA8YOOhxilZXyiPpHh3ydEe-URj5hPhXT80rRhdhj7pjgJRQjOhMS1_ia-fypyY1aSbSUpdnCq9S37oBP2wjRvwRjec2ZwLRa9jnxAY0FQGNtIx1eKJ2c257D4B1g9RnYsLDcefgGcU7YMmm7KKtA45K0WW-EdN_SKNRMs0LY4G7aMxdNWM63Vp-gVs-eGg")
+//        .header("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjY2RfZGF0YSIsImV4cCI6MTU4NDM4MTE5NX0.e7asI0UnvbVejhx5EosfHFzT_MDEOQIdzDQw9VhoJp3EjVPIliI87LvTlB6MGEAjh4xcqwKPnZ85vChH37EvyA")
+//        .header("Content-Type", "application/json"))
   }
 
   .pause(MinThinkTime seconds, MaxThinkTime seconds)
