@@ -59,7 +59,7 @@ object DVExcep {
     "Sec-Fetch-Site" -> "cross-site",
     "experimental" -> "true")
 
-  val submitLogin = group("DVLogin") {
+  val submitLogin = group("DIV_Login") {
 
     exec(http("DIV_020_005_Login")
       .post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
