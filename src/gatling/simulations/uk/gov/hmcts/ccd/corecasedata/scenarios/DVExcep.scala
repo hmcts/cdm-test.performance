@@ -191,7 +191,7 @@ object DVExcep {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("DIV_030_040_CreateCase${DVCaseType}Reason")
+    .exec(http("DIV_030_040_CreateCaseDivorceReason")
       .post("/data/case-types/${DVCaseType}/validate?pageId=solicitorCreateSolReasonForDivorce")
       .headers(headers_8)
       .body(StringBody("{\n  \"data\": {\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\"\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"tessa\",\n    \"D8PetitionerLastName\": \"tickles\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"daniel\",\n    \"D8RespondentLastName\": \"gleeballs\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"tessa tickles\",\n    \"D8MarriageRespondentName\": \"daniel gleeballs\",\n    \"D8MarriedInUk\": \"Yes\",\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ],\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\"\n  }\n}")))
@@ -251,21 +251,25 @@ object DVExcep {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
+     .exec(session => {
+      session.set("FileName1", "300kb.pdf")
+    })
+
     .exec(http("DIV_040_010_DocumentUploadToDM")
       .post(BaseURL + "/documents")
-      .bodyPart(RawFileBodyPart("files", "1MB.pdf")
-        .fileName("1MB.pdf")
+      .bodyPart(RawFileBodyPart("files", "${FileName1}")
+        .fileName("${FileName1}")
         .transferEncoding("binary"))
       .asMultipartForm
       .formParam("classification", "PUBLIC")
       .check(status.is(200))
       .check(regex("""http://(.+)/""").saveAs("DMURL"))
-      .check(regex("""/documents/(.+)"""").saveAs("Document_ID")))
+      .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
 
     .exec(http("DIV_040_015_DocumentUploadSubmit")
       .post("/data/caseworkers/:uid/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${New_Case_Id}/events")
       .headers(CommonHeader)
-      .body(StringBody("{\n  \"data\": {\n    \"D8DocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"other\",\n          \"DocumentEmailContent\": null,\n          \"DocumentDateAdded\": null,\n          \"DocumentComment\": null,\n          \"DocumentFileName\": null,\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}/binary\",\n            \"document_filename\": \"1MB.pdf\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+      .body(StringBody("{\n  \"data\": {\n    \"D8DocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"other\",\n          \"DocumentEmailContent\": null,\n          \"DocumentDateAdded\": null,\n          \"DocumentComment\": null,\n          \"DocumentFileName\": null,\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
   }
 
   .pause(MinThinkTime seconds, MaxThinkTime seconds)

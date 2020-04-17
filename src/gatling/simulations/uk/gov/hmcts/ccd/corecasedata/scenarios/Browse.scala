@@ -28,6 +28,7 @@ object Browse {
  val feedUserDataLarge = csv("LargeUserData.csv").circular
  val feedUserDataEthos = csv("EthosUserData.csv").circular
  val feedEthosSearchData = csv("EthosSearchData.csv").random
+ val feedUserProfileData = csv("UserProfileJurisdictions.csv").circular
  //val CCDCreateCaseFeeder = csv("CCD_CreateCase_TestData.csv").circular
 
  val CommonHeader = Environment.commonHeader
@@ -58,4 +59,5 @@ object Browse {
     .feed(feedUserDataLarge)
     .feed(feedUserDataEthos)
     .feed(feedEthosSearchData)
+    .feed(feedUserProfileData)
 }

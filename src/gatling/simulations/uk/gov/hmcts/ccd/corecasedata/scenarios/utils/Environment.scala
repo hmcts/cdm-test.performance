@@ -6,8 +6,9 @@ import io.gatling.http.Predef._
 object Environment {
 
   val idamURL = "https://idam-web-public.perftest.platform.hmcts.net"
-  val ccdEnvurl = "https://ccd-case-management-web-perftest.service.core-compute-perftest.internal"
-  val baseURL = "https://ccd-api-gateway-web-perftest.service.core-compute-perftest.internal"
+  val ccdEnvurl = "https://www-ccd.perftest.platform.hmcts.net"
+  val baseURL = "https://gateway-ccd.perftest.platform.hmcts.net"
+  //val baseURL = "https://ccd-api-gateway-web-perftest.service.core-compute-perftest.internal"
 
   /*val idamURL = "https://idam-web-public.aat.platform.hmcts.net"
   val ccdEnvurl = "https://ccd-case-management-web-aat.service.core-compute-aat.internal"

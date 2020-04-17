@@ -131,7 +131,7 @@ class CCDUIPTSimulation extends Simulation  {
       }
 
   val UserProfileSearch = scenario("CCDUP")
-      .repeat(10) {
+      .repeat(20) {
         exec(GetUserProfile.SearchJurisdiction)
           .exec(GetUserProfile.SearchAllUsers)
           .exec(WaitforNextIteration.waitforNextIteration)
@@ -143,12 +143,12 @@ class CCDUIPTSimulation extends Simulation  {
     CCDSSCSScenario.inject(rampUsers(150) during (20 minutes)),
     CCDEthosScenario.inject(rampUsers(400) during (20 minutes)),
     CCDCMCScenario.inject(rampUsers(150) during (20 minutes)),
-    CCDDivScenario.inject(rampUsers(150) during (20 minutes)),
-    UserProfileSearch.inject(rampUsers(10) during(20 minutes))
+    CCDDivScenario.inject(rampUsers(150) during (20 minutes))
+    //UserProfileSearch.inject(rampUsers(10) during(20 minutes))
 
     //These scenarios left commented out and used for debugging/script testing etc
     //CCDLargeFileUpload.inject(rampUsers(15) during(15 minutes))
-    //CCDProbateScenario2.inject(rampUsers(80) during(15 minutes))
+    //CCDEthosScenario.inject(rampUsers(1) during(1 minutes))
     //UserProfileSearch.inject(rampUsers(1) during(1 minutes))
   )
     .protocols(httpProtocol)

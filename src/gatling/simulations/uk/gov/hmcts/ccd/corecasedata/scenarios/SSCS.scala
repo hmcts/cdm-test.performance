@@ -60,11 +60,11 @@ object SSCS {
   val SSCSLogin = group("SSCS_Login") {
 
     exec(http("SSCS_020_005_Login")
-      //.post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-      .post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=https%3A%2F%2Fccd-case-management-web-perftest.service.core-compute-perftest.internal%2Foauth2redirect")
+      .post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+      //.post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=https%3A%2F%2Fccd-case-management-web-perftest.service.core-compute-perftest.internal%2Foauth2redirect")
       .disableFollowRedirect
       .headers(idam_header)
-      .formParam("username", "${SSCSUserName}")  //ccdloadtest1@gmail.com,Password12 ${SSCSUserName}
+      .formParam("username", "ccdloadtest1@gmail.com")  //ccdloadtest1@gmail.com,Password12 ${SSCSUserName}
       .formParam("password", "${SSCSUserPassword}") //${SSCSUserPassword}
       .formParam("save", "Sign in")
       .formParam("selfRegistrationEnabled", "false")
@@ -165,10 +165,10 @@ object SSCS {
         .headers(headers_9)
         .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    //.pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(session => {
-      session.set("FileName1", "3MB.pdf")
+      session.set("FileName1", "300kb.pdf")
     })
 
     .exec(http("SSCS_040_010_DocumentUploadToDM1")
@@ -180,7 +180,8 @@ object SSCS {
       .formParam("classification", "PUBLIC")
       .check(status.is(200))
       .check(regex("""http://(.+)/""").saveAs("DMURL"))
-      .check(regex("""/documents/(.+)"""").saveAs("Document_ID")))
+      //.check(regex("""/documents/(.+?)"""").saveAs("Document_ID")))
+      .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
 
     .exec(http("SSCS_040_015_DocumentUploadProcess")
       .post("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/${New_Case_Id}/events")
@@ -188,7 +189,6 @@ object SSCS {
       .body(StringBody("{\n  \"data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-11-12\",\n          \"documentComment\": \"${FileName1} upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"${FileName1} upload doc\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
   .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
 
   val SSCSSearchAndView = group("SSCS_View") {
     exec(http("SSCS_050_005_SearchPage")
@@ -218,7 +218,12 @@ object SSCS {
       .headers(headers_15))
   }
 
-  //.pause(MinThinkTime seconds, MaxThinkTime seconds)
+  .exec {
+    session =>
+      println(session("New_Case_Id").as[String])
+      println(session("Document_ID").as[String])
+      session
+  }
 }
 
 

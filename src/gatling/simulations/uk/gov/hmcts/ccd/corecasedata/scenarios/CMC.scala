@@ -3,7 +3,6 @@ package uk.gov.hmcts.ccd.corecasedata.scenarios
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
-
 import scala.concurrent.duration._
 
 object CMC {
@@ -138,7 +137,6 @@ object CMC {
 
     .exec(http("CMC_030_015_CreateCaseSubmit")
       .post(BaseURL + "/data/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases?ignore-warning=false")
-      //.post(BaseURL + "/data/case-types/${CMCCaseType}/validate?pageId=SubmitPrePayment1")
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"CreateClaim\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
