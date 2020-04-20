@@ -10,7 +10,7 @@ import scala.concurrent.duration._
 class CCDUIPTSimulation extends Simulation  {
 
   val BaseURL = Environment.baseURL
-  val PBiteration = 7 //7
+  val PBiteration = 1 //7
   val PBiteration2 = 8 //8
   val SSCSiteration = 10 //10
   val CMCiteration = 5 //5
@@ -139,17 +139,17 @@ class CCDUIPTSimulation extends Simulation  {
 
   setUp(
     //These 5 scenarios required for CCD regression testing
-    CCDProbateScenario.inject(rampUsers(150) during (20 minutes)),
+    /*CCDProbateScenario.inject(rampUsers(150) during (20 minutes)),
     CCDSSCSScenario.inject(rampUsers(150) during (20 minutes)),
     CCDEthosScenario.inject(rampUsers(400) during (20 minutes)),
     CCDCMCScenario.inject(rampUsers(150) during (20 minutes)),
-    CCDDivScenario.inject(rampUsers(150) during (20 minutes))
+    CCDDivScenario.inject(rampUsers(150) during (20 minutes))*/
     //UserProfileSearch.inject(rampUsers(10) during(20 minutes))
 
     //These scenarios left commented out and used for debugging/script testing etc
     //CCDLargeFileUpload.inject(rampUsers(15) during(15 minutes))
     //CCDEthosScenario.inject(rampUsers(1) during(1 minutes))
-    //UserProfileSearch.inject(rampUsers(1) during(1 minutes))
+    CCDProbateScenario.inject(rampUsers(150) during(30 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)

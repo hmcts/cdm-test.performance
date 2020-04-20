@@ -69,72 +69,72 @@ object PBGoR {
       .check(status.in(200, 302)))
       //.exitHereIfFailed
 
-      .exec(http("PBGoR_020_010_Login")
-        .get(CCDEnvurl + "/config")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
-
-      .exec(http("PBGoR_020_015_Login")
-        .options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
-
-      .exec(http("PBGoR_020_020_Login")
-        .get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
-
-      .exec(http("PBGoR_020_025_Login")
-        .get(CCDEnvurl + "/config")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
-
-      .exec(http("PBGoR_020_030_Login")
-        .options(BaseURL + "/data/caseworkers/:uid/profile"))
-      //.exitHereIfFailed
-
-      .exec(http("PBGoR_020_035_Login")
-        .get(BaseURL + "/data/caseworkers/:uid/profile")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
-
-      .exec(http("PBGoR_020_040_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types?access=read"))
-
-      .exec(http("PBGoR_020_045_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types?access=read")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
-
-      .exec(http("PBGoR_020_050_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/work-basket-inputs"))
-      //.exitHereIfFailed
-
-      .exec(http("PBGoR_020_055_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
-      //.exitHereIfFailed
-
-      .exec(http("PBGoR_020_060_Login")
-        .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/pagination_metadata?state=TODO"))
-      //.exitHereIfFailed
-
-      .exec(http("PBGoR_020_065_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/work-basket-inputs")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
-
-      .exec(http("PBGoR_020_070_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases?view=WORKBASKET&state=TODO&page=1")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
-
-      .exec(http("PBGoR_020_075_Login")
-        .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/pagination_metadata?state=TODO")
-        .headers(CommonHeader))
+    .exec(http("PBGoR_020_010_Login")
+      .get(CCDEnvurl + "/config")
+      .headers(CommonHeader))
     //.exitHereIfFailed
-  }
+
+    .exec(http("PBGoR_020_015_Login")
+      .options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("PBGoR_020_020_Login")
+      .get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("PBGoR_020_025_Login")
+      .get(CCDEnvurl + "/config")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("PBGoR_020_030_Login")
+      .options(BaseURL + "/data/caseworkers/:uid/profile"))
+    //.exitHereIfFailed
+
+    .exec(http("PBGoR_020_035_Login")
+      .get(BaseURL + "/data/caseworkers/:uid/profile")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("PBGoR_020_040_Login")
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types?access=read"))
+
+    .exec(http("PBGoR_020_045_Login")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types?access=read")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("PBGoR_020_050_Login")
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/work-basket-inputs"))
+    //.exitHereIfFailed
+
+    .exec(http("PBGoR_020_055_Login")
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
+    //.exitHereIfFailed
+
+    .exec(http("PBGoR_020_060_Login")
+      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/pagination_metadata?state=TODO"))
+    //.exitHereIfFailed
+
+    .exec(http("PBGoR_020_065_Login")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/work-basket-inputs")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("PBGoR_020_070_Login")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases?view=WORKBASKET&state=TODO&page=1")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("PBGoR_020_075_Login")
+      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/pagination_metadata?state=TODO")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
+  }
 
   val PBCreateCase = group("PB_Create") {
     exec(http("PBGoR_030_005_CreateCasePage")
@@ -177,6 +177,8 @@ object PBGoR {
         .headers(CommonHeader)
         .body(StringBody("{\n  \"data\": {\n    \"applicationSubmittedDate\": \"2019-03-01\"\n  },\n  \"event\": {\n    \"id\": \"paymentSuccessApp\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
     }
+
+
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     val PBDocUpload = group("PB_DocUpload") {
@@ -236,4 +238,3 @@ object PBGoR {
     }
 
 }
-
