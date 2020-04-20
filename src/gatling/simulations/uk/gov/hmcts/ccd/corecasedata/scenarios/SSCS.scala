@@ -218,12 +218,12 @@ object SSCS {
       .headers(headers_15))
   }
 
-  .exec {
-    session =>
-      println(session("New_Case_Id").as[String])
-      println(session("Document_ID").as[String])
-      session
-  }
+  // .exec {
+  //   session =>
+  //     println(session("New_Case_Id").as[String])
+  //     println(session("Document_ID").as[String])
+  //     session
+  // }
 }
 
 
