@@ -64,7 +64,7 @@ object SSCS {
       //.post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=https%3A%2F%2Fccd-case-management-web-perftest.service.core-compute-perftest.internal%2Foauth2redirect")
       .disableFollowRedirect
       .headers(idam_header)
-      .formParam("username", "ccdloadtest1@gmail.com")  //ccdloadtest1@gmail.com,Password12 ${SSCSUserName}
+      .formParam("username", "${SSCSUserName}")  //ccdloadtest1@gmail.com,Password12 ${SSCSUserName}
       .formParam("password", "${SSCSUserPassword}") //${SSCSUserPassword}
       .formParam("save", "Sign in")
       .formParam("selfRegistrationEnabled", "false")
