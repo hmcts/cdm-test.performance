@@ -10,9 +10,9 @@ import scala.concurrent.duration._
 class CCDUIPTSimulation extends Simulation  {
 
   val BaseURL = Environment.baseURL
-  val PBiteration = 1 //7
+  val PBiteration = 8 //8
   val PBiteration2 = 8 //8
-  val SSCSiteration = 10 //10
+  val SSCSiteration = 9 //9
   val CMCiteration = 5 //5
   val Diviteration = 4 //4
   val Fpliteration = 10 //10
