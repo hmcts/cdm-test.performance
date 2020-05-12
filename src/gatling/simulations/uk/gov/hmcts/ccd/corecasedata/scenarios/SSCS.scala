@@ -73,6 +73,16 @@ object SSCS {
 		"Sec-Fetch-Site" -> "same-site",
 		"experimental" -> "true")
 
+  val headers_6 = Map(
+		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-jurisdiction-configs.v2+json;charset=UTF-8",
+		"Content-Type" -> "application/json",
+		"Origin" -> CCDEnvurl,
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-site",
+		"experimental" -> "true")
+
   val headers_8 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-case-view.v2+json",
     "Content-Type" -> "application/json",
@@ -83,6 +93,24 @@ object SSCS {
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-event-trigger.v2+json;charset=UTF-8",
     "Sec-Fetch-Mode" -> "cors",
     "experimental" -> "true")
+
+  val headers_11 = Map(
+		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-workbasket-input-details.v2+json;charset=UTF-8",
+		"Content-Type" -> "application/json",
+		"Origin" -> "https://www-ccd.perftest.platform.hmcts.net",
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-site",
+		"experimental" -> "true")
+
+  val headers_12 = Map(
+		"Content-Type" -> "application/json",
+		"Origin" -> "https://www-ccd.perftest.platform.hmcts.net",
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-site")
 
   val headers_15 = Map(
     "Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
@@ -104,56 +132,122 @@ object SSCS {
       .formParam("selfRegistrationEnabled", "false")
       .formParam("_csrf", "${csrf}")
       .check(headerRegex("Location", "(?<=code=)(.*)&client").saveAs("authCode"))
-      .check(status.in(200, 302))
+      .check(status.in(200, 302)))
 
-      .resources(http("SSCS_020_010_Login")
-        .get(CCDEnvurl + "/config")
-        .headers(CommonHeader)))
+      // .exec(http("SSCS_020_010_Login")
+      //   .get(CCDEnvurl + "/config")
+      //   .headers(CommonHeader)))
 
-      .exec(http("SSCS_020_015_Login")
-        .options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-        .headers(CommonHeader))
-      .exec(http("SSCS_020_020_Login")
-        .get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-        .headers(CommonHeader))
-      .exec(http("SSCS_020_025_Login")
-        .get(CCDEnvurl + "/config")
-        .headers(CommonHeader))
+      // .exec(http("SSCS_020_015_Login")
+      //   .options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+      //   .headers(CommonHeader))
 
-      .exec(http("SSCS_020_030_Login")
-        .options(BaseURL + "/data/caseworkers/:uid/profile"))
+      // .exec(http("SSCS_020_020_Login")
+      //   .get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+      //   .headers(CommonHeader))
 
-      .exec(http("SSCS_020_035_Login")
-        .get(BaseURL + "/data/caseworkers/:uid/profile")
-        .headers(CommonHeader))
+      // .exec(http("SSCS_020_025_Login")
+      //   .get(CCDEnvurl + "/config")
+      //   .headers(CommonHeader))
 
-      .exec(http("SSCS_020_040_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types?access=read")
-        .resources(http("SSCS_020_045_Login")
-          .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types?access=read")
-          .headers(CommonHeader)))
+      // .exec(http("SSCS_020_030_Login")
+      //   .options(BaseURL + "/data/caseworkers/:uid/profile"))
 
-      .exec(http("SSCS_020_050_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/work-basket-inputs"))
+      // .exec(http("SSCS_020_035_Login")
+      //   .get(BaseURL + "/data/caseworkers/:uid/profile")
+      //   .headers(CommonHeader))
 
-      .exec(http("SSCS_020_055_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?view=WORKBASKET&state=TODO&page=1"))
+      // .exec(http("SSCS_020_040_Login")
+      //   .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types?access=read")
+      //   .resources(http("SSCS_020_045_Login")
+      //     .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types?access=read")
+      //     .headers(CommonHeader)))
 
-      .exec(http("SSCS_020_060_Login")
-        .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/pagination_metadata?state=TODO"))
+      // .exec(http("SSCS_020_050_Login")
+      //   .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/work-basket-inputs"))
 
-      .exec(http("SSCS_020_065_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/work-basket-inputs")
-        .headers(CommonHeader))
+      // .exec(http("SSCS_020_055_Login")
+      //   .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?view=WORKBASKET&state=TODO&page=1"))
 
-      .exec(http("SSCS_020_070_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?view=WORKBASKET&state=TODO&page=1")
-        .headers(CommonHeader))
+      // .exec(http("SSCS_020_060_Login")
+      //   .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/pagination_metadata?state=TODO"))
 
-      .exec(http("SSCS_020_075_Login")
-        .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/pagination_metadata?state=TODO")
-        .headers(CommonHeader))
+      // .exec(http("SSCS_020_065_Login")
+      //   .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/work-basket-inputs")
+      //   .headers(CommonHeader))
 
+      // .exec(http("SSCS_020_066_Login")
+      //   .get("/activity/cases/1552650446279756,1574715851299047,1574771353085053,1574771425565793,1574775065167620,1574775076679514,1574775081771140,1574775085031665,1574775090059446,1574775116202087,1574775125129875,1574775125356445,1574775164890403,1574775167970699,1574775170224035,1574775201506996,1574775205680128,1574775230602188,1574775232314675,1574775247646285,1574775263929649,1574775275516038,1574775282732867,1574775283695253,1574775292722858/activity")
+			//   .headers(CommonHeader))
+
+      // .exec(http("SSCS_020_070_Login")
+      //   .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?view=WORKBASKET&state=TODO&page=1")
+      //   .headers(CommonHeader))
+
+      // .exec(http("SSCS_020_075_Login")
+      //   .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/pagination_metadata?state=TODO")
+      //   .headers(CommonHeader))
+
+    .exec(http("request_1")
+      .get("https://www-ccd.perftest.platform.hmcts.net/config")
+			.headers(headers_1))
+
+    .exec(http("request_2")
+			.get("/oauth2?code=${authCode}&redirect_uri=www-ccd.perftest.platform.hmcts.net/oauth2redirect")
+			.headers(headers_2))
+
+    .exec(http("request_3")
+			.get("https://www-ccd.perftest.platform.hmcts.net/config")
+			.headers(headers_1))
+
+    .exec(http("request_4")
+			.get("/activity/cases/0/activity")
+			.headers(headers_2))
+			//.check(status.is(404))
+
+    .exec(http("request_5")
+			.get("/data/internal/profile")
+			.headers(headers_5))
+
+		.pause(1)
+
+		.exec(http("request_6")
+			.get("/data/internal/jurisdiction-ui-configs/?ids=DIVORCE&ids=AUTOTEST1&ids=CMC&ids=PROBATE&ids=SSCS&ids=EMPLOYMENT")
+			.headers(headers_6))
+
+    .exec(http("request_7")
+			.get("/data/internal/jurisdiction-ui-configs/?ids=DIVORCE&ids=AUTOTEST1&ids=CMC&ids=PROBATE&ids=SSCS&ids=EMPLOYMENT")
+			.headers(headers_6))
+
+    .exec(http("request_8")
+			.get("/data/internal/jurisdiction-ui-configs/?ids=DIVORCE&ids=AUTOTEST1&ids=CMC&ids=PROBATE&ids=SSCS&ids=EMPLOYMENT")
+			.headers(headers_6))
+
+    .exec(http("request_9")
+			.get("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/pagination_metadata?state=appealCreated")
+			.headers(headers_12))
+
+    .exec(http("request_10")
+			.get("/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?view=WORKBASKET&state=appealCreated&page=1")
+			.headers(headers_12)
+      .check(jsonPath("$..case_id").findAll.optional.saveAs("caseNumbers")))
+
+    .exec{
+      session =>
+        println(session("caseNumbers").as[String])
+        session
+      }
+
+    .exec(http("request_11")
+			.get("/data/internal/case-types/Benefit/work-basket-inputs")
+			.headers(headers_11))
+
+    .exec(http("request_12")
+			.get("/activity/cases/${caseNumbers}/activity")
+			//.get("/activity/cases/1552650446279756,1574715851299047,1574771353085053,1574771425565793,1574775065167620,1574775076679514,1574775081771140,1574775085031665,1574775090059446,1574775116202087,1574775125129875,1574775125356445,1574775164890403,1574775167970699,1574775170224035,1574775201506996,1574775205680128,1574775230602188,1574775232314675,1574775247646285,1574775263929649,1574775275516038,1574775282732867,1574775283695253,1574775292722858/activity")
+			.headers(headers_2))
+//			.check(status.is(404))))
+ 
   .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   }
@@ -205,12 +299,20 @@ object SSCS {
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .exec(http("SSCS_CaseActivity")
+			.get("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
   }
 
   val SSCSDocUpload = exec(http("SSCS_040_005_DocumentUploadPage1")
       .get("/data/internal/cases/${New_Case_Id}/event-triggers/uploadDocument?ignore-warning=false")
         .headers(headers_9)
         .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
+
+    .exec(http("SSCS_CaseActivity")
+			.get("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -229,10 +331,18 @@ object SSCS {
       .check(regex("""http://(.+)/""").saveAs("DMURL"))
       .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
 
+    .exec(http("SSCS_CaseActivity")
+			.get("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
+
     .exec(http("SSCS_040_015_DocumentUploadProcess")
       .post("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/${New_Case_Id}/events")
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-11-12\",\n          \"documentComment\": \"${FileName1} upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"${FileName1} upload doc\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+
+    .exec(http("SSCS_CaseActivity")
+			.get("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
 
   .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -253,11 +363,19 @@ object SSCS {
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_8))
 
+    .exec(http("SSCS_CaseActivity")
+			.get("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
+
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("SSCS_060_010_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_15))
+
+    .exec(http("SSCS_CaseActivity")
+			.get("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
   }
 
   // .exec {
