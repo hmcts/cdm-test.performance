@@ -46,6 +46,36 @@ object PBGoR {
     "Sec-Fetch-Mode" -> "cors",
     "experimental" -> "true")
 
+  val headers_9 = Map(
+		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-event-trigger.v2+json;charset=UTF-8",
+		"Content-Type" -> "application/json",
+		"Origin" -> CCDEnvurl,
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-site",
+		"experimental" -> "true")
+
+  val headers_10 = Map(
+		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.case-data-validate.v2+json;charset=UTF-8",
+		"Content-Type" -> "application/json",
+		"Origin" -> CCDEnvurl,
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-site",
+		"experimental" -> "true")
+
+  val headers_11 = Map(
+		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.create-event.v2+json;charset=UTF-8",
+		"Content-Type" -> "application/json",
+		"Origin" -> CCDEnvurl,
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-site",
+		"experimental" -> "true")
+
   val headers_15 = Map(
     "Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
     "Accept-Encoding" -> "gzip, deflate, br",
@@ -219,22 +249,45 @@ object PBGoR {
 
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
+    val PBStopCase = group("PB_Stop") {
+
+      exec(http("PBGoR_060_005_StopCase")
+        .get("/data/internal/cases/${New_Case_Id}/event-triggers/boStopCaseForCaseCreated?ignore-warning=false")
+        .headers(headers_9)
+        .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
+
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+      .exec(http("PBGoR_060_010_StopCaseAddReason")
+        .post("/data/case-types/GrantOfRepresentation/validate?pageId=boStopCaseForCaseCreatedboStopCaseForCaseCreatedPage1")
+        .headers(headers_10)
+        .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))
+
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+      .exec(http("PBGoR_060_015_StopCaseSubmit")
+        .post("/data/cases/${New_Case_Id}/events")
+        .headers(headers_11)
+        .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    }
+
     val PBSearchAndView = group("PB_View") {
-      exec(http("PBGoR_060_005_SearchForCase")
+      exec(http("PBGoR_070_005_SearchForCase")
         .get("/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/pagination_metadata")
         .headers(CommonHeader))
 
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("PBGoR_060_010_OpenCase")
+      .exec(http("PBGoR_070_010_OpenCase")
         .get("/data/internal/cases/${New_Case_Id}")
         .headers(headers_8))
 
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      .exec(http("PBGoR_060_015_OpenDocument")
+      .exec(http("PBGoR_070_015_OpenDocument")
         .get("/documents/${Document_ID}/binary")
         .headers(headers_15))
     }
-
 }

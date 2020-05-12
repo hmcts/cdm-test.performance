@@ -32,23 +32,12 @@ class CCDUIPTSimulation extends Simulation  {
         exec(PBGoR.PBCreateCase)
         .exec(PBGoR.PBPaymentSuccessful)
         .exec(PBGoR.PBDocUpload)
+        .exec(PBGoR.PBStopCase)
         .exec(PBGoR.PBSearchAndView)
         .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
-
-//  val CCDProbateScenario2 = scenario("CCDPB2")
-//    .repeat(1) {
-//      exec(Browse.Homepage)
-//        .exec(ExecuteLogin.submitLogin)
-//        .repeat(PBiteration2) {
-//          exec(PBGoR2.PBCreateCase)
-//          .exec(PBGoR2.PBPrintCase)
-//          .exec(WaitforNextIteration.waitforNextIteration)
-//        }
-//        .exec(Logout.ccdLogout)
-//    }
 
   val CCDSSCSScenario = scenario("CCDSSCS")
     .repeat(1) {
@@ -86,9 +75,9 @@ class CCDUIPTSimulation extends Simulation  {
         .exec(DVExcep.submitLogin)
         .repeat(Diviteration) {
           exec(DVExcep.DVCreateCase)
-            .exec(DVExcep.DVDocUpload)
-            .exec(DVExcep.DVSearchAndView)
-            .exec(WaitforNextIteration.waitforNextIteration)
+          .exec(DVExcep.DVDocUpload)
+          .exec(DVExcep.DVSearchAndView)
+          .exec(WaitforNextIteration.waitforNextIteration)
         }
         .exec(Logout.ccdLogout)
     }
@@ -133,23 +122,23 @@ class CCDUIPTSimulation extends Simulation  {
   val UserProfileSearch = scenario("CCDUP")
       .repeat(20) {
         exec(GetUserProfile.SearchJurisdiction)
-          .exec(GetUserProfile.SearchAllUsers)
-          .exec(WaitforNextIteration.waitforNextIteration)
+        .exec(GetUserProfile.SearchAllUsers)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
 
   setUp(
     //These 5 scenarios required for CCD regression testing
-    /*CCDProbateScenario.inject(rampUsers(150) during (20 minutes)),
+    CCDProbateScenario.inject(rampUsers(150) during (20 minutes)),
     CCDSSCSScenario.inject(rampUsers(150) during (20 minutes)),
     CCDEthosScenario.inject(rampUsers(400) during (20 minutes)),
     CCDCMCScenario.inject(rampUsers(150) during (20 minutes)),
-    CCDDivScenario.inject(rampUsers(150) during (20 minutes))*/
+    CCDDivScenario.inject(rampUsers(150) during (20 minutes))
     //UserProfileSearch.inject(rampUsers(10) during(20 minutes))
 
     //These scenarios left commented out and used for debugging/script testing etc
     //CCDLargeFileUpload.inject(rampUsers(15) during(15 minutes))
     //CCDEthosScenario.inject(rampUsers(1) during(1 minutes))
-    CCDProbateScenario.inject(rampUsers(150) during(30 minutes))
+    //CCDSSCSScenario.inject(rampUsers(150) during(30 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)
