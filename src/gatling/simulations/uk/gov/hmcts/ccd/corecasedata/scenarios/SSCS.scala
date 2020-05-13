@@ -230,11 +230,11 @@ object SSCS {
 			.headers(headers_12)
       .check(jsonPath("$..case_id").findAll.optional.saveAs("caseNumbers")))
 
-    .exec{
-      session =>
-        println(session("caseNumbers").as[String])
-        session
-      }
+    // .exec{
+    //   session =>
+    //     println(session("caseNumbers").as[String])
+    //     session
+    //   }
 
     .exec(http("SSCS_020_060_Login")
 			.get("/data/internal/case-types/Benefit/work-basket-inputs")
