@@ -59,6 +59,15 @@ object DVExcep {
     "Sec-Fetch-Site" -> "cross-site",
     "experimental" -> "true")
 
+  val headers_9 = Map(
+		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-case-trigger.v2+json;charset=UTF-8",
+		"Origin" -> CCDEnvurl,
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-site",
+		"experimental" -> "true")
+
   val submitLogin = group("DIV_Login") {
 
     exec(http("DIV_020_005_Login")
@@ -137,9 +146,9 @@ object DVExcep {
       .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/pagination_metadata?state=TODO")
       .headers(CommonHeader))
     //.exitHereIfFailed
-  }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
+  }
 
   val DVCreateCase = group ("DIV_Create") {
 
@@ -240,6 +249,7 @@ object DVExcep {
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
   }
 
   val DVDocUpload = group("DIV_DocUpload") {
@@ -252,7 +262,7 @@ object DVExcep {
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
      .exec(session => {
-      session.set("FileName1", "300kb.pdf")
+      session.set("FileName1", "3MB.pdf")
     })
 
     .exec(http("DIV_040_010_DocumentUploadToDM")
@@ -272,7 +282,7 @@ object DVExcep {
       .body(StringBody("{\n  \"data\": {\n    \"D8DocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"other\",\n          \"DocumentEmailContent\": null,\n          \"DocumentDateAdded\": null,\n          \"DocumentComment\": null,\n          \"DocumentFileName\": null,\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
   }
 
-  .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds) 
 
   val DVSearchAndView = group ("DIV_View") {
 
@@ -292,10 +302,11 @@ object DVExcep {
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_6))
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)  
 
     .exec(http("DIV_050_020_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_7))
+      
   }
 }

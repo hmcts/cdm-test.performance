@@ -39,7 +39,7 @@ object SSCS {
 
   val headers_2 = Map(
 		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-case-trigger.v2+json;charset=UTF-8",
-		"Origin" -> "https://www-ccd.perftest.platform.hmcts.net",
+		"Origin" -> CCDEnvurl,
 		"Pragma" -> "no-cache",
 		"Sec-Fetch-Dest" -> "empty",
 		"Sec-Fetch-Mode" -> "cors",
@@ -97,7 +97,7 @@ object SSCS {
   val headers_11 = Map(
 		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-workbasket-input-details.v2+json;charset=UTF-8",
 		"Content-Type" -> "application/json",
-		"Origin" -> "https://www-ccd.perftest.platform.hmcts.net",
+		"Origin" -> CCDEnvurl,
 		"Pragma" -> "no-cache",
 		"Sec-Fetch-Dest" -> "empty",
 		"Sec-Fetch-Mode" -> "cors",
@@ -106,7 +106,7 @@ object SSCS {
 
   val headers_12 = Map(
 		"Content-Type" -> "application/json",
-		"Origin" -> "https://www-ccd.perftest.platform.hmcts.net",
+		"Origin" -> CCDEnvurl,
 		"Pragma" -> "no-cache",
 		"Sec-Fetch-Dest" -> "empty",
 		"Sec-Fetch-Mode" -> "cors",
@@ -188,46 +188,44 @@ object SSCS {
       //   .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/pagination_metadata?state=TODO")
       //   .headers(CommonHeader))
 
-    .exec(http("request_1")
-      .get("https://www-ccd.perftest.platform.hmcts.net/config")
+    .exec(http("SSCS_020_010_Login")
+      .get(CCDEnvurl + "/config")
 			.headers(headers_1))
 
-    .exec(http("request_2")
+    .exec(http("SSCS_020_015_Login")
 			.get("/oauth2?code=${authCode}&redirect_uri=www-ccd.perftest.platform.hmcts.net/oauth2redirect")
 			.headers(headers_2))
 
-    .exec(http("request_3")
-			.get("https://www-ccd.perftest.platform.hmcts.net/config")
+    .exec(http("SSCS_020_020_Login")
+			.get(CCDEnvurl + "/config")
 			.headers(headers_1))
 
-    .exec(http("request_4")
+    .exec(http("SSCS_020_025_Login")
 			.get("/activity/cases/0/activity")
 			.headers(headers_2))
 			//.check(status.is(404))
 
-    .exec(http("request_5")
+    .exec(http("SSCS_020_030_Login")
 			.get("/data/internal/profile")
 			.headers(headers_5))
 
-		.pause(1)
-
-		.exec(http("request_6")
+		.exec(http("SSCS_020_035_Login")
 			.get("/data/internal/jurisdiction-ui-configs/?ids=DIVORCE&ids=AUTOTEST1&ids=CMC&ids=PROBATE&ids=SSCS&ids=EMPLOYMENT")
 			.headers(headers_6))
 
-    .exec(http("request_7")
+    .exec(http("SSCS_020_040_Login")
 			.get("/data/internal/jurisdiction-ui-configs/?ids=DIVORCE&ids=AUTOTEST1&ids=CMC&ids=PROBATE&ids=SSCS&ids=EMPLOYMENT")
 			.headers(headers_6))
 
-    .exec(http("request_8")
+    .exec(http("SSCS_020_045_Login")
 			.get("/data/internal/jurisdiction-ui-configs/?ids=DIVORCE&ids=AUTOTEST1&ids=CMC&ids=PROBATE&ids=SSCS&ids=EMPLOYMENT")
 			.headers(headers_6))
 
-    .exec(http("request_9")
+    .exec(http("SSCS_020_050_Login")
 			.get("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/pagination_metadata?state=appealCreated")
 			.headers(headers_12))
 
-    .exec(http("request_10")
+    .exec(http("SSCS_020_055_Login")
 			.get("/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?view=WORKBASKET&state=appealCreated&page=1")
 			.headers(headers_12)
       .check(jsonPath("$..case_id").findAll.optional.saveAs("caseNumbers")))
@@ -238,11 +236,11 @@ object SSCS {
         session
       }
 
-    .exec(http("request_11")
+    .exec(http("SSCS_020_060_Login")
 			.get("/data/internal/case-types/Benefit/work-basket-inputs")
 			.headers(headers_11))
 
-    .exec(http("request_12")
+    .exec(http("SSCS_020_065_Login")
 			.get("/activity/cases/${caseNumbers}/activity")
 			//.get("/activity/cases/1552650446279756,1574715851299047,1574771353085053,1574771425565793,1574775065167620,1574775076679514,1574775081771140,1574775085031665,1574775090059446,1574775116202087,1574775125129875,1574775125356445,1574775164890403,1574775167970699,1574775170224035,1574775201506996,1574775205680128,1574775230602188,1574775232314675,1574775247646285,1574775263929649,1574775275516038,1574775282732867,1574775283695253,1574775292722858/activity")
 			.headers(headers_2))
@@ -253,31 +251,6 @@ object SSCS {
   }
 
   val SSCSCreateCase = group("SSCS_Create") {
-
-    // exec(http("SSCS_030_005_CreateCasePage")
-    //   .get("/aggregated/caseworkers/:uid/jurisdictions?access=create")
-    //   .headers(CommonHeader))
-
-    // .exec(http("SSCS_030_010_CreateCaseDetailsPage")
-    //   .get("/data/internal/case-types/Benefit/event-triggers/appealCreated?ignore-warning=false")
-    //   .check(jsonPath("$.event_token").saveAs("New_Case_event_token"))
-    //   .headers(headers_1))
-
-    // .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    // .exec(http("SSCS_030_015_CreateCaseConfirmDetails")
-    //   .post("/data/case-types/Benefit/validate?pageId=appealCreated2.0")
-		// 	.headers(headers_3)
-		// 	.body(StringBody("{\n  \"data\": {\n    \"caseReference\": null,\n    \"caseCreated\": \"2019-11-22\",\n    \"region\": null,\n    \"appeal\": {\n      \"receivedVia\": \"Online\",\n      \"mrnDetails\": {\n        \"dwpIssuingOffice\": \"DWP\",\n        \"mrnDate\": \"2019-11-22\",\n        \"mrnLateReason\": null,\n        \"mrnMissingReason\": null\n      },\n      \"appellant\": {\n        \"name\": {\n          \"title\": \"Mr\",\n          \"firstName\": \"Daniel\",\n          \"middleName\": null,\n          \"lastName\": \"Gleeballs\"\n        },\n        \"identity\": {\n          \"dob\": \"2000-03-01\",\n          \"nino\": \"AB1234567Z\"\n        },\n        \"address\": {\n          \"line1\": \"24 Test Street\",\n          \"line2\": null,\n          \"line3\": null,\n          \"town\": \"London\",\n          \"county\": null,\n          \"postcode\": \"KT2 5BU\",\n          \"country\": \"UK\"\n        },\n        \"contact\": {\n          \"phone\": \"07123456789\",\n          \"mobile\": null,\n          \"email\": null\n        },\n        \"isAppointee\": \"No\",\n        \"appointee\": {\n          \"name\": {\n            \"title\": null,\n            \"firstName\": null,\n            \"middleName\": null,\n            \"lastName\": null\n          },\n          \"identity\": {\n            \"dob\": null,\n            \"nino\": null\n          },\n          \"address\": {\n            \"line1\": null,\n            \"line2\": null,\n            \"line3\": null,\n            \"town\": null,\n            \"county\": null,\n            \"postcode\": null,\n            \"country\": null\n          },\n          \"contact\": {\n            \"phone\": null,\n            \"mobile\": null,\n            \"email\": null\n          }\n        },\n        \"isAddressSameAsAppointee\": null\n      },\n      \"benefitType\": {\n        \"code\": null,\n        \"description\": null\n      },\n      \"hearingType\": null,\n      \"hearingOptions\": {\n        \"wantsToAttend\": null,\n        \"languageInterpreter\": null,\n        \"other\": null,\n        \"signLanguageType\": null\n      },\n      \"appealReasons\": {\n        \"reasons\": [],\n        \"otherReasons\": null\n      },\n      \"supporter\": {\n        \"name\": {\n          \"title\": null,\n          \"firstName\": null,\n          \"middleName\": null,\n          \"lastName\": null\n        },\n        \"contact\": {\n          \"phone\": null,\n          \"mobile\": null,\n          \"email\": null\n        }\n      },\n      \"rep\": {\n        \"hasRepresentative\": null\n      },\n      \"signer\": null\n    },\n    \"regionalProcessingCenter\": {\n      \"name\": null,\n      \"address1\": null,\n      \"address2\": null,\n      \"address3\": null,\n      \"address4\": null,\n      \"postcode\": null,\n      \"city\": null,\n      \"phoneNumber\": null,\n      \"faxNumber\": null,\n      \"email\": null\n    },\n    \"panel\": {\n      \"assignedTo\": null,\n      \"medicalMember\": null,\n      \"disabilityQualifiedMember\": null\n    }\n  },\n  \"event\": {\n    \"id\": \"appealCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"caseReference\": null,\n    \"caseCreated\": \"2019-11-22\",\n    \"region\": null,\n    \"appeal\": {\n      \"receivedVia\": \"Online\",\n      \"mrnDetails\": {\n        \"dwpIssuingOffice\": \"DWP\",\n        \"mrnDate\": \"2019-11-22\",\n        \"mrnLateReason\": null,\n        \"mrnMissingReason\": null\n      },\n      \"appellant\": {\n        \"name\": {\n          \"title\": \"Mr\",\n          \"firstName\": \"Daniel\",\n          \"middleName\": null,\n          \"lastName\": \"Gleeballs\"\n        },\n        \"identity\": {\n          \"dob\": \"2000-03-01\",\n          \"nino\": \"AB1234567Z\"\n        },\n        \"address\": {\n          \"line1\": \"24 Test Street\",\n          \"line2\": null,\n          \"line3\": null,\n          \"town\": \"London\",\n          \"county\": null,\n          \"postcode\": \"KT2 5BU\",\n          \"country\": \"UK\"\n        },\n        \"contact\": {\n          \"phone\": \"07123456789\",\n          \"mobile\": null,\n          \"email\": null\n        },\n        \"isAppointee\": \"No\",\n        \"appointee\": {\n          \"name\": {\n            \"title\": null,\n            \"firstName\": null,\n            \"middleName\": null,\n            \"lastName\": null\n          },\n          \"identity\": {\n            \"dob\": null,\n            \"nino\": null\n          },\n          \"address\": {\n            \"line1\": null,\n            \"line2\": null,\n            \"line3\": null,\n            \"town\": null,\n            \"county\": null,\n            \"postcode\": null,\n            \"country\": null\n          },\n          \"contact\": {\n            \"phone\": null,\n            \"mobile\": null,\n            \"email\": null\n          }\n        },\n        \"isAddressSameAsAppointee\": null\n      },\n      \"benefitType\": {\n        \"code\": null,\n        \"description\": null\n      },\n      \"hearingType\": null,\n      \"hearingOptions\": {\n        \"wantsToAttend\": null,\n        \"languageInterpreter\": null,\n        \"other\": null,\n        \"signLanguageType\": null\n      },\n      \"appealReasons\": {\n        \"reasons\": [],\n        \"otherReasons\": null\n      },\n      \"supporter\": {\n        \"name\": {\n          \"title\": null,\n          \"firstName\": null,\n          \"middleName\": null,\n          \"lastName\": null\n        },\n        \"contact\": {\n          \"phone\": null,\n          \"mobile\": null,\n          \"email\": null\n        }\n      },\n      \"rep\": {\n        \"hasRepresentative\": null\n      },\n      \"signer\": null\n    },\n    \"regionalProcessingCenter\": {\n      \"name\": null,\n      \"address1\": null,\n      \"address2\": null,\n      \"address3\": null,\n      \"address4\": null,\n      \"postcode\": null,\n      \"city\": null,\n      \"phoneNumber\": null,\n      \"faxNumber\": null,\n      \"email\": null\n    },\n    \"panel\": {\n      \"assignedTo\": null,\n      \"medicalMember\": null,\n      \"disabilityQualifiedMember\": null\n    }\n  }\n}")))
-
-    // .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    // .exec(http("SSCS_030_020_CreateCaseSubmit")
-    //   .post("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?ignore-warning=false")
-    //   .headers(CommonHeader)
-    //   .body(StringBody("{\n  \"data\": {\n    \"caseReference\": null,\n    \"caseCreated\": \"2019-11-22\",\n    \"region\": null,\n    \"appeal\": {\n      \"receivedVia\": \"Online\",\n      \"mrnDetails\": {\n        \"dwpIssuingOffice\": \"DWP\",\n        \"mrnDate\": \"2019-11-22\",\n        \"mrnLateReason\": null,\n        \"mrnMissingReason\": null\n      },\n      \"appellant\": {\n        \"name\": {\n          \"title\": \"Mr\",\n          \"firstName\": \"Daniel\",\n          \"middleName\": null,\n          \"lastName\": \"Gleeballs\"\n        },\n        \"identity\": {\n          \"dob\": \"2000-03-01\",\n          \"nino\": \"AB1234567Z\"\n        },\n        \"address\": {\n          \"line1\": \"24 Test Street\",\n          \"line2\": null,\n          \"line3\": null,\n          \"town\": \"London\",\n          \"county\": null,\n          \"postcode\": \"KT2 5BU\",\n          \"country\": \"UK\"\n        },\n        \"contact\": {\n          \"phone\": \"07123456789\",\n          \"mobile\": null,\n          \"email\": null\n        },\n        \"isAppointee\": \"No\",\n        \"appointee\": {\n          \"name\": {\n            \"title\": null,\n            \"firstName\": null,\n            \"middleName\": null,\n            \"lastName\": null\n          },\n          \"identity\": {\n            \"dob\": null,\n            \"nino\": null\n          },\n          \"address\": {\n            \"line1\": null,\n            \"line2\": null,\n            \"line3\": null,\n            \"town\": null,\n            \"county\": null,\n            \"postcode\": null,\n            \"country\": null\n          },\n          \"contact\": {\n            \"phone\": null,\n            \"mobile\": null,\n            \"email\": null\n          }\n        },\n        \"isAddressSameAsAppointee\": null\n      },\n      \"benefitType\": {\n        \"code\": null,\n        \"description\": null\n      },\n      \"hearingType\": null,\n      \"hearingOptions\": {\n        \"wantsToAttend\": null,\n        \"languageInterpreter\": null,\n        \"other\": null,\n        \"signLanguageType\": null\n      },\n      \"appealReasons\": {\n        \"reasons\": [],\n        \"otherReasons\": null\n      },\n      \"supporter\": {\n        \"name\": {\n          \"title\": null,\n          \"firstName\": null,\n          \"middleName\": null,\n          \"lastName\": null\n        },\n        \"contact\": {\n          \"phone\": null,\n          \"mobile\": null,\n          \"email\": null\n        }\n      },\n      \"rep\": {\n        \"hasRepresentative\": null\n      },\n      \"signer\": null\n    },\n    \"regionalProcessingCenter\": {\n      \"name\": null,\n      \"address1\": null,\n      \"address2\": null,\n      \"address3\": null,\n      \"address4\": null,\n      \"postcode\": null,\n      \"city\": null,\n      \"phoneNumber\": null,\n      \"faxNumber\": null,\n      \"email\": null\n    },\n    \"panel\": {\n      \"assignedTo\": null,\n      \"medicalMember\": null,\n      \"disabilityQualifiedMember\": null\n    }\n  },\n  \"event\": {\n    \"id\": \"appealCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
-    //   .check(jsonPath("$.id").saveAs("New_Case_Id")))
-    // }
 
     exec(http("SSCS_030_005_CreateCasePage")
       .get("/aggregated/caseworkers/:uid/jurisdictions?access=create")
@@ -298,11 +271,15 @@ object SSCS {
       .body(StringBody("{\n  \"data\": {\n    \"caseReference\": null,\n    \"caseCreated\": \"2020-05-12\",\n    \"region\": null,\n    \"appeal\": {\n      \"receivedVia\": \"Online\",\n      \"mrnDetails\": {\n        \"dwpIssuingOffice\": \"DWP\",\n        \"mrnDate\": \"2019-11-22\",\n        \"mrnLateReason\": null,\n        \"mrnMissingReason\": null\n      },\n      \"appellant\": {\n        \"name\": {\n          \"title\": \"Mr\",\n          \"firstName\": \"Daniel\",\n          \"middleName\": null,\n          \"lastName\": \"Gleeballs\"\n        },\n        \"identity\": {\n          \"dob\": \"2000-03-01\",\n          \"nino\": \"AB1234567Z\"\n        },\n        \"address\": {\n          \"line1\": \"24 Test Street\",\n          \"line2\": null,\n          \"line3\": null,\n          \"town\": \"London\",\n          \"county\": null,\n          \"postcode\": \"KT2 5BU\",\n          \"country\": \"UK\"\n        },\n        \"contact\": {\n          \"phone\": \"07123456789\",\n          \"mobile\": null,\n          \"email\": null\n        },\n        \"isAppointee\": \"No\",\n        \"appointee\": {\n          \"name\": {\n            \"title\": null,\n            \"firstName\": null,\n            \"middleName\": null,\n            \"lastName\": null\n          },\n          \"identity\": {\n            \"dob\": null,\n            \"nino\": null\n          },\n          \"address\": {\n            \"line1\": null,\n            \"line2\": null,\n            \"line3\": null,\n            \"town\": null,\n            \"county\": null,\n            \"postcode\": null,\n            \"country\": null\n          },\n          \"contact\": {\n            \"phone\": null,\n            \"mobile\": null,\n            \"email\": null\n          }\n        },\n        \"isAddressSameAsAppointee\": null\n      },\n      \"benefitType\": {\n        \"code\": null,\n        \"description\": null\n      },\n      \"hearingType\": null,\n      \"hearingOptions\": {\n        \"wantsToAttend\": null,\n        \"languageInterpreter\": null,\n        \"other\": null,\n        \"signLanguageType\": null\n      },\n      \"appealReasons\": {\n        \"reasons\": [],\n        \"otherReasons\": null\n      },\n      \"supporter\": {\n        \"name\": {\n          \"title\": null,\n          \"firstName\": null,\n          \"middleName\": null,\n          \"lastName\": null\n        },\n        \"contact\": {\n          \"phone\": null,\n          \"mobile\": null,\n          \"email\": null\n        }\n      },\n      \"rep\": {\n        \"hasRepresentative\": null\n      },\n      \"signer\": null\n    },\n    \"regionalProcessingCenter\": {\n      \"name\": null,\n      \"address1\": null,\n      \"address2\": null,\n      \"address3\": null,\n      \"address4\": null,\n      \"postcode\": null,\n      \"city\": null,\n      \"phoneNumber\": null,\n      \"faxNumber\": null,\n      \"email\": null\n    },\n    \"panel\": {\n      \"assignedTo\": null,\n      \"medicalMember\": null,\n      \"disabilityQualifiedMember\": null\n    }\n  },\n  \"event\": {\n    \"id\": \"appealCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .exec(http("SSCS_CaseActivity")
+    .repeat(10) {
+    exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
+
+      .pause(3)
+    }
+
+    .pause(MinThinkTime)
   }
 
   val SSCSDocUpload = exec(http("SSCS_040_005_DocumentUploadPage1")
@@ -310,11 +287,15 @@ object SSCS {
         .headers(headers_9)
         .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .exec(http("SSCS_CaseActivity")
+    .repeat(10) {
+    exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+      .pause(3)
+    }
+
+    .pause(MinThinkTime)
 
     .exec(session => {
       session.set("FileName1", "3MB.pdf")
@@ -340,13 +321,17 @@ object SSCS {
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-11-12\",\n          \"documentComment\": \"${FileName1} upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"${FileName1} upload doc\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
-    .exec(http("SSCS_CaseActivity")
+    .repeat(10) {
+    exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-  .pause(MinThinkTime seconds, MaxThinkTime seconds)
+      .pause(3)
+    }
 
-  val SSCSSearchAndView = group("SSCS_View") {
+    .pause(MinThinkTime)
+
+  val SSCSSearchAndView = 
     exec(http("SSCS_050_005_SearchPage")
       .get("/data/internal/case-types/Benefit/work-basket-inputs")
       .headers(headers_0))
@@ -363,20 +348,28 @@ object SSCS {
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_8))
 
-    .exec(http("SSCS_CaseActivity")
+    .repeat(10) {
+    exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+      .pause(3)
+    }
+
+    .pause(MinThinkTime)
 
     .exec(http("SSCS_060_010_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_15))
 
-    .exec(http("SSCS_CaseActivity")
+    .repeat(10) {
+    exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
-  }
+
+      .pause(3)
+    }
+  
 
   // .exec {
   //   session =>
@@ -385,5 +378,3 @@ object SSCS {
   //     session
   // }
 }
-
-
