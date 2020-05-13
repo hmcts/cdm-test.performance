@@ -16,7 +16,7 @@ class CCDUIPTSimulation extends Simulation  {
   val CMCiteration = 6 //6
   val Diviteration = 6 //6
   val Fpliteration = 10 //10
-  val Ethositeration = 24 //24
+  val Ethositeration = 22 //22
   val LFUiteration = 10 //8
 
   val httpProtocol = Environment.HttpProtocol
