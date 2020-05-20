@@ -172,17 +172,17 @@ object EthosSearchView {
       .options("/data/internal/cases/${EthosCaseRef}")
       .headers(headers_6))
 
-    // .exec(http("ET_040_010_OpenCase")
-    //   .get("/data/internal/cases/${EthosCaseRef}")
-    //   .headers(headers_7)
-    //   .check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID")))
-    // //.exitHereIfFailed
+    .exec(http("ET_040_010_OpenCase")
+      .get("/data/internal/cases/${EthosCaseRef}")
+      .headers(headers_7)
+      .check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID")))
+    //.exitHereIfFailed
 
     // .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    // .exec(http("ET_040_010_OpenDocument")
-    //   .get("/documents/${Document_ID}/binary")
-    //   .headers(headers_19))
+    .exec(http("ET_040_010_OpenDocument")
+      .get("/documents/${Document_ID}/binary")
+      .headers(headers_19))
   }
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 }

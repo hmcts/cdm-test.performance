@@ -93,7 +93,7 @@ object PBGoR {
     "Sec-Fetch-Site" -> "none",
     "Upgrade-Insecure-Requests" -> "1")
 
-  val submitLogin = group("PBLogin") {
+  val submitLogin = group("PB_Login") {
 
     exec(http("PBGoR_020_005_Login")
       .post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
@@ -266,7 +266,7 @@ object PBGoR {
       .pause(MinThinkTime)
 
       .exec(session => {
-          session.set("FileName1", "300kb.pdf")
+          session.set("FileName1", "3MB.pdf")
         })
 
       .exec(http("PGBoR_050_010_DocumentUploadToDM")
