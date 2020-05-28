@@ -10,11 +10,10 @@ import scala.concurrent.duration._
 class CCDUIPTSimulation extends Simulation  {
 
   val BaseURL = Environment.baseURL
-  val PBiteration = 6 //6
-  val PBiteration2 = 8 //8
-  val SSCSiteration = 10 //10
-  val CMCiteration = 6 //6
-  val Diviteration = 6 //6
+  val PBiteration = 600 //6
+  val SSCSiteration = 1000 //10
+  val CMCiteration = 600 //6
+  val Diviteration = 600 //6
   val Fpliteration = 10 //10
   val Ethositeration = 22 //22
   val LFUiteration = 10 //8
@@ -130,7 +129,7 @@ class CCDUIPTSimulation extends Simulation  {
     //These 5 scenarios required for CCD regression testing
     CCDProbateScenario.inject(rampUsers(150) during (20 minutes)),
     CCDSSCSScenario.inject(rampUsers(150) during (20 minutes)),
-    CCDEthosScenario.inject(rampUsers(400) during (20 minutes)),
+    //CCDEthosScenario.inject(rampUsers(400) during (20 minutes)),
     CCDCMCScenario.inject(rampUsers(150) during (20 minutes)),
     CCDDivScenario.inject(rampUsers(150) during (20 minutes))
 
