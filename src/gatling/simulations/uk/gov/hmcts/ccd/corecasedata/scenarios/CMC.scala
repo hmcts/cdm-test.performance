@@ -15,6 +15,7 @@ object CMC {
   val feedUserData = csv("CMCUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
+  val cmcCaseActivityRepeat = 1
 
   val headers_0 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-workbasket-input-details.v2+json;charset=UTF-8",
@@ -167,7 +168,7 @@ object CMC {
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"CreateClaim\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -198,7 +199,7 @@ object CMC {
       .headers(headers_11)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
         exec(http("CMC_CaseActivity")
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))
@@ -216,7 +217,7 @@ object CMC {
       .headers(headers_9)
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"StayClaim\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -237,7 +238,7 @@ object CMC {
       .headers(headers_11)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -256,7 +257,7 @@ object CMC {
       .headers(headers_9)
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"WaitingTransfer\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -277,7 +278,7 @@ object CMC {
       .headers(headers_11)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -296,7 +297,7 @@ object CMC {
       .headers(headers_9)
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"Transfer\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -317,7 +318,7 @@ object CMC {
       .headers(headers_11)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -336,7 +337,7 @@ object CMC {
       .headers(headers_9)
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"attachScannedDocs\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -357,7 +358,7 @@ object CMC {
       .headers(headers_11)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -376,7 +377,7 @@ object CMC {
       .headers(headers_9)
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"SupportUpdate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -396,7 +397,7 @@ object CMC {
       .get("/data/internal/case-types/${CMCCaseType}/work-basket-inputs")
       .headers(headers_0))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -414,7 +415,7 @@ object CMC {
       .get("/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases?view=WORKBASKET&page=1&case_reference=${New_Case_Id}")
       .headers(CommonHeader))
 
-    .repeat(7) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -432,7 +433,7 @@ object CMC {
       .get("/data/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/pagination_metadata?case_reference=${New_Case_Id}")
       .headers(CommonHeader))
 
-      .repeat(7) {
+      .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))

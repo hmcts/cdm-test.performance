@@ -15,6 +15,7 @@ object PBGoR {
   val feedUserData = csv("ProbateUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
+  val caseActivityRepeat = 1
 
   val headers_1 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-case-trigger.v2+json;charset=UTF-8",
@@ -199,7 +200,7 @@ object PBGoR {
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"applyForGrant\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
 
-    .repeat(7) {
+    .repeat(caseActivityRepeat) {
       exec(http("PB_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
@@ -217,7 +218,7 @@ object PBGoR {
         .headers(headers_0)
         .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-      .repeat(7) {
+      .repeat(caseActivityRepeat) {
         exec(http("PB_CaseActivity")
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))
@@ -237,7 +238,7 @@ object PBGoR {
         .headers(CommonHeader)
         .body(StringBody("{\n  \"data\": {\n    \"applicationSubmittedDate\": \"2019-03-01\"\n  },\n  \"event\": {\n    \"id\": \"paymentSuccessApp\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
-      .repeat(7) {
+      .repeat(caseActivityRepeat) {
           exec(http("PB_CaseActivity")
             .get("/activity/cases/${New_Case_Id}/activity")
             .headers(headers_2))
@@ -255,7 +256,7 @@ object PBGoR {
         .headers(headers_0)
         .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-      .repeat(7) {
+      .repeat(caseActivityRepeat) {
         exec(http("PB_CaseActivity")
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))
@@ -285,7 +286,7 @@ object PBGoR {
         .headers(headers_4)
         .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))
 
-      .repeat(7) {
+      .repeat(caseActivityRepeat) {
         exec(http("PB_CaseActivity")
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))
@@ -301,7 +302,7 @@ object PBGoR {
         .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
     }
 
-      .repeat(7) {
+      .repeat(caseActivityRepeat) {
         exec(http("PB_CaseActivity")
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))
@@ -318,7 +319,7 @@ object PBGoR {
         .headers(headers_9)
         .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-      .repeat(7) {
+      .repeat(caseActivityRepeat) {
         exec(http("PB_CaseActivity")
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))
@@ -333,7 +334,7 @@ object PBGoR {
         .headers(headers_10)
         .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))
 
-      .repeat(7) {
+      .repeat(caseActivityRepeat) {
         exec(http("PB_CaseActivity")
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))
@@ -348,7 +349,7 @@ object PBGoR {
         .headers(headers_11)
         .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
-      .repeat(7) {
+      .repeat(caseActivityRepeat) {
         exec(http("PB_CaseActivity")
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))
@@ -370,7 +371,7 @@ object PBGoR {
         .get("/data/internal/cases/${New_Case_Id}")
         .headers(headers_8))
 
-      .repeat(7) {
+      .repeat(caseActivityRepeat) {
         exec(http("PB_CaseActivity")
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))
@@ -384,7 +385,7 @@ object PBGoR {
         .get("/documents/${Document_ID}/binary")
         .headers(headers_15))
 
-        .repeat(7) {
+        .repeat(caseActivityRepeat) {
         exec(http("PB_CaseActivity")
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))

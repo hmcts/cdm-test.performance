@@ -138,7 +138,7 @@ class CCDUIPTSimulation extends Simulation  {
     //These scenarios left commented out and used for debugging/script testing etc
     //CCDLargeFileUpload.inject(rampUsers(15) during(15 minutes))
     //CCDEthosScenario.inject(rampUsers(1) during(1 minutes))
-    //CCDSSCSScenario.inject(rampUsers(1) during(30 minutes))
+    //CCDProbateScenario.inject(rampUsers(1) during(30 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)

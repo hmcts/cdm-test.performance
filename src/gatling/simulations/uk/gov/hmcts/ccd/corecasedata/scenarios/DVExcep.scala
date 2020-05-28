@@ -15,6 +15,7 @@ object DVExcep {
   val feedUserData = csv("DivorceUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
+  val divCaseActivityRepeat = 1
 
   val headers_0 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-workbasket-input-details.v2+json;charset=UTF-8",
