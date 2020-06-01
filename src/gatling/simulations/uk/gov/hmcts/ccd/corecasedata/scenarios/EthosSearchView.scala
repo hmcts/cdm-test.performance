@@ -16,12 +16,21 @@ object EthosSearchView {
   val feedEthosSearchData = csv("EthosSearchData.csv").random
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
+  val caseActivityRepeat = 5
 
   val headers_0 = Map(
     "Access-Control-Request-Headers" -> "content-type",
     "Access-Control-Request-Method" -> "GET",
     "Origin" -> CCDEnvurl,
     "Sec-Fetch-Mode" -> "no-cors")
+
+  val headers_1 = Map(
+		"Origin" -> CCDEnvurl,
+    "Accept" -> "application/json",
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-site")
 
   val headers_2 = Map(
     "Accept" -> "application/json",
@@ -143,9 +152,9 @@ object EthosSearchView {
       .options("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1")
       .headers(headers_0))
 
-    .exec(http("ET_030_010_SearchCases")
-      .options("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases/pagination_metadata")
-      .headers(headers_0))
+    // .exec(http("ET_030_010_SearchCases")
+    //   .options("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases/pagination_metadata")
+    //   .headers(headers_0))
 
     .exec(http("ET_030_015_SearchCases")
       .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases/pagination_metadata")
@@ -153,9 +162,17 @@ object EthosSearchView {
 
     .exec(http("ET_030_020_SearchCases")
       .get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1")
-      .headers(headers_2)
-      //.check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id"))
-    )
+      .headers(headers_2))
+    //   //.check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id"))
+
+    // exec(http("ET_030_005_SearchCases")
+    //   .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Scotland/cases/pagination_metadata")
+		// 	.headers(headers_0))
+
+    // .exec(http("ET_030_010_SearchCases")
+		// 	.get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Scotland/cases?page=1")
+		// 	.headers(headers_0))
+
   }
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -168,22 +185,17 @@ object EthosSearchView {
         session
     }*/
 
-    exec(http("ET_040_005_OpenCase")
-      .options("/data/internal/cases/${EthosCaseRef}")
-      .headers(headers_6))
-
-    .exec(http("ET_040_010_OpenCase")
+    exec(http("ET_040_OpenCase")
       .get("/data/internal/cases/${EthosCaseRef}")
       .headers(headers_7)
-      //.check(regex("/documents/(.+)\",\"document_filename\"").saveAs("Document_ID"))
       )
-    //.exitHereIfFailed
 
-    // .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .repeat(caseActivityRepeat) {
+      exec(http("Ethos_CaseActivity")
+        .get("/activity/cases/${EthosCaseRef}/activity")
+        .headers(headers_2))
 
-    // .exec(http("ET_040_010_OpenDocument")
-    //   .get("/documents/${Document_ID}/binary")
-    //   .headers(headers_19))
+        .pause(3)
+        }
   }
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 }
