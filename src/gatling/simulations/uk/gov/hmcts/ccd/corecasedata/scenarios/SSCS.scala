@@ -15,7 +15,7 @@ object SSCS {
   val feedUserData = csv("SSCSUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
-  val sscsCaseActivityRepeat = 1
+  val sscsCaseActivityRepeat = 5
 
   // val headers_0 = Map(
   //   "Sec-Fetch-Mode" -> "cors",
