@@ -31,9 +31,9 @@ class CCDUIPTSimulation extends Simulation  {
         exec(PBGoR.PBCreateCase)
         .exec(PBGoR.PBPaymentSuccessful)
         .exec(PBGoR.PBDocUpload)
-        // .exec(PBGoR.PBStopCase)
-        // .exec(PBGoR.PBSearchAndView)
-        // .exec(WaitforNextIteration.waitforNextIteration)
+        .exec(PBGoR.PBStopCase)
+        .exec(PBGoR.PBSearchAndView)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
@@ -45,8 +45,8 @@ class CCDUIPTSimulation extends Simulation  {
       .repeat(SSCSiteration) {
         exec(SSCS.SSCSCreateCase)
         .exec(SSCS.SSCSDocUpload)
-        // .exec(SSCS.SSCSSearchAndView)
-        // .exec(WaitforNextIteration.waitforNextIteration)
+        .exec(SSCS.SSCSSearchAndView)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
     }
@@ -57,13 +57,13 @@ class CCDUIPTSimulation extends Simulation  {
       .exec(CMC.CMCLogin)
       .repeat(CMCiteration) {
         exec(CMC.CMCCreateCase)
-        // .exec(CMC.CMCStayCase)
-        // .exec(CMC.CMCWaitingTransfer)
-        // .exec(CMC.CMCTransfer)
-        // .exec(CMC.CMCAttachScannedDocs)
-        // .exec(CMC.CMCSupportUpdate)
-        // .exec(CMC.CMCSearchAndView)
-        // .exec(WaitforNextIteration.waitforNextIteration)
+        .exec(CMC.CMCStayCase)
+        .exec(CMC.CMCWaitingTransfer)
+        .exec(CMC.CMCTransfer)
+        .exec(CMC.CMCAttachScannedDocs)
+        .exec(CMC.CMCSupportUpdate)
+        .exec(CMC.CMCSearchAndView)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
@@ -75,8 +75,8 @@ class CCDUIPTSimulation extends Simulation  {
         .repeat(Diviteration) {
           exec(DVExcep.DVCreateCase)
           .exec(DVExcep.DVDocUpload)
-          // .exec(DVExcep.DVSearchAndView)
-          // .exec(WaitforNextIteration.waitforNextIteration)
+          .exec(DVExcep.DVSearchAndView)
+          .exec(WaitforNextIteration.waitforNextIteration)
         }
         .exec(Logout.ccdLogout)
     }
