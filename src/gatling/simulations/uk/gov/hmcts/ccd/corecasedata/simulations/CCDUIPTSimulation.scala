@@ -15,7 +15,7 @@ class CCDUIPTSimulation extends Simulation  {
   val CMCiteration = 6 //6
   val Diviteration = 6 //6
   val Fpliteration = 10 //10
-  val Ethositeration = 22 //22
+  val Ethositeration = 23 //23
   val LFUiteration = 10 //8
 
   val httpProtocol = Environment.HttpProtocol
@@ -128,7 +128,7 @@ class CCDUIPTSimulation extends Simulation  {
   setUp(
     //These 5 scenarios required for CCD regression testing
     CCDProbateScenario.inject(rampUsers(150) during (20 minutes)),
-    //CCDSSCSScenario.inject(rampUsers(150) during (20 minutes)),
+    CCDSSCSScenario.inject(rampUsers(150) during (20 minutes)),
     CCDEthosScenario.inject(rampUsers(400) during (20 minutes)),
     CCDCMCScenario.inject(rampUsers(150) during (20 minutes)),
     CCDDivScenario.inject(rampUsers(150) during (20 minutes))
@@ -138,7 +138,7 @@ class CCDUIPTSimulation extends Simulation  {
     //These scenarios left commented out and used for debugging/script testing etc
     //CCDLargeFileUpload.inject(rampUsers(15) during(15 minutes))
     //CCDEthosScenario.inject(rampUsers(1) during(1 minutes))
-    //CCDProbateScenario.inject(rampUsers(1) during(30 minutes))
+    //CCDSSCSScenario.inject(rampUsers(1) during(30 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)
