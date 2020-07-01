@@ -2,7 +2,7 @@ package uk.gov.hmcts.ccd.corecasedata.simulations
 
 import io.gatling.core.Predef._
 import io.gatling.core.scenario.Simulation
-import io.gatling.http.Predef._ //comment out for VM runs, only required for proxy
+//import io.gatling.http.Predef._ //comment out for VM runs, only required for proxy
 import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 import scala.concurrent.duration._
@@ -20,7 +20,7 @@ class CCDUIPTSimulation extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
+    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
   val CCDProbateScenario = scenario("CCDPB")
