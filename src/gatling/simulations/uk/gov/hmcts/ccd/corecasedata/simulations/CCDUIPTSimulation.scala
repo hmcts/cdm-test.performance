@@ -2,7 +2,7 @@ package uk.gov.hmcts.ccd.corecasedata.simulations
 
 import io.gatling.core.Predef._
 import io.gatling.core.scenario.Simulation
-//import io.gatling.http.Predef._ //comment out for VM runs, only required for proxy
+import io.gatling.http.Predef._ //comment out for VM runs, only required for proxy
 import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 import scala.concurrent.duration._
@@ -10,7 +10,7 @@ import scala.concurrent.duration._
 class CCDUIPTSimulation extends Simulation  {
 
   val BaseURL = Environment.baseURL
-  val PBiteration = 7 //7
+  val PBiteration = 1 //7
   val SSCSiteration = 11 //11
   val CMCiteration = 7 //7
   val Diviteration = 6 //6
@@ -20,7 +20,7 @@ class CCDUIPTSimulation extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
+    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
   val CCDProbateScenario = scenario("CCDPB")
@@ -125,20 +125,25 @@ class CCDUIPTSimulation extends Simulation  {
         .exec(WaitforNextIteration.waitforNextIteration)
       }
 
+  val CaseShare = scenario("CCDCS")
+    .repeat(1) {
+      exec(CaseSharing.CaseShareRequest)
+    }
+
   setUp(
     //These 5 scenarios required for CCD regression testing
-    CCDProbateScenario.inject(rampUsers(150) during (20 minutes)),
+    /*CCDProbateScenario.inject(rampUsers(150) during (20 minutes)),
     CCDSSCSScenario.inject(rampUsers(150) during (20 minutes)),
     CCDEthosScenario.inject(rampUsers(400) during (20 minutes)),
     CCDCMCScenario.inject(rampUsers(150) during (20 minutes)),
-    CCDDivScenario.inject(rampUsers(150) during (20 minutes))
+    CCDDivScenario.inject(rampUsers(150) during (20 minutes))*/
 
     //UserProfileSearch.inject(rampUsers(10) during(20 minutes))
 
     //These scenarios left commented out and used for debugging/script testing etc
     //CCDLargeFileUpload.inject(rampUsers(15) during(15 minutes))
     //CCDEthosScenario.inject(rampUsers(1) during(1 minutes))
-    //CCDSSCSScenario.inject(rampUsers(1) during(30 minutes))
+    CCDProbateScenario.inject(rampUsers(1) during(30 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)

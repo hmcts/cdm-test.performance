@@ -6,8 +6,11 @@ import io.gatling.http.Predef._
 object Environment {
 
   val idamURL = "https://idam-web-public.perftest.platform.hmcts.net"
+  val idamAPI = "https://idam-api.perftest.platform.hmcts.net"
   val ccdEnvurl = "https://www-ccd.perftest.platform.hmcts.net"
   val baseURL = "https://gateway-ccd.perftest.platform.hmcts.net"
+  val s2sUrl = "http://rpe-service-auth-provider-perftest.service.core-compute-perftest.internal"
+  
   //val baseURL = "https://ccd-api-gateway-web-perftest.service.core-compute-perftest.internal"
 
   /*val idamURL = "https://idam-web-public.aat.platform.hmcts.net"
@@ -17,8 +20,8 @@ object Environment {
  // val baseURL = "https://gateway.ccd.demo.platform.hmcts.net"
   //val idamURL = "https://idam.preprod.ccidam.reform.hmcts.net"
   //val ccdEnvurl = "https://www.ccd.demo.platform.hmcts.net" 
-  val minThinkTime = 20 //20
-  val maxThinkTime = 60 //60
+  val minThinkTime = 2 //20
+  val maxThinkTime = 6 //60
   val constantthinkTime = 7
   val minWaitForNextIteration = 120 //120
   val maxWaitForNextIteration = 240 //240
