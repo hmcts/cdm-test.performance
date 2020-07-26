@@ -246,7 +246,14 @@ object SSCS {
 			//.get("/activity/cases/1552650446279756,1574715851299047,1574771353085053,1574771425565793,1574775065167620,1574775076679514,1574775081771140,1574775085031665,1574775090059446,1574775116202087,1574775125129875,1574775125356445,1574775164890403,1574775167970699,1574775170224035,1574775201506996,1574775205680128,1574775230602188,1574775232314675,1574775247646285,1574775263929649,1574775275516038,1574775282732867,1574775283695253,1574775292722858/activity")
 			.headers(headers_2))
 //			.check(status.is(404))))
- 
+
+//			 .exec {
+//			   session =>
+//					 println(session("Current logged in user is: "))
+//					 println(session("SSCSUserName").as[String])
+//			     session
+//			 }
+
   .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   }
@@ -347,7 +354,9 @@ object SSCS {
 
     .exec(http("SSCS_060_005_OpenCase")
       .get("/data/internal/cases/${New_Case_Id}")
-      .headers(headers_8))
+      .headers(headers_8)
+			//.check(css("""document_binary_url":"(.?)""""))
+		)
 
     .repeat(sscsCaseActivityRepeat) {
     exec(http("SSCS_CaseActivity")
