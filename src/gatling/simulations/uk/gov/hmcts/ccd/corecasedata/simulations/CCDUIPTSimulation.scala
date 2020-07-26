@@ -45,8 +45,8 @@ class CCDUIPTSimulation extends Simulation  {
       .repeat(SSCSiteration) {
         exec(SSCS.SSCSCreateCase)
         .exec(SSCS.SSCSDocUpload)
-        //.exec(SSCS.SSCSSearchAndView)
-        //.exec(WaitforNextIteration.waitforNextIteration)
+        .exec(SSCS.SSCSSearchAndView)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
     }
