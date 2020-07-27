@@ -33,6 +33,19 @@ object DVExcep {
     "Sec-Fetch-Mode" -> "cors",
     "experimental" -> "true")
 
+  val headers_4 = Map(
+    "Accept" -> "application/json",
+    "Accept-Encoding" -> "gzip, deflate, br",
+    "Accept-Language" -> "en-US,en;q=0.9",
+    "Cache-Control" -> "no-cache",
+    "Connection" -> "keep-alive",
+    "Content-Type" -> "application/json",
+    "Origin" -> CCDEnvurl,
+    "Sec-Fetch-Dest" -> "empty",
+    "Sec-Fetch-Mode" -> "cors",
+    "Sec-Fetch-Site" -> "same-site"
+  )
+
   val headers_5 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-event-trigger.v2+json;charset=UTF-8",
     "Sec-Fetch-Mode" -> "cors",
@@ -151,7 +164,7 @@ object DVExcep {
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
 
-  val DVCreateCase = group ("DIV_Create") {
+  val DVCreateCase =
 
     exec(http("DIV_030_005_CreateCaseStartPage")
       .get("/aggregated/caseworkers/:uid/jurisdictions?access=create")
@@ -251,9 +264,7 @@ object DVExcep {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-  }
-
-  val DVDocUpload = group("DIV_DocUpload") {
+  val DVDocUpload =
 
     exec(http("DIV_040_005_DocumentUploadPage")
       .get("/data/internal/cases/${New_Case_Id}/event-triggers/uploadDocument?ignore-warning=false")
@@ -281,11 +292,10 @@ object DVExcep {
       .post("/data/caseworkers/:uid/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${New_Case_Id}/events")
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"D8DocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"other\",\n          \"DocumentEmailContent\": null,\n          \"DocumentDateAdded\": null,\n          \"DocumentComment\": null,\n          \"DocumentFileName\": null,\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
-  }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds) 
 
-  val DVSearchAndView = group ("DIV_View") {
+  val DVSearchAndView =
 
     exec(http("DIV_050_005_SearchPage")
       .get("/data/internal/case-types/${DVCaseType}/work-basket-inputs")
@@ -295,6 +305,10 @@ object DVExcep {
 
     .exec(http("DIV_050_010_SearchForCase")
       .get("/aggregated/caseworkers/:uid/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases?view=WORKBASKET&page=1")
+      .headers(headers_4))
+
+    .exec(http("DIV_050_015_SearchForCase")
+      .get("/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata")
       .headers(CommonHeader))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -308,6 +322,5 @@ object DVExcep {
     .exec(http("DIV_050_020_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_7))
-      
-  }
+
 }

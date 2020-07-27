@@ -16,7 +16,7 @@ object EthosSearchView {
   val feedEthosSearchData = csv("EthosSearchData.csv").random
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
-  val caseActivityRepeat = 5
+  val caseActivityRepeat = 3
 
   val headers_0 = Map(
     "Access-Control-Request-Headers" -> "content-type",
@@ -81,121 +81,115 @@ object EthosSearchView {
       .check(status.in(200, 302)))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_010_Login")
-      .get(CCDEnvurl + "/config")
-      .headers(CommonHeader))
+      .exec(http("ET_020_010_Login")
+        .get(CCDEnvurl + "/config")
+        .headers(CommonHeader))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_015_Login")
-      .options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-      .headers(CommonHeader))
+      .exec(http("ET_020_015_Login")
+        .options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+        .headers(CommonHeader))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_020_Login")
-      .get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-      .headers(CommonHeader))
+      .exec(http("ET_020_020_Login")
+        .get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+        .headers(CommonHeader))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_025_Login")
-      .get(CCDEnvurl + "/config")
-      .headers(CommonHeader))
+      .exec(http("ET_020_025_Login")
+        .get(CCDEnvurl + "/config")
+        .headers(CommonHeader))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_030_Login")
-      .options(BaseURL + "/data/caseworkers/:uid/profile"))
+      .exec(http("ET_020_030_Login")
+        .options(BaseURL + "/data/caseworkers/:uid/profile"))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_035_Login")
-      .get(BaseURL + "/data/caseworkers/:uid/profile")
-      .headers(CommonHeader))
+      .exec(http("ET_020_035_Login")
+        .get(BaseURL + "/data/caseworkers/:uid/profile")
+        .headers(CommonHeader))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_040_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types?access=read")
-      .resources(http("ET_020_045_Login")
+      .exec(http("ET_020_040_Login")
+        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types?access=read")
+        .headers(CommonHeader))
+
+      .exec(http("ET_020_045_Login")
         .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types?access=read")
-        .headers(CommonHeader)))
+        .headers(CommonHeader))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_050_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/work-basket-inputs"))
+      .exec(http("ET_020_050_Login")
+        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/work-basket-inputs"))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_055_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
+      .exec(http("ET_020_055_Login")
+        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_060_Login")
-      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO"))
+      .exec(http("ET_020_060_Login")
+        .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO"))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_065_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/work-basket-inputs")
-      .headers(CommonHeader))
+      .exec(http("ET_020_065_Login")
+        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/work-basket-inputs")
+        .headers(CommonHeader))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_070_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?view=WORKBASKET&state=TODO&page=1")
-      .headers(CommonHeader))
+      .exec(http("ET_020_070_Login")
+        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?view=WORKBASKET&state=TODO&page=1")
+        .headers(CommonHeader))
       //.exitHereIfFailed
 
-    .exec(http("ET_020_075_Login")
-      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO")
-      .headers(CommonHeader))
-      //.exitHereIfFailed
+      .exec(http("ET_020_075_Login")
+        .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO")
+        .headers(CommonHeader))
+    //.exitHereIfFailed
   }
+
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-  val Search = group("Ethos_View") {
+  val Search =
 
-    exec(http("ET_030_005_SearchCases")
-      .options("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1")
-      .headers(headers_0))
+//    exec(http("ET_030_005_SearchCases")
+//      .options("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1")
+//      .headers(headers_0))
 
     // .exec(http("ET_030_010_SearchCases")
     //   .options("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases/pagination_metadata")
     //   .headers(headers_0))
 
-    .exec(http("ET_030_015_SearchCases")
-      .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases/pagination_metadata")
+    exec(http("ET_030_005_SearchCases")
+      .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases/pagination_metadata?case.receiptDate=2019-09-26")
       .headers(headers_2))
 
-    .exec(http("ET_030_020_SearchCases")
-      .get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1")
-      .headers(headers_2))
-    //   //.check(jsonPath("$.results[*].case_id").saveAs("SearchParam_Case_Id"))
+    .exec(http("ET_030_010_SearchCases")
+      .get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1&case.receiptDate=2019-09-26")
+      .headers(headers_2)
+      .check(jsonPath("$..case_id").findAll.optional.saveAs("caseNumbers"))
+    )
 
-    // exec(http("ET_030_005_SearchCases")
-    //   .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Scotland/cases/pagination_metadata")
-		// 	.headers(headers_0))
-
-    // .exec(http("ET_030_010_SearchCases")
-		// 	.get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/Scotland/cases?page=1")
-		// 	.headers(headers_0))
-
-  }
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-  val OpenCase = group("Ethos_View") {
+  val OpenCase =
 
-    /*exec {
+    exec {
       session =>
-        println(session("EthosCaseType").as[String])
-        println(session("EthosCaseRef").as[String])
+        println(session("caseNumbers").as[String])
         session
-    }*/
+    }
 
-    exec(http("ET_040_OpenCase")
-      .get("/data/internal/cases/${EthosCaseRef}")
-      .headers(headers_7)
-      )
+    .foreach("${caseNumbers}","caseNumber") {
+      exec(http("ET_040_OpenCase")
+        .get("/data/internal/cases/${caseNumber}")
+        .headers(headers_7))
 
-    .repeat(caseActivityRepeat) {
-      exec(http("Ethos_CaseActivity")
-        .get("/activity/cases/${EthosCaseRef}/activity")
-        .headers(headers_2))
+        .repeat(caseActivityRepeat) {
+          exec(http("Ethos_CaseActivity")
+            .get("/activity/cases/${caseNumber}/activity")
+            .headers(headers_2))
 
-        .pause(3)
+            .pause(2)
         }
-  }
+    }
 }

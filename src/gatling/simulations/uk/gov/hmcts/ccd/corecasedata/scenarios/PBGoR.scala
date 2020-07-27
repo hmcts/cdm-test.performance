@@ -50,6 +50,18 @@ object PBGoR {
     "Sec-Fetch-Mode" -> "cors",
     "experimental" -> "true")
 
+  val headers_7 = Map(
+    "Accept" -> "application/json",
+    "Accept-Encoding" -> "gzip, deflate, br",
+    "Accept-Language" -> "en-US,en;q=0.9",
+    "Cache-Control" -> "no-cache",
+    "Connection" -> "keep-alive",
+    "Content-Type" -> "application/json",
+    "Origin" -> CCDEnvurl,
+    "Sec-Fetch-Dest" -> "empty",
+    "Sec-Fetch-Mode" -> "cors",
+    "Sec-Fetch-Site" -> "same-site")
+
   val headers_8 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-case-view.v2+json",
     "Content-Type" -> "application/json",
@@ -180,7 +192,7 @@ object PBGoR {
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }
 
-  val PBCreateCase = group("PB_Create") {
+  val PBCreateCase =
     exec(http("PBGoR_030_005_CreateCasePage")
       .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=create")
       .headers(CommonHeader))
@@ -208,191 +220,170 @@ object PBGoR {
         .pause(3)
     }
 
-    .pause(MinThinkTime)  
-    
+  val PBPaymentSuccessful =
+    exec(http("PBGoR_040_005_PaymentSuccessfulPage")
+      .get("/data/internal/cases/${New_Case_Id}/event-triggers/paymentSuccessApp?ignore-warning=false")
+      .headers(headers_0)
+      .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
+
+    .repeat(caseActivityRepeat) {
+      exec(http("PB_CaseActivity")
+        .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+        .pause(3)
+        }
+
+    .exec(http("PBGoR_040_010_PaymentSuccessfulDetails")
+      .post("/data/case-types/${PBCaseType}/validate?pageId=paymentSuccessAppboPaymentSuccessfulAppPage1")
+      .headers(headers_4)
+      .body(StringBody("{\n  \"data\": {\n    \"applicationSubmittedDate\": \"2019-03-01\"\n  },\n  \"event\": {\n    \"id\": \"paymentSuccessApp\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"applicationSubmittedDate\": \"2019-03-01\"\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))
+
+    .exec(http("PBGoR_040_015_PaymentSuccessfulSubmit")
+      .post("/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/${New_Case_Id}/events")
+      .headers(CommonHeader)
+      .body(StringBody("{\n  \"data\": {\n    \"applicationSubmittedDate\": \"2019-03-01\"\n  },\n  \"event\": {\n    \"id\": \"paymentSuccessApp\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+
+    .repeat(caseActivityRepeat) {
+        exec(http("PB_CaseActivity")
+          .get("/activity/cases/${New_Case_Id}/activity")
+          .headers(headers_2))
+
+          .pause(3)
+          }
+
+  val PBDocUpload =
+    exec(http("PGBoR_050_005_DocumentUploadPage")
+      .get("/data/internal/cases/${New_Case_Id}/event-triggers/boUploadDocumentsForCaseCreated?ignore-warning=false")
+      .headers(headers_0)
+      .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
+
+    .repeat(caseActivityRepeat) {
+      exec(http("PB_CaseActivity")
+        .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+        .pause(3)
+        }
+
+    .pause(MinThinkTime)
+
+    .exec(session => {
+        session.set("FileName1", "3MB.pdf")
+      })
+
+    .exec(http("PGBoR_050_010_DocumentUploadToDM")
+      .post(BaseURL + "/documents")
+      .bodyPart(RawFileBodyPart("files", "${FileName1}")
+        .fileName("${FileName1}")
+        .transferEncoding("binary"))
+      .asMultipartForm
+      .formParam("classification", "PUBLIC")
+      .check(status.is(200))
+      .check(regex("""http://(.+)/""").saveAs("DMURL"))
+      .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
+
+    .exec(http("PGBoR_050_015_DocumentUploadProcess")
+      .post("/data/case-types/${PBCaseType}/validate?pageId=boUploadDocumentsForCaseCreatedboUploadDocumentPage1")
+      .headers(headers_4)
+      .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))
+
+    .repeat(caseActivityRepeat) {
+      exec(http("PB_CaseActivity")
+        .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+        .pause(3)
+        }
+
+    .exec(http("PGBoR_050_020_DocumentUploadSubmit")
+      .post("/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/${New_Case_Id}/events")
+      .headers(CommonHeader)
+      .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+
+    .repeat(caseActivityRepeat) {
+      exec(http("PB_CaseActivity")
+        .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+        .pause(3)
+        }
+
+  val PBStopCase =
+
+    exec(http("PBGoR_060_005_StopCase")
+      .get("/data/internal/cases/${New_Case_Id}/event-triggers/boStopCaseForCaseCreated?ignore-warning=false")
+      .headers(headers_9)
+      .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
+
+    .repeat(caseActivityRepeat) {
+      exec(http("PB_CaseActivity")
+        .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+        .pause(3)
+        }
+
+    .pause(MinThinkTime)
+
+    .exec(http("PBGoR_060_010_StopCaseAddReason")
+      .post("/data/case-types/GrantOfRepresentation/validate?pageId=boStopCaseForCaseCreatedboStopCaseForCaseCreatedPage1")
+      .headers(headers_10)
+      .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))
+
+    .repeat(caseActivityRepeat) {
+      exec(http("PB_CaseActivity")
+        .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+        .pause(3)
+        }
+
+    .exec(http("PBGoR_060_015_StopCaseSubmit")
+      .post("/data/cases/${New_Case_Id}/events")
+      .headers(headers_11)
+      .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+
+    .repeat(caseActivityRepeat) {
+      exec(http("PB_CaseActivity")
+        .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+        .pause(3)
+        }
+
+  val PBSearchAndView =
+    exec(http("PBGoR_070_005_SearchForCase")
+      .get("/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/pagination_metadata")
+      .headers(CommonHeader))
+
+    .exec(http("PBGoR_070_010_SearchForCase")
+      .get("/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases?view=WORKBASKET&page=1")
+      .headers(headers_7))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .exec(http("PBGoR_070_010_OpenCase")
+      .get("/data/internal/cases/${New_Case_Id}")
+      .headers(headers_8))
+
+    .repeat(caseActivityRepeat) {
+      exec(http("PB_CaseActivity")
+        .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+        .pause(3)
+        }
+
+    .exec(http("PBGoR_070_015_OpenDocument")
+      .get("/documents/${Document_ID}/binary")
+      .headers(headers_15))
+
+      .repeat(caseActivityRepeat) {
+      exec(http("PB_CaseActivity")
+        .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+        .pause(3)
+        }
   }
-
-    val PBPaymentSuccessful = group("PB_Payment") {
-      exec(http("PBGoR_040_005_PaymentSuccessfulPage")
-        .get("/data/internal/cases/${New_Case_Id}/event-triggers/paymentSuccessApp?ignore-warning=false")
-        .headers(headers_0)
-        .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
-
-      .repeat(caseActivityRepeat) {
-        exec(http("PB_CaseActivity")
-          .get("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
-
-          .pause(3)
-          }
-
-      .pause(MinThinkTime)  
-
-      .exec(http("PBGoR_040_010_PaymentSuccessfulDetails")
-        .post("/data/case-types/${PBCaseType}/validate?pageId=paymentSuccessAppboPaymentSuccessfulAppPage1")
-        .headers(headers_4)
-        .body(StringBody("{\n  \"data\": {\n    \"applicationSubmittedDate\": \"2019-03-01\"\n  },\n  \"event\": {\n    \"id\": \"paymentSuccessApp\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"applicationSubmittedDate\": \"2019-03-01\"\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))
-
-      .exec(http("PBGoR_040_015_PaymentSuccessfulSubmit")
-        .post("/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/${New_Case_Id}/events")
-        .headers(CommonHeader)
-        .body(StringBody("{\n  \"data\": {\n    \"applicationSubmittedDate\": \"2019-03-01\"\n  },\n  \"event\": {\n    \"id\": \"paymentSuccessApp\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
-
-      .repeat(caseActivityRepeat) {
-          exec(http("PB_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-            .pause(3)
-            }
-
-      .pause(MinThinkTime)
-
-    }
-
-    val PBDocUpload = group("PB_DocUpload") {
-      exec(http("PGBoR_050_005_DocumentUploadPage")
-        .get("/data/internal/cases/${New_Case_Id}/event-triggers/boUploadDocumentsForCaseCreated?ignore-warning=false")
-        .headers(headers_0)
-        .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
-
-      .repeat(caseActivityRepeat) {
-        exec(http("PB_CaseActivity")
-          .get("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
-
-          .pause(3)
-          }
-
-      .pause(MinThinkTime)
-
-      .exec(session => {
-          session.set("FileName1", "3MB.pdf")
-        })
-
-      .exec(http("PGBoR_050_010_DocumentUploadToDM")
-        .post(BaseURL + "/documents")
-        .bodyPart(RawFileBodyPart("files", "${FileName1}")
-          .fileName("${FileName1}")
-          .transferEncoding("binary"))
-        .asMultipartForm
-        .formParam("classification", "PUBLIC")
-        .check(status.is(200))
-        .check(regex("""http://(.+)/""").saveAs("DMURL"))
-        .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
-
-      .exec(http("PGBoR_050_015_DocumentUploadProcess")
-        .post("/data/case-types/${PBCaseType}/validate?pageId=boUploadDocumentsForCaseCreatedboUploadDocumentPage1")
-        .headers(headers_4)
-        .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))
-
-      .repeat(caseActivityRepeat) {
-        exec(http("PB_CaseActivity")
-          .get("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
-
-          .pause(3)
-          }
-
-      .pause(MinThinkTime)
-
-      .exec(http("PGBoR_050_020_DocumentUploadSubmit")
-        .post("/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/${New_Case_Id}/events")
-        .headers(CommonHeader)
-        .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
-    }
-
-      .repeat(caseActivityRepeat) {
-        exec(http("PB_CaseActivity")
-          .get("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
-
-          .pause(3)
-          }
-
-      .pause(MinThinkTime)
-
-    val PBStopCase = group("PB_Stop") {
-
-      exec(http("PBGoR_060_005_StopCase")
-        .get("/data/internal/cases/${New_Case_Id}/event-triggers/boStopCaseForCaseCreated?ignore-warning=false")
-        .headers(headers_9)
-        .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
-
-      .repeat(caseActivityRepeat) {
-        exec(http("PB_CaseActivity")
-          .get("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
-
-          .pause(3)
-          }
-
-      .pause(MinThinkTime)
-
-      .exec(http("PBGoR_060_010_StopCaseAddReason")
-        .post("/data/case-types/GrantOfRepresentation/validate?pageId=boStopCaseForCaseCreatedboStopCaseForCaseCreatedPage1")
-        .headers(headers_10)
-        .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))
-
-      .repeat(caseActivityRepeat) {
-        exec(http("PB_CaseActivity")
-          .get("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
-
-          .pause(3)
-          }
-
-      .pause(MinThinkTime)
-
-      .exec(http("PBGoR_060_015_StopCaseSubmit")
-        .post("/data/cases/${New_Case_Id}/events")
-        .headers(headers_11)
-        .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
-
-      .repeat(caseActivityRepeat) {
-        exec(http("PB_CaseActivity")
-          .get("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
-
-          .pause(3)
-          }
-
-      .pause(MinThinkTime)
-    }
-
-    val PBSearchAndView = group("PB_View") {
-      exec(http("PBGoR_070_005_SearchForCase")
-        .get("/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/pagination_metadata")
-        .headers(CommonHeader))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-      .exec(http("PBGoR_070_010_OpenCase")
-        .get("/data/internal/cases/${New_Case_Id}")
-        .headers(headers_8))
-
-      .repeat(caseActivityRepeat) {
-        exec(http("PB_CaseActivity")
-          .get("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
-
-          .pause(3)
-          }
-
-      .pause(MinThinkTime)
-
-      .exec(http("PBGoR_070_015_OpenDocument")
-        .get("/documents/${Document_ID}/binary")
-        .headers(headers_15))
-
-        .repeat(caseActivityRepeat) {
-        exec(http("PB_CaseActivity")
-          .get("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
-
-          .pause(3)
-          }
-
-      .pause(MinThinkTime)
-    }
-}

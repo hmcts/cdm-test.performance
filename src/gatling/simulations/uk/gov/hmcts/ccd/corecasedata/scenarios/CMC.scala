@@ -15,7 +15,7 @@ object CMC {
   val feedUserData = csv("CMCUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
-  val cmcCaseActivityRepeat = 6
+  val cmcCaseActivityRepeat = 4
 
   val headers_0 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-workbasket-input-details.v2+json;charset=UTF-8",
@@ -58,7 +58,7 @@ object CMC {
     "Sec-Fetch-Mode" -> "cors",
     "experimental" -> "true")
 
-  val CMCLogin = group("CMC_Login") {
+  val CMCLogin = group ("CMC_Login") {
 
     // ====================================================================
     // Enter email and password - Click Sign In button
@@ -76,64 +76,64 @@ object CMC {
       .check(headerRegex("Location", "(?<=code=)(.*)&client").saveAs("authCode"))
       .check(status.in(200, 302)))
 
-    .exec(http("CMC_020_010_Login")
-      .get(CCDEnvurl + "/config")
-      .headers(CommonHeader))
+      .exec(http("CMC_020_010_Login")
+        .get(CCDEnvurl + "/config")
+        .headers(CommonHeader))
 
-    .exec(http("CMC_020_015_Login")
-      .options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-      .headers(CommonHeader))
+      .exec(http("CMC_020_015_Login")
+        .options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+        .headers(CommonHeader))
 
-    .exec(http("CMC_020_020_Login")
-      .get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-      .headers(CommonHeader))
+      .exec(http("CMC_020_020_Login")
+        .get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+        .headers(CommonHeader))
 
-    .exec(http("CMC_020_025_Login")
-      .get(CCDEnvurl + "/config")
-      .headers(CommonHeader))
+      .exec(http("CMC_020_025_Login")
+        .get(CCDEnvurl + "/config")
+        .headers(CommonHeader))
 
-    .exec(http("CMC_020_030_Login")
-      .options(BaseURL + "/data/caseworkers/:uid/profile"))
+      .exec(http("CMC_020_030_Login")
+        .options(BaseURL + "/data/caseworkers/:uid/profile"))
 
-    .exec(http("CMC_020_035_Login")
-      .get(BaseURL + "/data/caseworkers/:uid/profile")
-      .headers(CommonHeader))
+      .exec(http("CMC_020_035_Login")
+        .get(BaseURL + "/data/caseworkers/:uid/profile")
+        .headers(CommonHeader))
 
-    .exec(http("CMC_020_040_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types?access=read")
-      .headers(CommonHeader))
+      .exec(http("CMC_020_040_Login")
+        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types?access=read")
+        .headers(CommonHeader))
 
-    .exec(http("CMC_020_045_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types?access=read")
-      .headers(CommonHeader))
+      .exec(http("CMC_020_045_Login")
+        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types?access=read")
+        .headers(CommonHeader))
 
-    .exec(http("CMC_020_050_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/work-basket-inputs"))
+      .exec(http("CMC_020_050_Login")
+        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/work-basket-inputs"))
 
-    .exec(http("CMC_020_055_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
+      .exec(http("CMC_020_055_Login")
+        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
 
-    .exec(http("CMC_020_060_Login")
-      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/pagination_metadata?state=TODO"))
+      .exec(http("CMC_020_060_Login")
+        .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/pagination_metadata?state=TODO"))
 
-    .exec(http("CMC_020_065_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/work-basket-inputs")
-      .headers(CommonHeader))
+      .exec(http("CMC_020_065_Login")
+        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/work-basket-inputs")
+        .headers(CommonHeader))
 
-    .exec(http("CMC_020_070_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases?view=WORKBASKET&state=TODO&page=1")
-      .headers(CommonHeader))
+      .exec(http("CMC_020_070_Login")
+        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases?view=WORKBASKET&state=TODO&page=1")
+        .headers(CommonHeader))
 
-    .exec(http("CMC_020_075_Login")
-      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/pagination_metadata?state=TODO")
-      .headers(CommonHeader))
+      .exec(http("CMC_020_075_Login")
+        .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/pagination_metadata?state=TODO")
+        .headers(CommonHeader))
 
-    .exec(http("CMC_020_080_Login")
-			.get("/activity/cases/1552650446279756,1574715851299047,1574771353085053,1574771425565793,1574775065167620,1574775076679514,1574775081771140,1574775085031665,1574775090059446,1574775116202087,1574775125129875,1574775125356445,1574775164890403,1574775167970699,1574775170224035,1574775201506996,1574775205680128,1574775230602188,1574775232314675,1574775247646285,1574775263929649,1574775275516038,1574775282732867,1574775283695253,1574775292722858/activity")
-			.headers(headers_2))
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+      .exec(http("CMC_020_080_Login")
+        .get("/activity/cases/1552650446279756,1574715851299047,1574771353085053,1574771425565793,1574775065167620,1574775076679514,1574775081771140,1574775085031665,1574775090059446,1574775116202087,1574775125129875,1574775125356445,1574775164890403,1574775167970699,1574775170224035,1574775201506996,1574775205680128,1574775230602188,1574775232314675,1574775247646285,1574775263929649,1574775275516038,1574775282732867,1574775283695253,1574775292722858/activity")
+        .headers(headers_2))
   }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val CMCCreateCase = 
 
@@ -176,8 +176,6 @@ object CMC {
         .pause(3)
     }
 
-    .pause(MinThinkTime)  
-    
 //  .exec { session =>
 //    val s1 = new File("src/gatling/resources/CMCData.csv")
 //    val writer = new PrintWriter(new FileOutputStream(new File("/src/gatling/resources/CMCData.csv"), true))
@@ -225,8 +223,6 @@ object CMC {
         .pause(3)
     }
 
-    .pause(MinThinkTime)
-
   val CMCWaitingTransfer = 
   
     // ====================================================================
@@ -246,8 +242,6 @@ object CMC {
         .pause(3)
     }
 
-    .pause(MinThinkTime)
-
     // ====================================================================
     // Submit the Waiting Transfer step
     // ====================================================================
@@ -264,8 +258,6 @@ object CMC {
 
         .pause(3)
     }
-
-    .pause(MinThinkTime)
 
   val CMCTransfer = 
   
@@ -286,8 +278,6 @@ object CMC {
         .pause(3)
     }
 
-    .pause(MinThinkTime)
-
     // ====================================================================
     // Submit the Transfer step
     // ====================================================================    
@@ -304,8 +294,6 @@ object CMC {
 
         .pause(3)
     }
-
-    .pause(MinThinkTime)
 
   val CMCAttachScannedDocs = 
   
@@ -326,8 +314,6 @@ object CMC {
         .pause(3)
     }
 
-    .pause(MinThinkTime)
-
     // ====================================================================
     // Submit the Attach Scanned Docs step
     // ====================================================================
@@ -344,8 +330,6 @@ object CMC {
 
         .pause(3)
     }
-
-    .pause(MinThinkTime)
 
   val CMCSupportUpdate = 
 
@@ -366,8 +350,6 @@ object CMC {
         .pause(3)
     }
 
-    .pause(MinThinkTime)
-
     // ====================================================================
     // Submit the Support Update step
     // ==================================================================== 
@@ -384,8 +366,6 @@ object CMC {
 
         .pause(3)
     }
-
-    .pause(MinThinkTime)
 
   val CMCSearchAndView = 
 
@@ -405,14 +385,16 @@ object CMC {
         .pause(3)
     }
 
-    .pause(MinThinkTime)
-
     // ====================================================================
     // Search for the newly created case
     // ==================================================================== 
 
     .exec(http("CMC_090_010_SearchForCase")
       .get("/aggregated/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases?view=WORKBASKET&page=1&case_reference=${New_Case_Id}")
+      .headers(CommonHeader))
+
+    .exec(http("CMC_090_015_SearchForCase")
+      .get("/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases/pagination_metadata?case_reference=${New_Case_Id}")
       .headers(CommonHeader))
 
     .repeat(cmcCaseActivityRepeat) {
@@ -423,15 +405,13 @@ object CMC {
         .pause(3)
     }
 
-    .pause(MinThinkTime)
-
     // ====================================================================
     // Open the Case
     // ==================================================================== 
 
-    .exec(http("CMC_090_015_OpenCase")
-      .get("/data/caseworkers/:uid/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/pagination_metadata?case_reference=${New_Case_Id}")
-      .headers(CommonHeader))
+    .exec(http("CMC_010_OpenCase")
+      .get("/data/internal/cases/${New_Case_Id}")
+      .headers(headers_8))
 
       .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
@@ -440,7 +420,5 @@ object CMC {
 
         .pause(3)
     }
-
-    .pause(MinThinkTime)
 
 }
