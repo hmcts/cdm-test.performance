@@ -179,7 +179,7 @@ object EthosSearchView {
 //        session
 //    }
 
-    .foreach("${caseNumbers}","caseNumber") {
+    foreach("${caseNumbers}","caseNumber") {
       exec(http("ET_040_OpenCase")
         .get("/data/internal/cases/${caseNumber}")
         .headers(headers_7))
