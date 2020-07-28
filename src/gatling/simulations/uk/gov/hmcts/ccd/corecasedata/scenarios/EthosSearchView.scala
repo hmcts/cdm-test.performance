@@ -189,7 +189,7 @@ object EthosSearchView {
             .get("/activity/cases/${caseNumber}/activity")
             .headers(headers_2))
 
-            .pause(2)
+            .pause(5)
         }
     }
 }
