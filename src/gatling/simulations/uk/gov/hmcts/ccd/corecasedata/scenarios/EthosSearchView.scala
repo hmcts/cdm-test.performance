@@ -173,11 +173,11 @@ object EthosSearchView {
 
   val OpenCase =
 
-    exec {
-      session =>
-        println(session("caseNumbers").as[String])
-        session
-    }
+//    exec {
+//      session =>
+//        println(session("caseNumbers").as[String])
+//        session
+//    }
 
     .foreach("${caseNumbers}","caseNumber") {
       exec(http("ET_040_OpenCase")

@@ -266,7 +266,7 @@ object PBGoR {
         .pause(3)
         }
 
-    .pause(MinThinkTime)
+    //.pause(MinThinkTime)
 
     .exec(session => {
         session.set("FileName1", "3MB.pdf")
