@@ -47,8 +47,8 @@ val CDSGetRequest =
   .exec(http("OIDC01_Authenticate")
       .post(IdamAPI + "/authenticate")
       .header("Content-Type", "application/x-www-form-urlencoded")
-      .formParam("username", "${caseSharingUser}")
-      .formParam("password", "Pass19word")
+      .formParam("username", "ccdloadtest621@gmail.com") //${caseSharingUser}
+      .formParam("password", "Password12")
       .check(status is 200)
       .check(headerRegex("Set-Cookie", "Idam.Session=(.*)").saveAs("authCookie")))
 
@@ -84,8 +84,30 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
-      .queryParam("ctid", "FINREM_ExceptionRecord")
+      .queryParam("ctid", "GrantOfRepresentation")
       .body(StringBody("{\n\t\"query\": {\n\t\t\"match_all\": {}\n\t\t},\n\t\t\"size\": 100,\n\t\t\"sort\":[ \n      { \n         \"last_modified\":\"desc\"\n      },\n      \"_score\"\n   ]\n}"))
+      .check(status in  (200)))
+
+  val ElasticSearchGetRef =
+
+    exec(http("CCD_SearchCaseEndpoint_SearchReference")
+      .post(ccdDataStoreUrl + "/searchCases")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .queryParam("ctid", "DIVORCE")
+      .body(StringBody("{ \n   \"query\":{ \n      \"bool\":{ \n         \"filter\":{ \n            \"wildcard\":{ \n               \"reference\":\"1595778159761287\"\n            }\n         }\n      }\n   }\n}"))
+      .check(status in  (200)))
+
+  val ElasticSearchGetByDate =
+
+    exec(http("CCD_SearchCaseEndpoint_SearchReference")
+      .post(ccdDataStoreUrl + "/searchCases")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .queryParam("ctid", "GrantOfRepresentation")
+      .body(StringBody("{\n   \"query\":{\n      \"bool\":{\n         \"filter\":{\n            \"term\":{\n               \"created_date\":\"2020-07-26\"\n            }\n         }\n      }\n   }\n}"))
       .check(status in  (200)))
 
   val CreateCaseForCaseSharing =

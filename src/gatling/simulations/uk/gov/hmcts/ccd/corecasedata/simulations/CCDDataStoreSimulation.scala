@@ -21,7 +21,7 @@ class CCDDataStoreSimulation extends Simulation  {
     .repeat(1) {
       exec(ccddatastore.CDSGetRequest)
         .repeat(1) {
-          exec(ccddatastore.ElasticSearchGetAll)
+          exec(ccddatastore.ElasticSearchGetByDate)
         }
     }
 

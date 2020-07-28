@@ -10,7 +10,7 @@ object CreateUser {
   val MaxThinkTime = Environment.maxThinkTime
   val CommonHeader = Environment.commonHeader
   val CCDAPIEnvurl = Environment.baseURL
-  val feedUserData = csv("SSCSUserData.csv").circular
+  val feedUserData = csv("ProbateUserData.csv")
 
   val headers_1 = Map( //ServiceAuthorization token can be called from http://rpe-service-auth-provider-perftest.service.core-compute-perftest.internal/testing-support/lease
     "ServiceAuthorization" -> "*******",
@@ -18,15 +18,14 @@ object CreateUser {
     "Accept" -> "application/json")
 
   val headers_0 = Map( //Authorization token needs to be provided by idam team
-    "Authorization" -> "AdminApiAuthToken ",
+    "Authorization" -> "AdminApiAuthToken ******",
     "Content-Type" -> "application/json")
 
 
   val IdamUser = feed(feedUserData)
 
     .exec(http("request_1")
-      .get("http://idam-api-perftest.service.core-compute-perftest.internal/users?email=${SSCSUserName}")
-      //.get("http://idam-api-perftest.service.core-compute-perftest.internal/users?email=ccdloadtest6@gmail.com")
+      .get("https://idam-api.perftest.platform.hmcts.net/users?email=${ProbateUserName}")
       .headers(headers_0)
       .check(jsonPath("$.id").saveAs("userId")))
 
@@ -122,14 +121,21 @@ object CreateUser {
 
     .exec(http("100_caseworker-ia-officer")
       .patch("http://idam-api-perftest.service.core-compute-perftest.internal/users/${userId}/roles/df62adcd-3f75-48f3-a6f0-16098bb69901")
-      .headers(headers_0))*/
+      .headers(headers_0))
 
     .exec(http("001_caseworker-sscs-superuser")
       .patch("http://idam-api-perftest.service.core-compute-perftest.internal/users/${userId}/roles/482db45a-3743-4bd8-b060-d991c8a89a7f")
       .headers(headers_0))
 
-    .pause(1)
+    .exec(http("001_DeleteProbateSolicitor")
+      .delete("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/16bc234c-54b3-4813-b369-17aa15081647")
+      .headers(headers_0))
 
+    .exec(http("002_DeleteDivorceSolicitor")
+      .delete("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/cb1ffd55-9dac-4b9e-8e69-94272238227c")
+      .headers(headers_0))*/
+
+    .pause(1)
 
   val CreateUserProfile = feed(feedUserData)
 
