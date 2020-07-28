@@ -16,7 +16,7 @@ object EthosSearchView {
   val feedEthosSearchData = csv("EthosSearchData.csv").random
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
-  val caseActivityRepeat = 3
+  val caseActivityRepeat = 2
 
   val headers_0 = Map(
     "Access-Control-Request-Headers" -> "content-type",

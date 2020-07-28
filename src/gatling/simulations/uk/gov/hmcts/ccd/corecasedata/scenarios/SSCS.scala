@@ -15,7 +15,7 @@ object SSCS {
   val feedUserData = csv("SSCSUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
-  val sscsCaseActivityRepeat = 5
+  val sscsCaseActivityRepeat = 2
 
   // val headers_0 = Map(
   //   "Sec-Fetch-Mode" -> "cors",
@@ -237,7 +237,7 @@ object SSCS {
       .pause(3)
     }
 
-    .pause(MinThinkTime)
+		.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val SSCSDocUpload = exec(http("SSCS_040_005_DocumentUploadPage1")
       .get("/data/internal/cases/${New_Case_Id}/event-triggers/uploadDocument?ignore-warning=false")
@@ -252,7 +252,7 @@ object SSCS {
       .pause(3)
     }
 
-    .pause(MinThinkTime)
+		.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(session => {
       session.set("FileName1", "3MB.pdf")
@@ -286,6 +286,8 @@ object SSCS {
       .pause(3)
     }
 
+	.pause(MinThinkTime seconds, MaxThinkTime seconds)
+
   val SSCSSearchAndView = 
     exec(http("SSCS_050_005_SearchForCase")
       .get("/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?view=WORKBASKET&state=appealCreated&page=1")
@@ -308,6 +310,8 @@ object SSCS {
 
       .pause(3)
     }
+
+		.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("SSCS_060_010_OpenDocument")
       .get("/documents/${Document_ID}/binary")

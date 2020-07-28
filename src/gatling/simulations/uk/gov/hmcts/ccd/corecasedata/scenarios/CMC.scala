@@ -15,7 +15,7 @@ object CMC {
   val feedUserData = csv("CMCUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
-  val cmcCaseActivityRepeat = 4
+  val cmcCaseActivityRepeat = 2
 
   val headers_0 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-workbasket-input-details.v2+json;charset=UTF-8",
@@ -176,6 +176,8 @@ object CMC {
         .pause(3)
     }
 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
 //  .exec { session =>
 //    val s1 = new File("src/gatling/resources/CMCData.csv")
 //    val writer = new PrintWriter(new FileOutputStream(new File("/src/gatling/resources/CMCData.csv"), true))
@@ -205,6 +207,8 @@ object CMC {
           .pause(3)
       }
 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
     // ====================================================================
     // Submit the Stay Claim step
     // ====================================================================
@@ -222,6 +226,8 @@ object CMC {
 
         .pause(3)
     }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val CMCWaitingTransfer = 
   
@@ -242,6 +248,8 @@ object CMC {
         .pause(3)
     }
 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
     // ====================================================================
     // Submit the Waiting Transfer step
     // ====================================================================
@@ -258,6 +266,8 @@ object CMC {
 
         .pause(3)
     }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val CMCTransfer = 
   
@@ -278,6 +288,8 @@ object CMC {
         .pause(3)
     }
 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
     // ====================================================================
     // Submit the Transfer step
     // ====================================================================    
@@ -294,6 +306,8 @@ object CMC {
 
         .pause(3)
     }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val CMCAttachScannedDocs = 
   
@@ -314,6 +328,8 @@ object CMC {
         .pause(3)
     }
 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
     // ====================================================================
     // Submit the Attach Scanned Docs step
     // ====================================================================
@@ -330,6 +346,8 @@ object CMC {
 
         .pause(3)
     }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val CMCSupportUpdate = 
 
@@ -350,6 +368,8 @@ object CMC {
         .pause(3)
     }
 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
     // ====================================================================
     // Submit the Support Update step
     // ==================================================================== 
@@ -366,6 +386,8 @@ object CMC {
 
         .pause(3)
     }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val CMCSearchAndView = 
 
