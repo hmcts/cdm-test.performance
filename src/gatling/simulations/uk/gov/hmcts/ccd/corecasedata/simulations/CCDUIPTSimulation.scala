@@ -155,5 +155,5 @@ class CCDUIPTSimulation extends Simulation  {
     //CcdDataStore.inject(rampUsers(1) during(30 minutes))
   )
     .protocols(httpProtocol)
-    //.maxDuration(60 minutes)
+    .maxDuration(30 minutes)
 }
