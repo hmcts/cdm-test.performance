@@ -16,7 +16,7 @@ object EthosSearchView {
   val feedEthosSearchData = csv("EthosSearchData.csv").random
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
-  val caseActivityRepeat = 1
+  val caseActivityRepeat = 2
 
   val headers_0 = Map(
     "Access-Control-Request-Headers" -> "content-type",
@@ -160,13 +160,13 @@ object EthosSearchView {
     //   .headers(headers_0))
 
     exec(http("ET_030_005_SearchCases")
-      .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases/pagination_metadata?case.receiptDate=2019-09-26")
+      .get("/data/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases/pagination_metadata")//?case.receiptDate=2019-09-26")
       .headers(headers_2))
 
     .exec(http("ET_030_010_SearchCases")
-      .get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1&case.receiptDate=2019-09-26")
+      .get("/aggregated/caseworkers/:uid/jurisdictions/EMPLOYMENT/case-types/${EthosCaseType}/cases?view=WORKBASKET&page=1")//&case.receiptDate=2019-09-26")
       .headers(headers_2)
-      .check(jsonPath("$..case_id").findAll.optional.saveAs("caseNumbers"))
+      //.check(jsonPath("$..case_id").findAll.optional.saveAs("caseNumbers"))
     )
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -179,17 +179,17 @@ object EthosSearchView {
 //        session
 //    }
 
-    foreach("${caseNumbers}","caseNumber") {
+    //foreach("${caseNumbers}","caseNumber") {
       exec(http("ET_040_OpenCase")
-        .get("/data/internal/cases/${caseNumber}")
+        .get("/data/internal/cases/${EthosCaseRef}")
         .headers(headers_7))
 
-        .repeat(caseActivityRepeat) {
-          exec(http("Ethos_CaseActivity")
-            .get("/activity/cases/${caseNumber}/activity")
-            .headers(headers_2))
+      .repeat(caseActivityRepeat) {
+        exec(http("Ethos_CaseActivity")
+          .get("/activity/cases/${EthosCaseRef}/activity")
+          .headers(headers_2))
 
-            .pause(5)
-        }
-    }
+          .pause(5)
+      }
+    //}
 }

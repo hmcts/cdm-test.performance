@@ -15,7 +15,7 @@ class CCDUIPTSimulation extends Simulation  {
   val CMCiteration = 7 //7
   val Diviteration = 6 //6
   val Fpliteration = 10 //10
-  val Ethositeration = 18 //24
+  val Ethositeration = 24 //24
   val LFUiteration = 10 //8
 
   val httpProtocol = Environment.HttpProtocol
@@ -150,7 +150,7 @@ class CCDUIPTSimulation extends Simulation  {
     //These scenarios left commented out and used for debugging/script testing etc
     //CCDLargeFileUpload.inject(rampUsers(15) during(15 minutes))
     //CCDSSCSScenario.inject(rampUsers(200) during(200 minutes))
-    //CCDProbateScenario.inject(rampUsers(1) during(1 minutes))
+    //CCDEthosScenario.inject(rampUsers(1) during(1 minutes))
     //CaseShare.inject(rampUsers(1) during(30 minutes))
     //CcdDataStore.inject(rampUsers(1) during(30 minutes))
   )
