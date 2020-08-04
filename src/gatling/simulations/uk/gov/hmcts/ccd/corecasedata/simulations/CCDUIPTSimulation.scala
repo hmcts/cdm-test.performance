@@ -125,18 +125,6 @@ class CCDUIPTSimulation extends Simulation  {
         .exec(WaitforNextIteration.waitforNextIteration)
       }
 
-  val CaseShare = scenario("CCDCS")
-    .exec(casesharing.CDSGetRequest)
-    .exec(casesharing.CaseShareRequest)
-
-  val CcdDataStore = scenario("CCDDS") 
-    .exec(ccddatastore.CDSGetRequest)
-
-  val DataStoreCreateCase = scenario("CreateCase")
-      .exec(ccddatastore.CDSGetRequest)
-      .exec(ccddatastore.CreateCaseForCaseSharing)
-
-
   setUp(
     //These 5 scenarios required for CCD regression testing
     CCDProbateScenario.inject(rampUsers(150) during (20 minutes)),
