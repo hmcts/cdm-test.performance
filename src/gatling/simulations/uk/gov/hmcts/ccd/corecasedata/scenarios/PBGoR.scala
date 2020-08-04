@@ -15,7 +15,7 @@ object PBGoR {
   val feedUserData = csv("ProbateUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
-  val caseActivityRepeat = 2
+  val caseActivityRepeat = 3
 
   val headers_1 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-case-trigger.v2+json;charset=UTF-8",
@@ -347,7 +347,7 @@ object PBGoR {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("PBGoR_070_010_OpenCase")
+    .exec(http("PBGoR_080_005_OpenCase")
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_8))
 
@@ -361,7 +361,7 @@ object PBGoR {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("PBGoR_070_015_OpenDocument")
+    .exec(http("PBGoR_080_010_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_15))
 
