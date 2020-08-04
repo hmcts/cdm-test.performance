@@ -12,7 +12,7 @@ class CCDUIPTSimulation extends Simulation  {
   val BaseURL = Environment.baseURL
   val PBiteration = 8 //8
   val SSCSiteration = 14 //14
-  val CMCiteration = 8 //8
+  val CMCiteration = 1 //8
   val Diviteration = 8 //8
   val Fpliteration = 10 //10
   val Ethositeration = 26 //26
@@ -59,7 +59,7 @@ class CCDUIPTSimulation extends Simulation  {
         exec(CMC.CMCCreateCase)
         .exec(CMC.CMCStayCase)
         .exec(CMC.CMCWaitingTransfer)
-        .exec(CMC.CMCTransfer)
+        //.exec(CMC.CMCTransfer)
         .exec(CMC.CMCAttachScannedDocs)
         .exec(CMC.CMCSupportUpdate)
         .exec(CMC.CMCSearchAndView)
@@ -126,8 +126,8 @@ class CCDUIPTSimulation extends Simulation  {
       }
 
   val CaseShare = scenario("CCDCS")
-    .exec(CaseSharing.CDSGetRequest)
-    .exec(CaseSharing.CaseShareRequest)
+    .exec(casesharing.CDSGetRequest)
+    .exec(casesharing.CaseShareRequest)
 
   val CcdDataStore = scenario("CCDDS") 
     .exec(ccddatastore.CDSGetRequest)
@@ -150,7 +150,7 @@ class CCDUIPTSimulation extends Simulation  {
     //These scenarios left commented out and used for debugging/script testing etc
     //CCDLargeFileUpload.inject(rampUsers(15) during(15 minutes))
     //CCDSSCSScenario.inject(rampUsers(200) during(200 minutes))
-    //CCDEthosScenario.inject(rampUsers(1) during(1 minutes))
+    //CCDCMCScenario.inject(rampUsers(1) during(1 minutes))
     //CaseShare.inject(rampUsers(1) during(30 minutes))
     //CcdDataStore.inject(rampUsers(1) during(30 minutes))
   )
