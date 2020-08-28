@@ -20,7 +20,7 @@ class CaseSharingSimulation extends Simulation  {
     .doNotTrackHeader("1")
 
   val csIterationLarge = 100
-  val csIterationSmall = 500
+  val csIterationSmall = 400
 
   val CaseSharingLarge = scenario("CCDCSLarge")
     .repeat(1) {
@@ -31,7 +31,6 @@ class CaseSharingSimulation extends Simulation  {
         .repeat(csIterationLarge) {
             exec(casesharing.CreateCase)
             .exec(casesharing.CaseSharingPostLarge)
-            .exec(WaitforNextIteration.waitforNextIteration)
         }
     }
 
@@ -44,7 +43,6 @@ class CaseSharingSimulation extends Simulation  {
         .repeat(csIterationSmall) {
           exec(casesharing.CreateCase)
           .exec(casesharing.CaseSharingPostSmall)
-          .exec(WaitforNextIteration.waitforNextIteration)
         }
     }
 
