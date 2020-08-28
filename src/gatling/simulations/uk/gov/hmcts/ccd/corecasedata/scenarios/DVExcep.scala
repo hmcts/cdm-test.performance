@@ -313,13 +313,13 @@ object DVExcep {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("DIV_050_015_OpenCase")
+    .exec(http("DIV_060_005_OpenCase")
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_6))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)  
 
-    .exec(http("DIV_050_020_OpenDocument")
+    .exec(http("DIV_060_010_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_7))
 

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.ccd.corecasedata.simulations
 
+import com.typesafe.config.{Config, ConfigFactory}
 import io.gatling.core.Predef._
 import io.gatling.core.scenario.Simulation
 import io.gatling.http.Predef._ //comment out for VM runs, only required for proxy
@@ -10,7 +11,7 @@ import scala.concurrent.duration._
 class CCDDataStoreSimulation extends Simulation  {
 
   val BaseURL = Environment.baseURL
-
+  val config: Config = ConfigFactory.load()
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
@@ -21,7 +22,10 @@ class CCDDataStoreSimulation extends Simulation  {
     .repeat(1) {
       exec(ccddatastore.CDSGetRequest)
         .repeat(1) {
-          exec(ccddatastore.ElasticSearchGetByDate)
+          exec(ccddatastore.ElasticSearchGetAll)
+          .exec(ccddatastore.ElasticSearchGetRef)
+          .exec(ccddatastore.ElasticSearchGetByDate)
+          .exec(ccddatastore.ElasticSearchEthos)
         }
     }
 

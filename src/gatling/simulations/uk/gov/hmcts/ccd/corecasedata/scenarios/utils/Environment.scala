@@ -8,18 +8,10 @@ object Environment {
   val idamURL = "https://idam-web-public.perftest.platform.hmcts.net"
   val idamAPI = "https://idam-api.perftest.platform.hmcts.net"
   val ccdEnvurl = "https://www-ccd.perftest.platform.hmcts.net"
+  val ccdDataStoreUrl = "ccd-data-store-api-perftest.service.core-compute-perftest.internal"
   val baseURL = "https://gateway-ccd.perftest.platform.hmcts.net"
   val s2sUrl = "http://rpe-service-auth-provider-perftest.service.core-compute-perftest.internal"
-  
-  //val baseURL = "https://ccd-api-gateway-web-perftest.service.core-compute-perftest.internal"
-
-  /*val idamURL = "https://idam-web-public.aat.platform.hmcts.net"
-  val ccdEnvurl = "https://ccd-case-management-web-aat.service.core-compute-aat.internal"
-  val baseURL = "https://ccd-api-gateway-web-aat.service.core-compute-aat.internal"*/
-
- // val baseURL = "https://gateway.ccd.demo.platform.hmcts.net"
-  //val idamURL = "https://idam.preprod.ccidam.reform.hmcts.net"
-  //val ccdEnvurl = "https://www.ccd.demo.platform.hmcts.net" 
+  val xuiMCUrl = "https://manage-case.perftest.platform.hmcts.net/oauth2/callback"
   val minThinkTime = 20 //20
   val maxThinkTime = 60 //60
   val constantthinkTime = 7
@@ -37,7 +29,6 @@ object Environment {
     "Origin" -> ccdEnvurl)
 
   val idam_header = Map(
-    //"Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
     "accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
     "Accept-Encoding" -> "gzip, deflate, br",
     "Accept-Language" -> "en-US,en;q=0.9",

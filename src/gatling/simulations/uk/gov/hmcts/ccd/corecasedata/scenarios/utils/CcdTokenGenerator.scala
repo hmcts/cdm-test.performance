@@ -1,91 +1,105 @@
-//package uk.gov.hmcts.ccd.corecasedata.scenarios.utils
-//
-//import scala.collection.JavaConversions._
-//import io.lemonlabs.uri.Url
-//import io.netty.handler.codec.http.HttpHeaders
-//import org.springframework.http.HttpHeaders
-//import org.springframework.web.client.RestTemplate
-//import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator
-//import org.springframework.util.LinkedMultiValueMap
-//import org.springframework.util.MultiValueMap
-//
-//object CcdTokenGenerator extends PerformanceTestsConfig with SpringApplicationContext {
-//
-//  val AUTH_CODE_URL = "$UserAuthUrl/authorizationCode"
-//  val AUTH_TOKEN_URL = "$UserAuthUrl/oauth2/token?client_id=$AuthClientId&client_secret=$OAuth2ClientSecret"
-//  val restTemplate = new RestTemplate
-//
-//  var dataStoreS2STokenGenerator = applicationContext.getBean("dataStoreS2STokenGenerator").asInstanceOf[AuthTokenGenerator]
-//  var gatewayS2STokenGenerator = applicationContext.getBean("gatewayS2STokenGenerator").asInstanceOf[AuthTokenGenerator]
-//
-//  def generateWebUserToken(): String = generateUserToken(UserCcdId, UserCcdPassword, RedirectUriForAuthToken)
-//
-//  def generateImportUserToken: String = generateUserToken(UserImportId, UserImportPassword, RedirectUriForAuthToken)
-//
-//  private def generateUserToken(id: String, password: String, redirectUri: String): String = {
-//    val authCode = generateUserAuthCode(id, password, redirectUri)
-//    val token = generateUserAuthToken(authCode, redirectUri)
-//
-//    token
-//  }
-//
-//  private def generateUserAuthCode(userId: String, password: String, redirectUri: String): String = {
-//    // retrieve authorisation code for user name and password
-//    val headers = new HttpHeaders
-//    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED)
-//    headers.setAccept(List(MediaType.APPLICATION_JSON_UTF8))
-//
-//    val formParameters = new LinkedMultiValueMap[String, String]
-//    formParameters.add("username", userId)
-//    formParameters.add("password", password)
-//    formParameters.add("client_id", AuthClientId)
-//    formParameters.add("redirect_uri", redirectUri)
-//
-//    val request = new HttpEntity[MultiValueMap[String, String]](formParameters, headers)
-//
-//    val response = restTemplate.postForEntity(AUTH_CODE_URL, request, classOf[String])
-//
-//    // extract authorisation code from the headers
-//    val locationHeader = response.getHeaders.get("Location").toString.replaceAll("\\[", "").replaceAll("\\]", "")
-//    val queryParameters = Url.parse(locationHeader).query.param("code")
-//
-//    queryParameters.getOrElse("")
-//  }
-//
-//  private def generateUserAuthToken(authCode: String, redirectUri: String): String = {
-//    // retrieve SIDAM authorisation code for user name and password
-//    val headers = new HttpHeaders
-//    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED)
-//    headers.setAccept(List(MediaType.APPLICATION_JSON_UTF8))
-//
-//    val formParameters = new LinkedMultiValueMap[String, String]
-//    formParameters.add("code", authCode)
-//    formParameters.add("grant_type", "authorization_code")
-//    formParameters.add("redirect_uri", redirectUri)
-//
-//    val request = new HttpEntity[MultiValueMap[String, String]](formParameters, headers)
-//
-//    val response = restTemplate.postForEntity(AUTH_TOKEN_URL, request, classOf[String])
-//
-//    // extract access token from the response body
-//    val responseProperties = response.getBody.parseJson.convertTo[Map[String, JsValue]]
-//    val accessToken= responseProperties("access_token").convertTo[String]
-//
-//    println(s"accessToken: $accessToken")
-//
-//    accessToken.toString
-//  }
-//
-//  def generateDataStoreS2SToken(): String = {
-//    val token = dataStoreS2STokenGenerator.generate()
-//    println("generated s2s datastore token: $token")
-//    token
-//  }
-//
-//  def generateGatewayS2SToken(): String = {
-//    val token = gatewayS2STokenGenerator.generate()
-//    println("generated s2s gateway token: $token")
-//    token
-//  }
-//
-//}
+// package uk.gov.hmcts.ccd.corecasedata.scenarios.utils
+
+// import com.typesafe.config.ConfigFactory
+// import com.warrenstrange.googleauth.GoogleAuthenticator
+// import io.restassured.RestAssured
+// import io.restassured.config.EncoderConfig
+// import io.restassured.http.ContentType
+
+// object CcdTokenGenerator {
+
+//     private val config = ConfigFactory.load()
+
+//     val TOKEN_LEASE_URL = config.getString("s2sUrl")
+//     val USERTOKEN_SidAM_URL = config.getString("idam_api_url")
+
+//     val RD_URL = config.getString("baseUrl")
+
+//     def generateS2SToken() : String = {
+
+//     val authenticator: GoogleAuthenticator = new GoogleAuthenticator()
+//     val password = authenticator.getTotpPassword(config.getString("aat_service.pass"))
+//     val jsonPayload: String = """{"microservice":"""" + config.getString("aat_service.name") + """","oneTimePassword":"""" + password + """"}"""
+
+//     val s2sRequest = RestAssured.given
+//                     .contentType("application/json")
+//                     .accept("application/json")
+//                     .proxy("proxyout.reform.hmcts.net", 8080)
+//                     .body(jsonPayload)
+//                     .post(TOKEN_LEASE_URL +"/lease")
+//                     .then()
+//                     .statusCode(200)
+//                     .extract()
+//                     .response()
+
+//     val token = s2sRequest.asString()
+
+//     token
+//   }
+
+//   //=======================================
+
+// def generateSIDAMUserTokenInternal() : String = {
+//     return generateSIDAMUserTokenInternal("ccdloadtest1@gmail.com") //mallikarjun.puttana@hmcts.net
+// }
+
+// def generateSIDAMUserTokenInternal(userName : String) : String = {
+
+//     val authCodeRequest = RestAssured.given().config(RestAssured.config()
+//                         .encoderConfig(EncoderConfig.encoderConfig()
+//                         .encodeContentTypeAs("x-www-form-urlencoded",
+//                         ContentType.URLENC)))
+//                         .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+//                         .proxy("proxyout.reform.hmcts.net", 8080)
+//                         .formParam("username", userName)
+//                         .formParam("password", "Testing1234") 
+//                         .formParam("client_id", "rd-professional-api")
+//                         .formParam("client_secret", "cc5f2a6-9690-11e9-bc42-526af7764f64")
+//                         .formParam("redirect_uri", RD_URL + "/oauth2redirect")
+//                         .formParam("grant_type", "password")
+//                         .formParam("scope", "openid profile roles create-user manage-user search-user")
+//                         .request()
+
+
+//     val response = authCodeRequest.post(USERTOKEN_SidAM_URL + ":443/o/token")
+//     val statusCode = response.getStatusCode()
+//     val tokenStr = response.asString()
+//     val tokenIndexStart = tokenStr.indexOf(":")
+//     val tokenIndexEnd = tokenStr.indexOf(",")
+//     val token =  tokenStr.substring(tokenIndexStart+2,tokenIndexEnd -1 )
+
+//     "Bearer " + token
+//     }
+
+//     def generateSIDAMUserTokenExternal() : String = {
+//             return generateSIDAMUserTokenExternal("")
+//     }
+
+//     def generateSIDAMUserTokenExternal(userName : String) : String = {
+
+//     val authCodeRequest = RestAssured.given().config(RestAssured.config()
+//                         .encoderConfig(EncoderConfig.encoderConfig()
+//                         .encodeContentTypeAs("x-www-form-urlencoded",
+//                         ContentType.URLENC)))
+//                         .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+//                         .proxy("proxyout.reform.hmcts.net", 8080)
+//                         .formParam("username", userName)
+//                         .formParam("password", "Password12")
+//                         .formParam("client_id", "rd-professional-api")
+//                         .formParam("client_secret", "cc5f2a6-9690-11e9-bc42-526af7764f64")
+//                         .formParam("redirect_uri", RD_URL + "/oauth2redirect")
+//                         .formParam("grant_type", "password")
+//                         .formParam("scope", "openid profile roles create-user manage-user search-user")
+//                         .request();
+
+//     val response = authCodeRequest.post(USERTOKEN_SidAM_URL + ":443/o/token")
+//     val statusCode = response.getStatusCode()
+//     val tokenStr = response.asString()
+//     val tokenIndexStart = tokenStr.indexOf(":")
+//     val tokenIndexEnd = tokenStr.indexOf(",")
+//     val token =  tokenStr.substring(tokenIndexStart+2,tokenIndexEnd -1 )
+
+//     "Bearer " + "Bearer" + token
+//   }
+
+// }
