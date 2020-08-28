@@ -226,7 +226,7 @@ object casesharing {
       .header("Authorization", "Bearer ${access_tokenShare}")
       .header("Content-Type", "application/json")
       .header("Accept", "application/json")
-      .body(StringBody("{\"assignee_id\":\"${assigneeUser}\",\"case_id\":\"${caseId}\",\"case_type_id\":\"GrantOfRepresentation\"}")))
+      .body(StringBody("{\"assignee_id\":\"${assigneeUser}\",\"case_id\":\"${caseToShare}\",\"case_type_id\":\"GrantOfRepresentation\"}")))
 
       .pause(Environment.constantthinkTime)
 
