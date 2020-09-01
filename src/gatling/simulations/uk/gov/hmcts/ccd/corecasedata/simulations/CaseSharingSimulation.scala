@@ -19,8 +19,8 @@ class CaseSharingSimulation extends Simulation  {
     //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
-  val csIterationLarge = 100
-  val csIterationSmall = 100
+  val csIterationLarge = 200
+  val csIterationSmall = 200
 
   val CaseSharingLarge = scenario("CCDCSLarge")
     .repeat(1) {
