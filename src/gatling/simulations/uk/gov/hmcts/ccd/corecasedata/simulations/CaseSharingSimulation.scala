@@ -20,7 +20,7 @@ class CaseSharingSimulation extends Simulation  {
     .doNotTrackHeader("1")
 
   val csIterationLarge = 100
-  val csIterationSmall = 400
+  val csIterationSmall = 100
 
   val CaseSharingLarge = scenario("CCDCSLarge")
     .repeat(1) {
@@ -47,8 +47,8 @@ class CaseSharingSimulation extends Simulation  {
     }
 
   setUp(
-    CaseSharingLarge.inject(rampUsers(400) during(30 minutes)),
-    CaseSharingSmall.inject(rampUsers(10) during(5 minutes))
+    CaseSharingLarge.inject(rampUsers(100) during(20 minutes)),
+    CaseSharingSmall.inject(rampUsers(100) during(20 minutes))
   )
     .protocols(httpProtocol)
   //.maxDuration(60 minutes)
