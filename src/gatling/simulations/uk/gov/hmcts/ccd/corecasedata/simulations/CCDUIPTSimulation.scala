@@ -159,9 +159,9 @@ class CCDUIPTSimulation extends Simulation  {
     CCDSSCSScenario.inject(rampUsers(150) during (20 minutes)),
     CCDEthosScenario.inject(rampUsers(400) during (20 minutes)),
     CCDCMCScenario.inject(rampUsers(150) during (20 minutes)),
-    CCDDivScenario.inject(rampUsers(150) during (20 minutes)),
-    CaseSharingLarge.inject(rampUsers(100) during(20 minutes)),
-    CaseSharingSmall.inject(rampUsers(100) during(20 minutes))
+    CCDDivScenario.inject(rampUsers(150) during (20 minutes))
+    // CaseSharingLarge.inject(rampUsers(100) during(20 minutes)),
+    // CaseSharingSmall.inject(rampUsers(100) during(20 minutes))
 
 
     //UserProfileSearch.inject(rampUsers(10) during(20 minutes))
@@ -171,7 +171,7 @@ class CCDUIPTSimulation extends Simulation  {
     //CCDSSCSScenario.inject(rampUsers(200) during(200 minutes))
     //CCDCMCScenario.inject(rampUsers(1) during(1 minutes))
     //CaseShare.inject(rampUsers(1) during(30 minutes))
-    //CcdDataStore.inject(rampUsers(1) during(30 minutes))
+    //CCDEthosScenario.inject(rampUsers(1) during(1 minutes))
   )
     .protocols(httpProtocol)
     //.maxDuration(30 minutes)
