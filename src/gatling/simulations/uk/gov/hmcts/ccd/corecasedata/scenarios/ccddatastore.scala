@@ -49,8 +49,8 @@ val CDSGetRequest =
   .exec(http("OIDC01_Authenticate")
       .post(IdamAPI + "/authenticate")
       .header("Content-Type", "application/x-www-form-urlencoded")
-      .formParam("username", "ccdloadtest1@gmail.com") //${caseSharingUser}
-      .formParam("password", "Password12")
+      .formParam("username", "${userEmail}") //${userEmail}
+      .formParam("password", "Pass19word")
       .formParam("redirectUri", ccdRedirectUri)
       .formParam("originIp", "0:0:0:0:0:0:0:1")
       .check(status is 200)
@@ -102,7 +102,7 @@ val CDSGetRequest =
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .queryParam("ctid", "DIVORCE")
-      .body(StringBody("{ \n   \"query\":{ \n      \"bool\":{ \n         \"filter\":{ \n            \"wildcard\":{ \n               \"reference\":\"1595778159761287\"\n            }\n         }\n      }\n   }\n}"))
+      .body(StringBody("{ \n   \"query\":{ \n      \"bool\":{ \n         \"filter\":{ \n            \"wildcard\":{ \n               \"reference\":\"1599491334195514\"\n            }\n         }\n      }\n   }\n}"))
       .check(status in  (200)))
 
       .pause(5)
@@ -156,4 +156,20 @@ val CDSGetRequest =
       .check(jsonPath("$.id").saveAs("caseId")))
 
       .pause(5)
+
+  val GetAssignedUsers = 
+
+    exec(http("AAC_010_GetAssignedUsersAndRoles")
+      .get(ccdDataStoreUrl + "/case-users")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("experimental","true")
+      .queryParam("case_ids", "${caseToShare}"))
+
+      .exec {
+      session =>
+        println(session("userEmail").as[String])
+      session
+    }
+    .pause(5)
 }
