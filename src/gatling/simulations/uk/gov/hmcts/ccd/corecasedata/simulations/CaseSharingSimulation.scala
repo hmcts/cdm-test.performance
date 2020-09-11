@@ -16,11 +16,12 @@ class CaseSharingSimulation extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
+    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
   val csIterationLarge = 200
   val csIterationSmall = 200
+  val AssignedCaseAndUsersIteration = 200
 
   val CaseSharingLarge = scenario("CCDCSLarge")
     .repeat(1) {
@@ -46,9 +47,18 @@ class CaseSharingSimulation extends Simulation  {
         }
     }
 
+  val GetAssignedCaseAndUsers = scenario("CCDGetCaseUsers")
+    .repeat(1) {
+      exec(ccddatastore.CDSGetRequest)
+        .repeat(AssignedCaseAndUsersIteration) {
+          exec(ccddatastore.GetAssignedUsers)
+        }
+    }
+
   setUp(
-    CaseSharingLarge.inject(rampUsers(100) during(20 minutes)),
-    CaseSharingSmall.inject(rampUsers(100) during(20 minutes))
+    //CaseSharingLarge.inject(rampUsers(100) during(20 minutes)),
+    //CaseSharingSmall.inject(rampUsers(100) during(20 minutes)),
+    GetAssignedCaseAndUsers.inject(rampUsers(200) during(20 minutes))
   )
     .protocols(httpProtocol)
   //.maxDuration(60 minutes)

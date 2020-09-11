@@ -241,4 +241,6 @@ object casesharing {
       .body(StringBody("{\"assignee_id\":\"${assigneeUser}\",\"case_id\":\"${caseToShare}\",\"case_type_id\":\"GrantOfRepresentation\"}")))
 
       .pause(Environment.constantthinkTime)
+
+  
 }
