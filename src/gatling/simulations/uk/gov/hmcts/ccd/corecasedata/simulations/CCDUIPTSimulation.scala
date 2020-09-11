@@ -129,7 +129,7 @@ class CCDUIPTSimulation extends Simulation  {
         .exec(WaitforNextIteration.waitforNextIteration)
       }
 
-  val CaseSharingLarge = scenario("CCDCSLarge")
+  /*val CaseSharingLarge = scenario("CCDCSLarge")
     .repeat(1) {
       repeat(1) {
         exec(casesharing.CDSGetRequestLarge) //this step only required once per user to generate the token for case creation
@@ -151,7 +151,7 @@ class CCDUIPTSimulation extends Simulation  {
           exec(casesharing.CreateCase)
           .exec(casesharing.CaseSharingPostSmall)
         }
-    }
+    }*/
 
   setUp(
     //These 5 scenarios required for CCD regression testing

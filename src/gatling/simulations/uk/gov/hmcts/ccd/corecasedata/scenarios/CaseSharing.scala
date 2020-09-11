@@ -104,7 +104,7 @@ object casesharing {
       .check(status is 200)
       .check(jsonPath("$.access_token").saveAs("access_tokenCreate")))
 
-    val CreateCase =
+    //val CreateCase =
 
     // exec(http("01_Create_GetEventToken")
     //   .get("http://" + Environment.ccdDataStoreUrl + "/caseworkers/${idamUserId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/solicitorCreateApplication/token")

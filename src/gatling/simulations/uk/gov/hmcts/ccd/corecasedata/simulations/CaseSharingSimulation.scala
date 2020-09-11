@@ -30,8 +30,8 @@ class CaseSharingSimulation extends Simulation  {
         .exec(casesharing.CaseShareLoginLarge) //this step only required once per user to generate the token for case sharing
       }
         .repeat(csIterationLarge) {
-            exec(casesharing.CreateCase)
-            .exec(casesharing.CaseSharingPostLarge)
+            //exec(casesharing.CreateCase)
+            exec(casesharing.CaseSharingPostLarge)
         }
     }
 
@@ -42,8 +42,8 @@ class CaseSharingSimulation extends Simulation  {
         .exec(casesharing.CaseShareLoginSmall) //this step only required once per user to generate the token for case sharing
       }
         .repeat(csIterationSmall) {
-          exec(casesharing.CreateCase)
-          .exec(casesharing.CaseSharingPostSmall)
+          //exec(casesharing.CreateCase)
+          exec(casesharing.CaseSharingPostSmall)
         }
     }
 
