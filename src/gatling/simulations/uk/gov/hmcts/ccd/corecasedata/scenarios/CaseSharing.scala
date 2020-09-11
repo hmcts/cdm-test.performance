@@ -106,21 +106,22 @@ object casesharing {
 
     val CreateCase =
 
-    exec(http("01_Create_GetEventToken")
-      .get("http://" + Environment.ccdDataStoreUrl + "/caseworkers/${idamUserId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/solicitorCreateApplication/token")
-      .header("ServiceAuthorization", "Bearer ${bearerTokenCreate}")
-      .header("Authorization", "Bearer ${access_tokenCreate}")
-      .header("Content-Type","application/json")
-      .check(jsonPath("$.token").saveAs("eventToken")))
+    // exec(http("01_Create_GetEventToken")
+    //   .get("http://" + Environment.ccdDataStoreUrl + "/caseworkers/${idamUserId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/solicitorCreateApplication/token")
+    //   .header("ServiceAuthorization", "Bearer ${bearerTokenCreate}")
+    //   .header("Authorization", "Bearer ${access_tokenCreate}")
+    //   .header("Content-Type","application/json")
+    //   .check(jsonPath("$.token").saveAs("eventToken")))
 
-    .exec(http("01_Create_CreateCase")
-      .post("http://" +Environment.ccdDataStoreUrl + "/caseworkers/${idamUserId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
-      .header("ServiceAuthorization", "Bearer ${bearerTokenCreate}")
-      .header("Authorization", "Bearer ${access_tokenCreate}")
-      .header("Content-Type","application/json")
-      .body(StringBody("{\n  \"data\": {\n    \"solsSolicitorFirmName\": \"jon & ola\",\n    \"solsSolicitorAddress\": {\n      \"AddressLine1\": \"Flat 12\",\n      \"AddressLine2\": \"Bramber House\",\n      \"AddressLine3\": \"Seven Kings Way\",\n      \"PostTown\": \"Kingston Upon Thames\",\n      \"County\": \"\",\n      \"PostCode\": \"KT2 5BU\",\n      \"Country\": \"United Kingdom\"\n    },\n    \"solsSolicitorAppReference\": \"test\",\n    \"solsSolicitorEmail\": \"${userEmail}\",\n    \"solsSolicitorPhoneNumber\": null,\n    \"organisationPolicy\": {\n      \"OrgPolicyCaseAssignedRole\": \"[Claimant]\",\n      \"OrgPolicyReference\": null,\n      \"Organisation\": {\n        \"OrganisationID\": \"${orgRefCode}\",\n        \"OrganisationName\": \"${orgName}\"\n      }\n    }\n  },\n  \"event\": {\n    \"id\": \"solicitorCreateApplication\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
-      .check(jsonPath("$.id").saveAs("caseId"))
-    )
+    // .exec(http("01_Create_CreateCase")
+    //   .post("http://" +Environment.ccdDataStoreUrl + "/caseworkers/${idamUserId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+    //   .header("ServiceAuthorization", "Bearer ${bearerTokenCreate}")
+    //   .header("Authorization", "Bearer ${access_tokenCreate}")
+    //   .header("Content-Type","application/json")
+    //   .body(StringBody("{\n  \"data\": {\n    \"solsSolicitorFirmName\": \"jon & ola\",\n    \"solsSolicitorAddress\": {\n      \"AddressLine1\": \"Flat 12\",\n      \"AddressLine2\": \"Bramber House\",\n      \"AddressLine3\": \"Seven Kings Way\",\n      \"PostTown\": \"Kingston Upon Thames\",\n      \"County\": \"\",\n      \"PostCode\": \"KT2 5BU\",\n      \"Country\": \"United Kingdom\"\n    },\n    \"solsSolicitorAppReference\": \"test\",\n    \"solsSolicitorEmail\": \"${userEmail}\",\n    \"solsSolicitorPhoneNumber\": null,\n    \"organisationPolicy\": {\n      \"OrgPolicyCaseAssignedRole\": \"[Claimant]\",\n      \"OrgPolicyReference\": null,\n      \"Organisation\": {\n        \"OrganisationID\": \"${orgRefCode}\",\n        \"OrganisationName\": \"${orgName}\"\n      }\n    }\n  },\n  \"event\": {\n    \"id\": \"solicitorCreateApplication\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
+    //   .check(jsonPath("$.id").saveAs("caseId"))
+    // )
+
     //  .check(status.saveAs("statusvalue")))
     //  .doIf(session=>session("statusvalue").as[String].contains("201")) {
     //    exec {
@@ -134,7 +135,7 @@ object casesharing {
     //    }
     //  }
 
-    .pause(Environment.constantthinkTime)
+    //.pause(Environment.constantthinkTime)
 
   val CaseShareLoginLarge =
 

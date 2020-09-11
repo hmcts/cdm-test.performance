@@ -171,5 +171,5 @@ val CDSGetRequest =
     //     println(session("userEmail").as[String])
     //   session
     // }
-    .pause(5)
+    .pause(Environment.constantthinkTime)
 }
