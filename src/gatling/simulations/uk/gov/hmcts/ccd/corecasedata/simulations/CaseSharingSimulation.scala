@@ -26,24 +26,24 @@ class CaseSharingSimulation extends Simulation  {
   val CaseSharingLarge = scenario("CCDCSLarge")
     .repeat(1) {
       repeat(1) {
-        exec(casesharing.CDSGetRequestLarge) //this step only required once per user to generate the token for case creation
-        .exec(casesharing.CaseShareLoginLarge) //this step only required once per user to generate the token for case sharing
+        //exec(casesharing.CDSGetRequestLarge) //this step only required once per user to generate the token for case creation
+        exec(casesharing.CaseShareLoginLarge) //this step only required once per user to generate the token for case sharing
       }
         .repeat(csIterationLarge) {
-            exec(casesharing.CreateCase)
-            .exec(casesharing.CaseSharingPostLarge)
+            //exec(casesharing.CreateCase)
+            exec(casesharing.CaseSharingPostLarge)
         }
     }
 
   val CaseSharingSmall = scenario("CCDCSSmall")
     .repeat(1) {
       repeat(1) {
-        exec(casesharing.CDSGetRequestSmall) //this step only required once per user to generate the token for case creation
-        .exec(casesharing.CaseShareLoginSmall) //this step only required once per user to generate the token for case sharing
+        //exec(casesharing.CDSGetRequestSmall) //this step only required once per user to generate the token for case creation
+        exec(casesharing.CaseShareLoginSmall) //this step only required once per user to generate the token for case sharing
       }
         .repeat(csIterationSmall) {
-          exec(casesharing.CreateCase)
-          .exec(casesharing.CaseSharingPostSmall)
+          //exec(casesharing.CreateCase)
+          exec(casesharing.CaseSharingPostSmall)
         }
     }
 
