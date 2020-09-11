@@ -56,8 +56,8 @@ class CaseSharingSimulation extends Simulation  {
     }
 
   setUp(
-    //CaseSharingLarge.inject(rampUsers(100) during(20 minutes)),
-    //CaseSharingSmall.inject(rampUsers(100) during(20 minutes)),
+    CaseSharingLarge.inject(rampUsers(100) during(20 minutes)),
+    CaseSharingSmall.inject(rampUsers(100) during(20 minutes)),
     GetAssignedCaseAndUsers.inject(rampUsers(200) during(20 minutes))
   )
     .protocols(httpProtocol)

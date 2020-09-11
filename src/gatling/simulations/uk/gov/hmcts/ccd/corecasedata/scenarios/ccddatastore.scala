@@ -166,10 +166,10 @@ val CDSGetRequest =
       .header("experimental","true")
       .queryParam("case_ids", "${caseToShare}"))
 
-      .exec {
-      session =>
-        println(session("userEmail").as[String])
-      session
-    }
+    // .exec {
+    //   session =>
+    //     println(session("userEmail").as[String])
+    //   session
+    // }
     .pause(5)
 }
