@@ -12,12 +12,12 @@ class CCDUIPTSimulation extends Simulation  {
 
   val config: Config = ConfigFactory.load()
   val BaseURL = Environment.baseURL
-  val PBiteration = 7 //7
-  val SSCSiteration = 14 //14
-  val CMCiteration = 8 //8
-  val Diviteration = 8 //8
+  val PBiteration = 70 //7
+  val SSCSiteration = 140 //14
+  val CMCiteration = 80 //8
+  val Diviteration = 80 //8
   val Fpliteration = 10 //10
-  val Ethositeration = 26 //26
+  val Ethositeration = 260 //26
   val LFUiteration = 10 //8
   val csIterationLarge = 200
   val csIterationSmall = 200
@@ -174,5 +174,5 @@ class CCDUIPTSimulation extends Simulation  {
     //CCDEthosScenario.inject(rampUsers(1) during(1 minutes))
   )
     .protocols(httpProtocol)
-    //.maxDuration(30 minutes)
+    .maxDuration(180 minutes)
 }
