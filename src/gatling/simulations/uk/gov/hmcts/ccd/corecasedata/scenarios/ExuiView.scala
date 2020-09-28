@@ -108,7 +108,7 @@ object ExuiView {
               .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&state=Open&page=1")
               .headers(LoginHeader.headers_0))
 
-        .pause(Environment.minThinkTime seconds, Environment.maxThinkTime seconds)
+        .pause(Environment.constantthinkTime)
 
     }
 
@@ -125,7 +125,7 @@ object ExuiView {
         .headers(ProbateHeader.headers_search)
         .check(status.in(200,304)))
 
-    .pause(Environment.minThinkTime seconds, Environment.maxThinkTime seconds)
+    .pause(Environment.constantthinkTime)
 
 
 val searchDivorceCase = 
@@ -141,5 +141,5 @@ val searchDivorceCase =
         .headers(ProbateHeader.headers_search)
         .check(status.in(200,304)))
 
-    .pause(Environment.minThinkTime seconds, Environment.maxThinkTime seconds)
+    .pause(Environment.constantthinkTime)
 }
