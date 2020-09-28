@@ -1,27 +1,39 @@
 package uk.gov.hmcts.ccd.corecasedata.simulations
 
-import com.typesafe.config.{Config, ConfigFactory}
 import io.gatling.core.Predef._
 import io.gatling.core.scenario.Simulation
+import com.typesafe.config.{Config, ConfigFactory}
 import io.gatling.http.Predef._ //comment out for VM runs, only required for proxy
 import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 import scala.concurrent.duration._
 
-class CCDDataStoreSimulation extends Simulation  {
+class CCD_SearchSimulation extends Simulation  {
 
-  val BaseURL = Environment.baseURL
   val config: Config = ConfigFactory.load()
+  val BaseURL = Environment.baseURL
+
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
+  val CCDUISearch = scenario("CCDUISearch")
+    .repeat(1) {
+      exec(Browse.Homepage)
+      .exec(LoginAndSearch.Login)
+      .repeat(10) {
+        exec(LoginAndSearch.Search)
+        .exec(WaitforNextIteration.waitforNextIteration)
+      }
+      .exec(Logout.ccdLogout)
+  }
+
   val CCDElasticSearch = scenario("CCDES")
     .repeat(1) {
       exec(ccddatastore.CDSGetRequest)
-        .repeat(1) {
+        .repeat(100) {
           exec(ccddatastore.ElasticSearchGetRef)
           .exec(ccddatastore.ElasticSearchGetByDate)
           .exec(ccddatastore.ElasticSearchEthos)
@@ -33,7 +45,7 @@ class CCDDataStoreSimulation extends Simulation  {
   val CCDElasticSearchGoR = scenario("CCDESGoR")
     .repeat(1) {
       exec(ccddatastore.CDSGetRequest)
-        .repeat(1) {
+        .repeat(10) {
           exec(ccddatastore.ElasticSearchGet25GoR)
         }
     }
@@ -41,7 +53,7 @@ class CCDDataStoreSimulation extends Simulation  {
   val CCDElasticSearchGoRState = scenario("CCDESGoRState")
     .repeat(1) {
       exec(ccddatastore.CDSGetRequest)
-        .repeat(10) {
+        .repeat(1) {
           exec(ccddatastore.ElasticSearchWorkbasketGoR)
         }
     }
@@ -49,17 +61,34 @@ class CCDDataStoreSimulation extends Simulation  {
   val CCDElasticSearchBenefitEvidenceHandled = scenario("CCDESBenefitEvidenceHandled")
     .repeat(1) {
       exec(ccddatastore.CDSGetRequest)
-        .repeat(1) {
+        .repeat(10) {
           exec(ccddatastore.ElasticSearchWorkbasketSSCS)
         }
     }
 
+  val XUISearch = scenario("XuiSearch")
+    .repeat(1) {
+      exec(ExuiView.manageCasesHomePage)
+      .exec(ExuiView.manageCaseslogin)
+        .repeat(10){
+          exec(ExuiView.searchProbateCase)
+          .exec(ExuiView.searchDivorceCase)
+          .exec(WaitforNextIteration.waitforNextIteration)
+        }
+    }
+
+
   setUp(
-    //CCDElasticSearch.inject(rampUsers(1) during(1 minutes)),
-    //CCDElasticSearchGoR.inject(rampUsers(1) during(1 minutes)),
-    //CCDElasticSearchGoRState.inject(rampUsers(1) during(1 minutes)),
-    CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(1) during(1 minutes))
+    //CCDUISearch.inject(rampUsers(5) during (5 minutes)),
+    CCDElasticSearch.inject(rampUsers(50) during (5 minutes)),
+    //CCDElasticSearchGoR.inject(rampUsers(5) during (5 minutes)),
+    //CCDElasticSearchGoRState.inject(rampUsers(1) during (5 minutes)),
+    //CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(5) during (5 minutes)),
+    //XUISearch.inject(rampUsers(250) during (20 minutes)),
+    XUISearch.inject(rampUsers(350) during (20 minutes))
+    
+
   )
     .protocols(httpProtocol)
-  //.maxDuration(60 minutes)
+    .maxDuration(60 minutes)
 }

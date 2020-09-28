@@ -25,6 +25,8 @@ val ccdGatewayClientSecret = config.getString("ccdGatewayCS")
 //  val ccdGatewayClientSecret = "vUstam6brAsT38ranuwRut65rakec4u6"
 val ccdScope = "openid profile authorities acr roles openid profile roles"
 val feedCSUserData = csv("CaseSharingUsers_Large.csv").circular
+val feedCaseSearchData = csv("caseSearchData.csv").random
+val feedWorkbasketData = csv("workbasketCaseTypes.csv").circular
 
 val MinThinkTime = Environment.minThinkTime
 val MaxThinkTime = Environment.maxThinkTime
@@ -49,8 +51,8 @@ val CDSGetRequest =
   .exec(http("OIDC01_Authenticate")
       .post(IdamAPI + "/authenticate")
       .header("Content-Type", "application/x-www-form-urlencoded")
-      .formParam("username", "${userEmail}") //${userEmail}
-      .formParam("password", "Pass19word")
+      .formParam("username", "ccdloadtest1@gmail.com") //${userEmail}
+      .formParam("password", "Password12")
       .formParam("redirectUri", ccdRedirectUri)
       .formParam("originIp", "0:0:0:0:0:0:0:1")
       .check(status is 200)
@@ -81,28 +83,108 @@ val CDSGetRequest =
 //        session
 //    }
 
-  val ElasticSearchGetAll =
+  val ElasticSearchGet25GoR =
 
-    exec(http("CCD_SearchCaseEndpoint_Search100Cases")
+    exec(http("CCD_SearchCaseEndpoint_Search20GrantOfRepresentation")
       .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .queryParam("ctid", "GrantOfRepresentation")
-      .body(StringBody("{\n\t\"query\": {\n\t\t\"match_all\": {}\n\t\t},\n\t\t\"size\": 100,\n\t\t\"sort\":[ \n      { \n         \"last_modified\":\"desc\"\n      },\n      \"_score\"\n   ]\n}"))
+      .body(StringBody("{\n\t\"query\": {\n\t\t\"match_all\": {}\n\t\t},\n\t\t\"size\": 25,\n\t\t\"sort\":[ \n      { \n         \"last_modified\":\"desc\"\n      },\n      \"_score\"\n   ]\n}"))
       .check(status in  (200)))
 
       .pause(5)
 
-  val ElasticSearchGetRef =
+  val ElasticSearchWorkbasketGoR = 
 
-    exec(http("CCD_SearchCaseEndpoint_SearchCaseReference")
+    exec(http("CCD_SearchCaseEndpoint_GetJurisdictions_GrantOfRepresentation")
+      .get(ccdDataStoreUrl + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      // .queryParam("ctid", "GrantOfRepresentation")
+      // .queryParam("use_case", "WORKBASKET")
+      // .queryParam("view", "WORKBASKET")
+      // .queryParam("page", "1")
+      // .queryParam("state", "IntCaseCreated")
+      // .body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":25,\"sort\":[{\"created_date\":\"DESC\"}]}"))
+      .check(status in (200)))
+
+    // exec(http("CCD_SearchCaseEndpoint_SearchWorkbasket_GrantOfRepresentation")
+    //   .post(ccdDataStoreUrl + "/searchCases")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .header("Authorization", "Bearer ${access_token}")
+    //   .header("Content-Type","application/json")
+    //   .queryParam("ctid", "GrantOfRepresentation")
+    //   .queryParam("use_case", "WORKBASKET")
+    //   .queryParam("view", "WORKBASKET")
+    //   .queryParam("page", "1")
+    //   .queryParam("state", "IntCaseCreated")
+    //   .body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":25,\"sort\":[{\"created_date\":\"DESC\"}]}"))
+    //   .check(status in (200)))
+
+      .pause(Environment.constantthinkTime)
+
+  val ElasticSearchWorkbasketSSCS = 
+
+    exec(http("CCD_SearchCaseEndpoint_SearchWorkbasket_Benefit")
+      .post(ccdDataStoreUrl + "/searchCases")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .queryParam("ctid", "Benefit")
+      .queryParam("use_case", "WORKBASKET")
+      .queryParam("view", "WORKBASKET")
+      .queryParam("page", "1")
+      .queryParam("case.evidenceHandled", "No")
+      .body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":25,\"sort\":[{\"created_date\":\"DESC\"}]}"))
+      .check(status in (200)))
+
+      .pause(Environment.constantthinkTime)
+
+  val ElasticSearchGet25Divorce =
+
+    exec(http("CCD_SearchCaseEndpoint_Search20DIVORCE")
       .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .queryParam("ctid", "DIVORCE")
-      .body(StringBody("{ \n   \"query\":{ \n      \"bool\":{ \n         \"filter\":{ \n            \"wildcard\":{ \n               \"reference\":\"1599491334195514\"\n            }\n         }\n      }\n   }\n}"))
+      .body(StringBody("{\n\t\"query\": {\n\t\t\"match_all\": {}\n\t\t},\n\t\t\"size\": 25,\n\t\t\"sort\":[ \n      { \n         \"last_modified\":\"desc\"\n      },\n      \"_score\"\n   ]\n}"))
+      .check(status in  (200)))
+
+      .pause(5)
+
+  val ElasticSearchWorkbasket = 
+
+    feed(feedWorkbasketData)
+
+    .exec(http("CCD_SearchCaseEndpoint_SearchWorkbasket${caseType}")
+      .post(ccdDataStoreUrl + "/searchCases")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .queryParam("ctid", "${caseType}")
+      .queryParam("use_case", "WORKBASKET")
+      .queryParam("view", "WORKBASKET")
+      .queryParam("page", "1")
+      .body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":25,\"sort\":[{\"created_date\":\"DESC\"}]}"))
+      .check(status in (200)))
+
+      .pause(5)
+
+  val ElasticSearchGetRef =
+
+    feed(feedCaseSearchData)
+
+    .exec(http("CCD_SearchCaseEndpoint_SearchCaseReference")
+      .post(ccdDataStoreUrl + "/searchCases")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .queryParam("ctid", "${caseType}") //${caseType}
+      .body(StringBody("{ \n   \"query\":{ \n      \"bool\":{ \n         \"filter\":{ \n            \"wildcard\":{ \n               \"reference\":\"${caseId}\"\n            }\n         }\n      }\n   }\n}"))
       .check(status in  (200)))
 
       .pause(5)
@@ -128,7 +210,9 @@ val CDSGetRequest =
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .queryParam("ctid", "Scotland")
-      .body(StringBody("{\"size\":10000,\"query\":{\"terms\":{\"data.ethosCaseReference.keyword\":[\"4178987/2020\"],\"boost\":1.0}}}"))
+      //.body(StringBody("{\"size\":10000,\"query\":{\"terms\":{\"data.ethosCaseReference.keyword\":[\"4178987/2020\"],\"boost\":1.0}}}"))
+      .body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":25,\"sort\":[{\"created_date\":\"DESC\"}]}"))
+
       .check(status in  (200)))
 
       .pause(5)
