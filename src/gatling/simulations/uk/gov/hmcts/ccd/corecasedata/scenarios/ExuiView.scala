@@ -58,8 +58,8 @@ object ExuiView {
            .headers(LoginHeader.headers_login_submit)
            .check(status.in(200, 304, 302))).exitHereIfFailed
 
-      .exec(getCookieValue(
-        CookieKey("__userid__").withDomain("manage-case.perftest.platform.hmcts.net").saveAs("myUserId")))
+      // .exec(getCookieValue(
+      //   CookieKey("__userid__").withDomain("manage-case.perftest.platform.hmcts.net").saveAs("myUserId")))
 
       .exec(http("XUI_020_010_Homepage")
             .get(baseURL + "/external/config/ui")
