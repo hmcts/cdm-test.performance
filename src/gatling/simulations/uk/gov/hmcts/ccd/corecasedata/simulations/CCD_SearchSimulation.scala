@@ -3,7 +3,7 @@ package uk.gov.hmcts.ccd.corecasedata.simulations
 import io.gatling.core.Predef._
 import io.gatling.core.scenario.Simulation
 import com.typesafe.config.{Config, ConfigFactory}
-//import io.gatling.http.Predef._ //comment out for VM runs, only required for proxy
+import io.gatling.http.Predef._ //comment out for VM runs, only required for proxy
 import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 import scala.concurrent.duration._
@@ -16,7 +16,7 @@ class CCD_SearchSimulation extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
+    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
   val CCDUISearch = scenario("CCDUISearch")
@@ -77,15 +77,32 @@ class CCD_SearchSimulation extends Simulation  {
         }
     }
 
+  val CitizenSearch = scenario("Citizen")
+    .repeat(1) {
+      exec(ccddatastore.CitizenLogin)
+      .repeat(200) {
+        exec(ccddatastore.CitizenSearch)
+      }
+    }
+
+  val CaseworkerSearch = scenario("Caseworker")
+    .repeat(1) {
+      exec(ccddatastore.CDSGetRequest)
+      .repeat(10) {
+        exec(ccddatastore.CaseworkerSearch)
+      }
+    }
 
   setUp(
     //CCDUISearch.inject(rampUsers(5) during (5 minutes)),
-    CCDElasticSearch.inject(rampUsers(50) during (5 minutes)),
     //CCDElasticSearchGoR.inject(rampUsers(5) during (5 minutes)),
+    CitizenSearch.inject(rampUsers(50) during (5 minutes)),
+    CaseworkerSearch.inject(rampUsers(50) during (5 minutes)),
     //CCDElasticSearchGoRState.inject(rampUsers(1) during (5 minutes)),
     //CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(5) during (5 minutes)),
     //XUISearch.inject(rampUsers(250) during (20 minutes)),
-    XUISearch.inject(rampUsers(350) during (20 minutes))
+    CCDElasticSearch.inject(rampUsers(50) during (5 minutes)),
+    XUISearch.inject(rampUsers(350) during (10 minutes))
     
 
   )

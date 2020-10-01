@@ -1,5 +1,5 @@
-caseType
-MoneyClaimCase
-GrantOfRepresentation
-Caveat
-DIVORCE
+jurisdiction,caseType
+CMC,MoneyClaimCase
+PROBATE,GrantOfRepresentation
+PROBATE,Caveat
+DIVORCE,DIVORCE
