@@ -80,7 +80,7 @@ class CCD_SearchSimulation extends Simulation  {
   val CitizenSearch = scenario("Citizen")
     .repeat(1) {
       exec(ccddatastore.CitizenLogin)
-      .repeat(200) {
+      .repeat(210) {
         exec(ccddatastore.CitizenSearch)
       }
     }
@@ -88,7 +88,7 @@ class CCD_SearchSimulation extends Simulation  {
   val CaseworkerSearch = scenario("Caseworker")
     .repeat(1) {
       exec(ccddatastore.CDSGetRequest)
-      .repeat(10) {
+      .repeat(220) {
         exec(ccddatastore.CaseworkerSearch)
       }
     }
