@@ -121,7 +121,7 @@ val CDSGetRequest =
 
   val ElasticSearchGet25GoR =
 
-    exec(http("CCD_SearchCaseEndpoint_Search20GrantOfRepresentation")
+    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
       .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -136,7 +136,7 @@ val CDSGetRequest =
 
     feed(feedWorkbasketData)
 
-    .exec(http("CCD_SearchCaseEndpoint_CitizenSearch${caseType}")
+    .exec(http("CCD_SearchCaseEndpoint_CitizenSearch")
       .get(ccdDataStoreUrl + "/citizens/1f65a0df-b064-4f9b-85ea-3eec5a28ce86/jurisdictions/${jurisdiction}/case-types/${caseType}/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -149,7 +149,7 @@ val CDSGetRequest =
 
     feed(feedWorkbasketData)
 
-    .exec(http("CCD_SearchCaseEndpoint_CaseworkerSearch${caseType}")
+    .exec(http("CCD_SearchCaseEndpoint_CaseworkerSearch")
       .get(ccdDataStoreUrl + "/caseworkers/539560/jurisdictions/${jurisdiction}/case-types/${caseType}/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -166,7 +166,7 @@ val CDSGetRequest =
 
   val ElasticSearchWorkbasketGoR = 
 
-    exec(http("CCD_SearchCaseEndpoint_SearchWorkbasket_GrantOfRepresentation")
+    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
       .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -183,7 +183,7 @@ val CDSGetRequest =
 
   val ElasticSearchWorkbasketSSCS = 
 
-    exec(http("CCD_SearchCaseEndpoint_SearchWorkbasket_Benefit")
+    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
       .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -200,7 +200,7 @@ val CDSGetRequest =
 
   val ElasticSearchGet25Divorce =
 
-    exec(http("CCD_SearchCaseEndpoint_Search20DIVORCE")
+    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
       .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -215,7 +215,7 @@ val CDSGetRequest =
 
     feed(feedWorkbasketData)
 
-    .exec(http("CCD_SearchCaseEndpoint_SearchWorkbasket${caseType}")
+    .exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
       .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -233,7 +233,7 @@ val CDSGetRequest =
 
     feed(feedCaseSearchData)
 
-    .exec(http("CCD_SearchCaseEndpoint_SearchCaseReference")
+    .exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
       .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -246,7 +246,7 @@ val CDSGetRequest =
 
   val ElasticSearchGetByDate =
 
-    exec(http("CCD_SearchCaseEndpoint_SearchDate")
+    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
       .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -259,7 +259,7 @@ val CDSGetRequest =
 
   val ElasticSearchEthos =
 
-    exec(http("CCD_SearchCaseEndpoint_SearchEthosReference")
+    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
       .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
