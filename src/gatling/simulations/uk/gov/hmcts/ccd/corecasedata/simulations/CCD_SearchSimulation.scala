@@ -70,7 +70,7 @@ class CCD_SearchSimulation extends Simulation  {
     .repeat(1) {
       exec(ExuiView.manageCasesHomePage)
       .exec(ExuiView.manageCaseslogin)
-        .repeat(10){
+        .repeat(20){
           exec(ExuiView.searchProbateCase)
           .exec(ExuiView.searchDivorceCase)
           .exec(WaitforNextIteration.waitforNextIteration)
