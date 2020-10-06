@@ -19,6 +19,8 @@ object ProbateHeader {
 
  val headers_search = Map(
   "Content-Type" -> "application/json",
+  "Accept-Encoding" -> "gzip, deflate, br",
+  "Connection" -> "Keep-Alive",
   "Pragma" -> "no-cache",
   "Sec-Fetch-Dest" -> "empty",
   "Sec-Fetch-Mode" -> "cors",

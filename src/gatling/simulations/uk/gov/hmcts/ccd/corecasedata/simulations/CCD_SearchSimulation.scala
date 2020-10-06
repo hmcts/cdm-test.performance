@@ -70,12 +70,13 @@ class CCD_SearchSimulation extends Simulation  {
     .repeat(1) {
       exec(ExuiView.manageCasesHomePage)
       .exec(ExuiView.manageCaseslogin)
-        .repeat(20){
+        .repeat(10){ //20
           exec(ExuiView.searchProbateCase)
           .exec(ExuiView.searchDivorceCase)
-          .exec(WaitforNextIteration.waitforNextIteration)
+          //.exec(WaitforNextIteration.waitforNextIteration)
         }
     }
+
 
   val CitizenSearch = scenario("Citizen")
     .repeat(1) {
@@ -103,6 +104,7 @@ class CCD_SearchSimulation extends Simulation  {
     //XUISearch.inject(rampUsers(250) during (20 minutes)),
     CCDElasticSearch.inject(rampUsers(50) during (5 minutes)),
     XUISearch.inject(rampUsers(550) during (10 minutes))
+    //XUISearchNew.inject(rampUsers(1) during (10 minutes))
     
 
   )
