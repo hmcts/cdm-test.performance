@@ -99,9 +99,6 @@ class CCD_SearchSimulation extends Simulation  {
     //CCDElasticSearchGoR.inject(rampUsers(5) during (5 minutes)),
     CitizenSearch.inject(rampUsers(50) during (5 minutes)),
     CaseworkerSearch.inject(rampUsers(50) during (5 minutes)),
-    //CCDElasticSearchGoRState.inject(rampUsers(1) during (5 minutes)),
-    //CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(5) during (5 minutes)),
-    //XUISearch.inject(rampUsers(250) during (20 minutes)),
     CCDElasticSearch.inject(rampUsers(50) during (5 minutes)),
     XUISearch.inject(rampUsers(550) during (10 minutes))
     //XUISearchNew.inject(rampUsers(1) during (10 minutes))

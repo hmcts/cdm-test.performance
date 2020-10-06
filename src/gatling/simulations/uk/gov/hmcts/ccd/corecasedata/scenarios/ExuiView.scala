@@ -6,10 +6,11 @@ import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.{Environment, LoginHeader, 
 
 object ExuiView {
 
-    val baseURL = Environment.xuiBaseURL
-    val IdamUrl = Environment.idamURL
+      val baseURL = Environment.xuiBaseURL
+      val IdamUrl = Environment.idamURL
+      val feedXUIUserData = csv("XUISearchUsers.csv").circular
 
-    val manageCasesHomePage =
+  val manageCasesHomePage =
     tryMax(2) {
 
       exec(http("XUI_010_005_Homepage")
@@ -44,10 +45,12 @@ object ExuiView {
   val manageCaseslogin =
     tryMax(2) {
 
-      exec(http("XUI_020_005_SignIn")
+      feed(feedXUIUserData)
+
+      .exec(http("XUI_020_005_SignIn")
         //.post(IdamUrl + "/login?response_type=code&client_id=xuiwebapp&redirect_uri=" + baseURL + "/oauth2/callback&scope=profile%20openid%20roles%20manage-user%20create-user")
         .post(IdamUrl + "/login?response_type=code&redirect_uri=" + baseURL + "%2Foauth2%2Fcallback&scope=profile%20openid%20roles%20manage-user%20create-user&state=${state}&client_id=xuiwebapp")
-           .formParam("username", "ccdloadtest1@gmail.com")
+           .formParam("username", "${email}")
            .formParam("password", "Password12")
            .formParam("save", "Sign in")
            .formParam("selfRegistrationEnabled", "false")
