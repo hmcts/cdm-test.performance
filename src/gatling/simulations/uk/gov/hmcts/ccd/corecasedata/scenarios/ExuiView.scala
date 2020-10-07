@@ -108,10 +108,9 @@ object ExuiView {
               .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&state=Open&page=1")
               .headers(LoginHeader.headers_0))
 
-      .exec(getCookieValue(
-            CookieKey("XSRF-TOKEN").withDomain("manage-case.perftest.platform.hmcts.net").saveAs("xsrfToken")))
+      //.exec(getCookieValue(CookieKey("XSRF-TOKEN").withDomain("manage-case.perftest.platform.hmcts.net").saveAs("xsrfToken")))
 
-        .pause(Environment.constantthinkTime)
+      .pause(Environment.constantthinkTime)
 
     }
 
@@ -120,14 +119,14 @@ object ExuiView {
     exec(http("XUI_ProbateSearchResults_WorkbasketMetadata")
         .get(baseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/pagination_metadata")
         .headers(ProbateHeader.headers_search)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        //.header("X-XSRF-TOKEN", "${xsrfToken}")
         .check(status.in(200,304)))
 
     .exec(http("XUI_ProbateSearchResults_WorkbasketUseCase")
         .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases?view=WORKBASKET&page=1")
         //.post(baseURL + "/data/internal/searchCases?ctid=GrantOfRepresentation&use_case=WORKBASKET&view=WORKBASKET&page=1")
         .headers(ProbateHeader.headers_search)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        //.header("X-XSRF-TOKEN", "${xsrfToken}")
         .check(status.in(200,304)))
 
     .pause(Environment.constantthinkTime)
@@ -135,14 +134,14 @@ object ExuiView {
     .exec(http("XUI_ProbateSearchResults_SearchMetadata")
         .get(baseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/pagination_metadata")
         .headers(ProbateHeader.headers_search)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        //.header("X-XSRF-TOKEN", "${xsrfToken}")
         .check(status.in(200,304)))
 
     .exec(http("XUI_ProbateSearchResults_SearchUseCase")
         .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases?view=SEARCH&page=1")
         //.post(baseURL + "/data/internal/searchCases?ctid=GrantOfRepresentation&use_case=SEARCH&view=SEARCH&page=1")
         .headers(ProbateHeader.headers_search)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        //.header("X-XSRF-TOKEN", "${xsrfToken}")
         .check(status.in(200,304)))
 
     .pause(Environment.constantthinkTime)
@@ -163,14 +162,14 @@ val searchDivorceCase =
     exec(http("XUI_DivorceSearchResults_WorkbasketMetadata")
         .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata")
         .headers(ProbateHeader.headers_search)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        //.header("X-XSRF-TOKEN", "${xsrfToken}")
         .check(status.in(200,304)))
 
     .exec(http("XUI_DivorceSearchResults_WorkbasketUseCase")
         .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&page=1")
         //.post(baseURL + "/data/internal/searchCases?ctid=DIVORCE&use_case=WORKBASKET&view=WORKBASKET&page=1")
         .headers(ProbateHeader.headers_search)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        //.header("X-XSRF-TOKEN", "${xsrfToken}")
         .check(status.in(200,304)))
 
     .pause(Environment.constantthinkTime)
@@ -178,14 +177,14 @@ val searchDivorceCase =
     .exec(http("XUI_DivorceSearchResults_SearchMetadata")
         .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata")
         .headers(ProbateHeader.headers_search)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        //.header("X-XSRF-TOKEN", "${xsrfToken}")
         .check(status.in(200,304)))
 
     .exec(http("XUI_DivorceSearchResults_SearchUseCase")
         .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=SEARCH&page=1")
         //.post(baseURL + "/data/internal/searchCases?ctid=DIVORCE&use_case=SEARCH&view=SEARCH&page=1")
         .headers(ProbateHeader.headers_search)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        //.header("X-XSRF-TOKEN", "${xsrfToken}")
         .check(status.in(200,304)))
 
     .pause(Environment.constantthinkTime)
