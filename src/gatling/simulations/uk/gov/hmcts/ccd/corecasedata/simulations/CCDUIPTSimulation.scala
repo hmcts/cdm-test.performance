@@ -80,7 +80,8 @@ class CCDUIPTSimulation extends Simulation  {
         .repeat(Diviteration) {
           exec(DVExcep.DVCreateCase)
           .exec(DVExcep.DVDocUpload)
-          .exec(DVExcep.DVSearchAndView)
+          .exec(DVExcep.DVSearch)
+          .exec(DVExcep.DVView)
           .exec(WaitforNextIteration.waitforNextIteration)
         }
         .exec(Logout.ccdLogout)
@@ -139,6 +140,15 @@ class CCDUIPTSimulation extends Simulation  {
         }
       }
 
+  val DivorceSearch = scenario("Divorce CW Search")
+      .repeat(1) {
+        exec(Browse.Homepage)
+        .exec(DVExcep.submitLogin)
+        .repeat(Ethositeration) {
+          exec(DVExcep.DVSearch)
+        }
+      }
+
   /*val CaseSharingLarge = scenario("CCDCSLarge")
     .repeat(1) {
       repeat(1) {
@@ -167,8 +177,9 @@ class CCDUIPTSimulation extends Simulation  {
     //These 5 scenarios required for CCD regression testing
     // CCDProbateScenario.inject(rampUsers(70) during (10 minutes)), //150
     // CCDSSCSScenario.inject(rampUsers(70) during (10 minutes)), //150
-    CCDEthosScenario.inject(rampUsers(400) during (10 minutes)), //400
-    ProbateSearch.inject(rampUsers(100) during (1 minute))
+    //CCDEthosScenario.inject(rampUsers(400) during (10 minutes)), //400
+    ProbateSearch.inject(rampUsers(250) during (1 minute)),
+    DivorceSearch.inject(rampUsers(250) during (1 minute))
     // CCDCMCScenario.inject(rampUsers(70) during (10 minutes)), //150
     // CCDDivScenario.inject(rampUsers(70) during (10 minutes)) //150
     

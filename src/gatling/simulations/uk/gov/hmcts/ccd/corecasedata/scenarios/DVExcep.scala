@@ -295,7 +295,7 @@ object DVExcep {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds) 
 
-  val DVSearchAndView =
+  val DVSearch =
 
     exec(http("DIV_050_005_SearchPage")
       .get("/data/internal/case-types/${DVCaseType}/work-basket-inputs")
@@ -308,12 +308,14 @@ object DVExcep {
       .headers(headers_4))
 
     .exec(http("DIV_050_015_SearchForCase")
-      .get("/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata")
+      .get("/data/caseworkers/:uid/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/pagination_metadata")
       .headers(CommonHeader))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("DIV_060_005_OpenCase")
+    val DVView =
+
+    exec(http("DIV_060_005_OpenCase")
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_6))
 
