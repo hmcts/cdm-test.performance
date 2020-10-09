@@ -104,7 +104,7 @@ class CCDUIPTSimulation extends Simulation  {
       .repeat(Ethositeration) {
         exec(EthosSearchView.Search)
         .exec(EthosSearchView.OpenCase)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        //.exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
@@ -155,11 +155,12 @@ class CCDUIPTSimulation extends Simulation  {
 
   setUp(
     //These 5 scenarios required for CCD regression testing
-    CCDProbateScenario.inject(rampUsers(70) during (10 minutes)), //150
-    CCDSSCSScenario.inject(rampUsers(70) during (10 minutes)), //150
-    CCDEthosScenario.inject(rampUsers(200) during (10 minutes)), //400
-    CCDCMCScenario.inject(rampUsers(70) during (10 minutes)), //150
-    CCDDivScenario.inject(rampUsers(70) during (10 minutes)) //150
+    // CCDProbateScenario.inject(rampUsers(70) during (10 minutes)), //150
+    // CCDSSCSScenario.inject(rampUsers(70) during (10 minutes)), //150
+    CCDEthosScenario.inject(rampUsers(500) during (10 minutes)), //400
+    // CCDCMCScenario.inject(rampUsers(70) during (10 minutes)), //150
+    // CCDDivScenario.inject(rampUsers(70) during (10 minutes)) //150
+    
     // CaseSharingLarge.inject(rampUsers(100) during(20 minutes)),
     // CaseSharingSmall.inject(rampUsers(100) during(20 minutes))
 
@@ -174,5 +175,5 @@ class CCDUIPTSimulation extends Simulation  {
     //CCDEthosScenario.inject(rampUsers(1) during(1 minutes))
   )
     .protocols(httpProtocol)
-    .maxDuration(180 minutes)
+    .maxDuration(60 minutes)
 }
