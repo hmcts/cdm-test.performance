@@ -36,7 +36,8 @@ class CCDUIPTSimulation extends Simulation  {
         .exec(PBGoR.PBPaymentSuccessful)
         .exec(PBGoR.PBDocUpload)
         .exec(PBGoR.PBStopCase)
-        .exec(PBGoR.PBSearchAndView)
+        .exec(PBGoR.PBSearch)
+        .exec(PBGoR.PBView)
         .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
@@ -129,6 +130,15 @@ class CCDUIPTSimulation extends Simulation  {
         .exec(WaitforNextIteration.waitforNextIteration)
       }
 
+  val ProbateSearch = scenario("Probate CW Search")
+      .repeat(1) {
+        exec(Browse.Homepage)
+        .exec(PBGoR.submitLogin)
+        .repeat(Ethositeration) {
+          exec(PBGoR.PBSearch)
+        }
+      }
+
   /*val CaseSharingLarge = scenario("CCDCSLarge")
     .repeat(1) {
       repeat(1) {
@@ -157,7 +167,8 @@ class CCDUIPTSimulation extends Simulation  {
     //These 5 scenarios required for CCD regression testing
     // CCDProbateScenario.inject(rampUsers(70) during (10 minutes)), //150
     // CCDSSCSScenario.inject(rampUsers(70) during (10 minutes)), //150
-    CCDEthosScenario.inject(rampUsers(500) during (10 minutes)), //400
+    CCDEthosScenario.inject(rampUsers(400) during (10 minutes)), //400
+    ProbateSearch.inject(rampUsers(100) during (1 minute))
     // CCDCMCScenario.inject(rampUsers(70) during (10 minutes)), //150
     // CCDDivScenario.inject(rampUsers(70) during (10 minutes)) //150
     

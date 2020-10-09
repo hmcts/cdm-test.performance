@@ -336,7 +336,7 @@ object PBGoR {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-  val PBSearchAndView =
+  val PBSearch =
     exec(http("PBGoR_070_005_SearchForCase")
       .get("/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/pagination_metadata")
       .headers(CommonHeader))
@@ -347,7 +347,9 @@ object PBGoR {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("PBGoR_080_005_OpenCase")
+  val PBView =
+
+    exec(http("PBGoR_080_005_OpenCase")
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_8))
 
