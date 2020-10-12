@@ -137,6 +137,7 @@ class CCDUIPTSimulation extends Simulation  {
         .exec(PBGoR.submitLogin)
         .repeat(Ethositeration) {
           exec(PBGoR.PBSearch)
+          .exec(WaitforNextIteration.waitforNextIteration)
         }
       }
 
@@ -146,6 +147,7 @@ class CCDUIPTSimulation extends Simulation  {
         .exec(DVExcep.submitLogin)
         .repeat(Ethositeration) {
           exec(DVExcep.DVSearch)
+          .exec(WaitforNextIteration.waitforNextIteration)
         }
       }
 
