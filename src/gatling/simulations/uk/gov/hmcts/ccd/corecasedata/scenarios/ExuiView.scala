@@ -142,7 +142,7 @@ val feedXUISearchData = csv("XUISearchData.csv").circular
         .headers(ProbateHeader.headers_1)
         .header("X-XSRF-TOKEN", "${xsrfToken}"))
 
-    .exec(http("XUI_FindCase_HealthCheck")
+    .exec(http("XUI_FindCase_JurisdictionsRead")
         .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=read")
         .headers(ProbateHeader.headers_1)
         .header("X-XSRF-TOKEN", "${xsrfToken}"))
@@ -183,7 +183,7 @@ val feedXUISearchData = csv("XUISearchData.csv").circular
         .get(baseURL + "/api/healthCheck?path=%2Fcases")
         .headers(ProbateHeader.headers_0))
 
-    .exec(http("XUI_CaseList_HealthCheck")
+    .exec(http("XUI_CaseList_JurisdictionsRead")
         .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=read")
         .headers(ProbateHeader.headers_1)
         .header("X-XSRF-TOKEN", "${xsrfToken}"))
