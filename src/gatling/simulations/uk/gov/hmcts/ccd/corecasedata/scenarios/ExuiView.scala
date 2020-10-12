@@ -6,9 +6,10 @@ import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.{Environment, LoginHeader, 
 
 object ExuiView {
 
-      val baseURL = Environment.xuiBaseURL
-      val IdamUrl = Environment.idamURL
-      val feedXUIUserData = csv("XUISearchUsers.csv").circular
+val baseURL = Environment.xuiBaseURL
+val IdamUrl = Environment.idamURL
+val feedXUIUserData = csv("XUISearchUsers.csv").circular
+val feedXUISearchData = csv("XUISearchData.csv").circular
 
   val manageCasesHomePage =
     tryMax(2) {
@@ -47,6 +48,10 @@ object ExuiView {
 
       feed(feedXUIUserData)
 
+      /*==========================================
+      User Login Steps
+      ==========================================*/
+
       .exec(http("XUI_020_005_SignIn")
         //.post(IdamUrl + "/login?response_type=code&client_id=xuiwebapp&redirect_uri=" + baseURL + "/oauth2/callback&scope=profile%20openid%20roles%20manage-user%20create-user")
         .post(IdamUrl + "/login?response_type=code&redirect_uri=" + baseURL + "%2Foauth2%2Fcallback&scope=profile%20openid%20roles%20manage-user%20create-user&state=${state}&client_id=xuiwebapp")
@@ -66,28 +71,10 @@ object ExuiView {
             .headers(LoginHeader.headers_0)
             .check(status.in(200,304)))
 
-        /*.exec(http("XUI_020_010_Homepage")
-              .get("/external/config/ui")
-              .headers(LoginHeader.headers_0)
-              .check(status.in(200,304)))*/
-
       .exec(http("XUI_020_015_SignInTCEnabled")
             .get(baseURL + "/api/configuration?configurationKey=termsAndConditionsEnabled")
             .headers(LoginHeader.headers_38)
             .check(status.in(200, 304)))
-
-     /* .exec(http("XUI_020_020_SignInGetUserId")
-            .get("/api/userTermsAndConditions/${myUserId}")
-            .headers(LoginHeader.headers_tc))*/
-
-     /* .exec(http("XUI_020_025_SignInAcceptTCGet")
-            .get("/accept-terms-and-conditions")
-            .headers(LoginHeader.headers_tc_get)
-            .check(status.in(200, 304)))*/
-
-     /* .exec(http("XUI_020_030_SignInTCEnabled")
-            .get("/api/configuration?configurationKey=termsAndConditionsEnabled")
-            .headers(LoginHeader.headers_tc))*/
 
       .repeat(1, "count") {
         exec(http("XUI_020_020_AcceptT&CAccessJurisdictions${count}")
@@ -101,50 +88,125 @@ object ExuiView {
               .headers(LoginHeader.headers_17))
 
         .exec(http("XUI_020_030_GetPaginationMetaData")
-              .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata?state=Open")
+              .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata?state=SOTAgreementPayAndSubmitRequired")
               .headers(LoginHeader.headers_0))
 
         .exec(http("XUI_020_035_GetDefaultWorkBasketView")
-              .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&state=Open&page=1")
+              .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&state=SOTAgreementPayAndSubmitRequired&page=1")
               .headers(LoginHeader.headers_0))
 
-      //.exec(getCookieValue(CookieKey("XSRF-TOKEN").withDomain("manage-case.perftest.platform.hmcts.net").saveAs("xsrfToken")))
+      .exec(getCookieValue(CookieKey("XSRF-TOKEN").withDomain("manage-case.perftest.platform.hmcts.net").saveAs("xsrfToken")))
 
       .pause(Environment.constantthinkTime)
 
     }
 
-    val searchProbateCase = 
+    val searchCase = 
 
-    exec(http("XUI_ProbateSearchResults_WorkbasketMetadata")
-        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/pagination_metadata")
+    feed(feedXUISearchData)
+
+    /*==========================================
+    Execute a Search from the Case List View
+    ==========================================*/
+
+    .exec(http("XUI_${jurisdiction}SearchResults_WorkbasketMetadata")
+        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases/pagination_metadata?state=${state}")
         .headers(ProbateHeader.headers_search)
-        //.header("X-XSRF-TOKEN", "${xsrfToken}")
+        .header("X-XSRF-TOKEN", "${xsrfToken}")
         .check(status.in(200,304)))
 
-    .exec(http("XUI_ProbateSearchResults_WorkbasketUseCase")
-        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases?view=WORKBASKET&page=1")
-        //.post(baseURL + "/data/internal/searchCases?ctid=GrantOfRepresentation&use_case=WORKBASKET&view=WORKBASKET&page=1")
+    .exec(http("XUI_${jurisdiction}SearchResults_WorkbasketUseCase")
+        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases?view=WORKBASKET&state=c&page=1")
+        //.post(baseURL + "/data/internal/searchCases?ctid=${caseType}&use_case=WORKBASKET&view=WORKBASKET&page=1")
         .headers(ProbateHeader.headers_search)
-        //.header("X-XSRF-TOKEN", "${xsrfToken}")
+        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        .check(status.in(200,304)))
+
+    .pause(Environment.constantthinkTime)
+
+    /*==========================================
+    Click on the Find Case link on top right
+    ==========================================*/
+
+    .exec(http("XUI_FindCase_HealthCheck")
+        .get(baseURL + "/api/healthCheck?path=%2Fcases%2Fcase-search")
+        .headers(ProbateHeader.headers_0))
+
+    .exec(http("XUI_${jurisdiction}SearchResults_SearchMetadata")
+        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases/pagination_metadata?state=${caseType}")
+        .headers(ProbateHeader.headers_1)
+        .header("X-XSRF-TOKEN", "${xsrfToken}"))
+
+    .exec(http("XUI_${jurisdiction}SearchResults_SearchUseCase")
+        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases?view=SEARCH&page=1&state=v")
+        .headers(ProbateHeader.headers_1)
+        .header("X-XSRF-TOKEN", "${xsrfToken}"))
+
+    .exec(http("XUI_FindCase_HealthCheck")
+        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=read")
+        .headers(ProbateHeader.headers_1)
+        .header("X-XSRF-TOKEN", "${xsrfToken}"))
+
+    .exec(http("XUI_FindCase_SearchInputs")
+        .get(baseURL + "/data/internal/case-types/${caseType}/search-inputs")
+        .headers(ProbateHeader.headers_1)
+        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        .header("experimental", "true")
+        .header("Accept", "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-search-input-details.v2+json;charset=UTF-8"))
+
+    .pause(Environment.constantthinkTime)
+
+    /*==========================================
+    Execute a Search from the Find Case View
+    ==========================================*/
+
+    .exec(http("XUI_${jurisdiction}SearchResults_SearchMetadata")
+        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases/pagination_metadata?state=${state}")
+        .headers(ProbateHeader.headers_search)
+        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        .check(status.in(200,304)))
+
+    .exec(http("XUI_${jurisdiction}SearchResults_SearchUseCase")
+        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases?view=SEARCH&state=${state}&page=1")
+        //.post(baseURL + "/data/internal/searchCases?ctid=${caseType}&use_case=SEARCH&view=SEARCH&page=1")
+        .headers(ProbateHeader.headers_search)
+        .header("X-XSRF-TOKEN", "${xsrfToken}")
         .check(status.in(200,304)))
 
     .pause(Environment.constantthinkTime)
 
-    .exec(http("XUI_ProbateSearchResults_SearchMetadata")
-        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/pagination_metadata")
-        .headers(ProbateHeader.headers_search)
-        //.header("X-XSRF-TOKEN", "${xsrfToken}")
-        .check(status.in(200,304)))
+    /*==========================================
+    Click on Case List
+    ==========================================*/
 
-    .exec(http("XUI_ProbateSearchResults_SearchUseCase")
-        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases?view=SEARCH&page=1")
-        //.post(baseURL + "/data/internal/searchCases?ctid=GrantOfRepresentation&use_case=SEARCH&view=SEARCH&page=1")
-        .headers(ProbateHeader.headers_search)
-        //.header("X-XSRF-TOKEN", "${xsrfToken}")
-        .check(status.in(200,304)))
+    .exec(http("XUI_CaseList_HealthCheck")
+        .get(baseURL + "/api/healthCheck?path=%2Fcases")
+        .headers(ProbateHeader.headers_0))
+
+    .exec(http("XUI_CaseList_HealthCheck")
+        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=read")
+        .headers(ProbateHeader.headers_1)
+        .header("X-XSRF-TOKEN", "${xsrfToken}"))
+
+    .exec(http("XUI_${jurisdiction}SearchResults_WorkbasketMetadata")
+        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases/pagination_metadata?state=${state}")
+        .headers(ProbateHeader.headers_1)
+        .header("X-XSRF-TOKEN", "${xsrfToken}"))
+
+    .exec(http("XUI_CaseList_WorkBasketInputs")
+        .get(baseURL + "/data/internal/case-types/${caseType}/work-basket-inputs")
+        .headers(ProbateHeader.headers_1)
+        .header("experimental", "true")
+        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        .header("Accept", "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-workbasket-input-details.v2+json;charset=UTF-8"))
+
+    .exec(http("XUI_${jurisdiction}SearchResults_WorkbasketUseCase")
+        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases?view=WORKBASKET&state=${state}s&page=1")
+        .headers(ProbateHeader.headers_1)
+        .header("X-XSRF-TOKEN", "${xsrfToken}"))
 
     .pause(Environment.constantthinkTime)
+
 
 //     .exec(http("XUI_ProbateSearchResults_SortFirstname")
 //         //.get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases?view=WORKBASKET&page=1")
@@ -157,46 +219,46 @@ object ExuiView {
 //     .pause(Environment.constantthinkTime)
 
 
-val searchDivorceCase = 
+// val searchDivorceCase = 
 
-    exec(http("XUI_DivorceSearchResults_WorkbasketMetadata")
-        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata")
-        .headers(ProbateHeader.headers_search)
-        //.header("X-XSRF-TOKEN", "${xsrfToken}")
-        .check(status.in(200,304)))
-
-    .exec(http("XUI_DivorceSearchResults_WorkbasketUseCase")
-        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&page=1")
-        //.post(baseURL + "/data/internal/searchCases?ctid=DIVORCE&use_case=WORKBASKET&view=WORKBASKET&page=1")
-        .headers(ProbateHeader.headers_search)
-        //.header("X-XSRF-TOKEN", "${xsrfToken}")
-        .check(status.in(200,304)))
-
-    .pause(Environment.constantthinkTime)
-
-    .exec(http("XUI_DivorceSearchResults_SearchMetadata")
-        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata")
-        .headers(ProbateHeader.headers_search)
-        //.header("X-XSRF-TOKEN", "${xsrfToken}")
-        .check(status.in(200,304)))
-
-    .exec(http("XUI_DivorceSearchResults_SearchUseCase")
-        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=SEARCH&page=1")
-        //.post(baseURL + "/data/internal/searchCases?ctid=DIVORCE&use_case=SEARCH&view=SEARCH&page=1")
-        .headers(ProbateHeader.headers_search)
-        //.header("X-XSRF-TOKEN", "${xsrfToken}")
-        .check(status.in(200,304)))
-
-    .pause(Environment.constantthinkTime)
-
-//     .exec(http("XUI_DivorceSearchResults_SortCreatedDate")
-//         //.get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&page=1")
-//         .post(baseURL + "/data/internal/searchCases?ctid=DIVORCE&use_case=SEARCH&view=SEARCH&page=1")
+//     exec(http("XUI_DivorceSearchResults_WorkbasketMetadata")
+//         .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata")
 //         .headers(ProbateHeader.headers_search)
-//         .header("X-XSRF-TOKEN", "${xsrfToken}")
-//         .body(StringBody("{\n  \"sort\": {\n    \"column\": \"[CREATED_DATE]\",\n    \"order\": 1,\n    \"type\": \"DateTime\"\n  },\n  \"size\": 25\n}"))
+//         //.header("X-XSRF-TOKEN", "${xsrfToken}")
+//         .check(status.in(200,304)))
+
+//     .exec(http("XUI_DivorceSearchResults_WorkbasketUseCase")
+//         .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&page=1")
+//         //.post(baseURL + "/data/internal/searchCases?ctid=DIVORCE&use_case=WORKBASKET&view=WORKBASKET&page=1")
+//         .headers(ProbateHeader.headers_search)
+//         //.header("X-XSRF-TOKEN", "${xsrfToken}")
 //         .check(status.in(200,304)))
 
 //     .pause(Environment.constantthinkTime)
+
+//     .exec(http("XUI_DivorceSearchResults_SearchMetadata")
+//         .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata")
+//         .headers(ProbateHeader.headers_search)
+//         //.header("X-XSRF-TOKEN", "${xsrfToken}")
+//         .check(status.in(200,304)))
+
+//     .exec(http("XUI_DivorceSearchResults_SearchUseCase")
+//         .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=SEARCH&page=1")
+//         //.post(baseURL + "/data/internal/searchCases?ctid=DIVORCE&use_case=SEARCH&view=SEARCH&page=1")
+//         .headers(ProbateHeader.headers_search)
+//         //.header("X-XSRF-TOKEN", "${xsrfToken}")
+//         .check(status.in(200,304)))
+
+//     .pause(Environment.constantthinkTime)
+
+// //     .exec(http("XUI_DivorceSearchResults_SortCreatedDate")
+// //         //.get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&page=1")
+// //         .post(baseURL + "/data/internal/searchCases?ctid=DIVORCE&use_case=SEARCH&view=SEARCH&page=1")
+// //         .headers(ProbateHeader.headers_search)
+// //         .header("X-XSRF-TOKEN", "${xsrfToken}")
+// //         .body(StringBody("{\n  \"sort\": {\n    \"column\": \"[CREATED_DATE]\",\n    \"order\": 1,\n    \"type\": \"DateTime\"\n  },\n  \"size\": 25\n}"))
+// //         .check(status.in(200,304)))
+
+// //     .pause(Environment.constantthinkTime)
 
 }

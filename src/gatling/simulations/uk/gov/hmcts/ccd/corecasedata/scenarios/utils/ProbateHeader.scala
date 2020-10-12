@@ -109,5 +109,18 @@ object ProbateHeader {
   "sec-fetch-site" -> "same-origin",
   "x-dtpc" -> "3$484214221_400h65vVNUHLCFUOLBQIRUKGTWUKCORNUWNRADP-0")
 
+  val headers_0 = Map(
+		"Accept" -> "application/json, text/plain, */*",
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-origin")
+
+	val headers_1 = Map(
+		"Content-Type" -> "application/json",
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-origin")
 
 }

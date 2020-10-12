@@ -70,10 +70,10 @@ class CCD_SearchSimulation extends Simulation  {
     .repeat(1) {
       exec(ExuiView.manageCasesHomePage)
       .exec(ExuiView.manageCaseslogin)
-        .repeat(20){ //20
-          exec(ExuiView.searchProbateCase)
-          .exec(ExuiView.searchDivorceCase)
-          //.exec(WaitforNextIteration.waitforNextIteration)
+        .repeat(8s){ //20
+          exec(ExuiView.searchCase)
+          //.exec(ExuiView.searchDivorceCase)
+          .exec(WaitforNextIteration.waitforNextIteration)
         }
     }
 
@@ -97,14 +97,14 @@ class CCD_SearchSimulation extends Simulation  {
   setUp(
     //CCDUISearch.inject(rampUsers(5) during (5 minutes)),
     //CCDElasticSearchGoR.inject(rampUsers(5) during (5 minutes)),
-    CitizenSearch.inject(rampUsers(50) during (5 minutes)),
-    CaseworkerSearch.inject(rampUsers(50) during (5 minutes)),
-    CCDElasticSearch.inject(rampUsers(50) during (5 minutes)),
-    XUISearch.inject(rampUsers(250) during (10 minutes))
+    // CitizenSearch.inject(rampUsers(50) during (5 minutes)),
+    // CaseworkerSearch.inject(rampUsers(50) during (5 minutes)),
+    // CCDElasticSearch.inject(rampUsers(50) during (5 minutes)),
+    XUISearch.inject(rampUsers(100) during (10 minutes))
     //XUISearchNew.inject(rampUsers(1) during (10 minutes))
     
 
   )
     .protocols(httpProtocol)
-    .maxDuration(60 minutes)
+    //.maxDuration(60 minutes)
 }
