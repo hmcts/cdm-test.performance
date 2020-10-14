@@ -39,6 +39,7 @@ class CCD_SearchSimulation extends Simulation  {
           .exec(ccddatastore.ElasticSearchEthos)
           .exec(ccddatastore.ElasticSearchWorkbasket)
           .exec(ccddatastore.ElasticSearchGet25Divorce)
+          .exec(WaitforNextIteration.waitforNextIteration)
         }
     }
 
@@ -109,8 +110,8 @@ class CCD_SearchSimulation extends Simulation  {
     CitizenSearch.inject(rampUsers(50) during (10 minutes)),
     CaseworkerSearch.inject(rampUsers(50) during (10 minutes)),
     CCDElasticSearch.inject(rampUsers(50) during (10 minutes)),
-//    XUISearch.inject(rampUsers(200) during (20 minutes))
-    XUICaseWorker.inject(rampUsers(550) during (10 minutes))
+    XUISearch.inject(rampUsers(550) during (20 minutes))
+    //XUICaseWorker.inject(rampUsers(550) during (10 minutes))
     //XUISearchNew.inject(rampUsers(1) during (10 minutes))
     
 
