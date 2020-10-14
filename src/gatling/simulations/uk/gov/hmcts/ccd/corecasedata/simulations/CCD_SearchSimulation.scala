@@ -94,13 +94,22 @@ class CCD_SearchSimulation extends Simulation  {
       }
     }
 
+  val XUICaseWorker = scenario("Caseworker XUI API")
+    .repeat(1) {
+      exec(ccddatastore.XUIIdamLogin)
+      .repeat(36) {
+        exec(ccddatastore.XUICaseworkerSearch)
+      }
+    }
+
   setUp(
     //CCDUISearch.inject(rampUsers(5) during (5 minutes)),
     //CCDElasticSearchGoR.inject(rampUsers(5) during (5 minutes)),
-    // CitizenSearch.inject(rampUsers(50) during (5 minutes)),
-    // CaseworkerSearch.inject(rampUsers(50) during (5 minutes)),
-    // CCDElasticSearch.inject(rampUsers(50) during (5 minutes)),
-    XUISearch.inject(rampUsers(200) during (20 minutes))
+    CitizenSearch.inject(rampUsers(50) during (10 minutes)),
+    CaseworkerSearch.inject(rampUsers(50) during (10 minutes)),
+    CCDElasticSearch.inject(rampUsers(50) during (10 minutes)),
+//    XUISearch.inject(rampUsers(200) during (20 minutes))
+    XUICaseWorker.inject(rampUsers(550) during (10 minutes))
     //XUISearchNew.inject(rampUsers(1) during (10 minutes))
     
 
