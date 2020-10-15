@@ -49,6 +49,7 @@ val CDSGetRequest =
       .header("Content-Type", "application/json")
       .body(StringBody("{\"microservice\":\"ccd_data\"}"))
       .check(bodyString.saveAs("bearerToken")))
+      .exitHereIfFailed
 
   .exec(http("OIDC01_Authenticate")
       .post(IdamAPI + "/authenticate")
@@ -59,6 +60,7 @@ val CDSGetRequest =
       .formParam("originIp", "0:0:0:0:0:0:0:1")
       .check(status is 200)
       .check(headerRegex("Set-Cookie", "Idam.Session=(.*)").saveAs("authCookie")))
+      .exitHereIfFailed
 
   .exec(http("OIDC02_Authorize_CCD")
       .post(IdamAPI + "/o/authorize?response_type=code&client_id=" + ccdClientId + "&redirect_uri=" + ccdRedirectUri + "&scope=" + ccdScope).disableFollowRedirect
@@ -67,6 +69,7 @@ val CDSGetRequest =
       .header("Content-Length", "0")
       .check(status is 302)
       .check(headerRegex("Location", "code=(.*)&client_id").saveAs("code")))
+      .exitHereIfFailed
 
     //MkVIBs0dfCwTIBeU-enTRbfGUh0
 
@@ -77,6 +80,7 @@ val CDSGetRequest =
       //.header("Cookie", "Idam.Session=${authCookie}")
       .check(status is 200)
       .check(jsonPath("$.access_token").saveAs("access_token")))
+      .exitHereIfFailed
 
 //  .exec {
 //      session =>
