@@ -68,7 +68,7 @@ class CCD_SearchSimulation extends Simulation  {
     }
 
   val XUISearch = scenario("XuiSearch")
-    .repeat(1) {
+    .repeat(100) {
       exec(ExuiView.manageCasesHomePage)
       .exec(ExuiView.manageCaseslogin)
       .exec(ExuiView.XUILogout)
