@@ -53,8 +53,8 @@ val CDSGetRequest =
   .exec(http("OIDC01_Authenticate")
       .post(IdamAPI + "/authenticate")
       .header("Content-Type", "application/x-www-form-urlencoded")
-      .formParam("username", "ccdloadtest1@gmail.com") //${userEmail}
-      .formParam("password", "Password12")
+      .formParam("username", "${userEmail}") //${userEmail}
+      .formParam("password", "Pass19word")
       .formParam("redirectUri", ccdRedirectUri)
       .formParam("originIp", "0:0:0:0:0:0:0:1")
       .check(status is 200)
@@ -327,6 +327,9 @@ val CDSGetRequest =
 
       .pause(5)
 
+
+  //Case Sharing Requests - for manage-case-assignment API//
+
   val CreateCaseForCaseSharing =
 
     exec(http("GetIdamUserID")
@@ -361,10 +364,61 @@ val CDSGetRequest =
       .header("experimental","true")
       .queryParam("case_ids", "${caseToShare}"))
 
-    // .exec {
-    //   session =>
-    //     println(session("userEmail").as[String])
-    //   session
-    // }
     .pause(Environment.constantthinkTime)
+
+  /////////////////////////////////////////////////////////////////////////////////
+
+  //Respondent Journey Requests - Create Case & Update Supplementary Case Data//
+
+  val RJCreateCase = 
+
+    exec(http("GetEventToken")
+        .get(ccdDataStoreUrl + "/caseworkers/${idamUserId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/solicitorCreateApplication/token")
+        .header("ServiceAuthorization", "Bearer ${bearerToken}")
+        .header("Authorization", "Bearer ${access_token}")
+        .header("Content-Type","application/json")
+        .check(jsonPath("$.token").saveAs("eventToken")))
+
+    .exec(http("CreateCase")
+        .post(ccdDataStoreUrl + "/caseworkers/${idamUserId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+        .header("ServiceAuthorization", "Bearer ${bearerToken}")
+        .header("Authorization", "Bearer ${access_token}")
+        .header("Content-Type","application/json")
+        .body(StringBody("{\n  \"data\": {\n    \"solsSolicitorFirmName\": \"jon & ola\",\n    \"solsSolicitorAddress\": {\n      \"AddressLine1\": \"Flat 12\",\n      \"AddressLine2\": \"Bramber House\",\n      \"AddressLine3\": \"Seven Kings Way\",\n      \"PostTown\": \"Kingston Upon Thames\",\n      \"County\": \"\",\n      \"PostCode\": \"KT2 5BU\",\n      \"Country\": \"United Kingdom\"\n    },\n    \"solsSolicitorAppReference\": \"test\",\n    \"solsSolicitorEmail\": \"ccdorg-mvgvh_mcccd.user52@mailinator.com\",\n    \"solsSolicitorPhoneNumber\": null,\n    \"organisationPolicy\": {\n      \"OrgPolicyCaseAssignedRole\": \"[Claimant]\",\n      \"OrgPolicyReference\": null,\n      \"Organisation\": {\n        \"OrganisationID\": \"IGWEE4D\",\n        \"OrganisationName\": \"ccdorg-mvgvh\"\n      }\n    }\n  },\n  \"event\": {\n    \"id\": \"solicitorCreateApplication\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
+        //.body(StringBody(" {   \n \t\"data\" : {\n      \"TextField\" : \"textField1\",\n      \"TextAreaField\" : \"textAreaField1\",\n      \"AddressField\" : {\n        \"AddressLine1\" : \"102 Petty France\",\n        \"AddressLine2\" : \"CCD\",\n        \"AddressLine3\" : \"c/o HMCTS Reform\",\n        \"Country\" : \"UK\"\n      },\n      \"OrganisationPolicyField1\" : {\n        \"OrgPolicyCaseAssignedRole\" : \"[Claimant]\",\n        \"OrgPolicyReference\" : \"ref\",\n        \"Organisation\" : {\n          \"OrganisationID\" : \"orgID1\",\n          \"OrganisationName\" : \"orgName1\"\n        }\n      },\n      \"OrganisationPolicyField2\" : {\n        \"OrgPolicyCaseAssignedRole\" : \"[Defendant]\",\n        \"OrgPolicyReference\" : \"ref\",\n        \"Organisation\" : {\n          \"OrganisationID\" : \"orgID2\",\n          \"OrganisationName\" : \"orgName2\"\n        }\n      }\n    },\n    \"event\" : {\n      \"id\" : \"createCase\",\n      \"summary\" : \"\",\n      \"description\" : \"\"\n    },\n    \"event_token\" : \"${eventToken}\",\n    \"ignore_warning\" : false,\n    \"draft_id\" : null\n \t\n }"))
+        .check(jsonPath("$.id").saveAs("caseId")))
+
+    .pause(Environment.constantthinkTime)
+
+  val RJUpdateSupplementaryCaseData =
+
+    exec(http("CCD_UpdateSupplementaryCaseData")
+        .post(ccdDataStoreUrl + "/cases/${caseId}/supplementary-data")
+        .header("ServiceAuthorization", "Bearer ${bearerToken}")
+        .header("Authorization", "Bearer ${access_token}")
+        .header("Content-Type","application/json")
+        .body(StringBody("{\n    \"supplementary_data_updates\": {\n        \"$inc\": {\n        \t\"orgs_assigned_users.aca-11\": 1\n        }\n    }\n}")))
+        //.body(StringBody("{\n\t\"supplementary_data_updates\": {\n\t\t\"$set\": {\n\t\t\t\"orgs_assigned_users.OrgA\": 22,\n            \"orgs_assigned_users.OrgC\": \"Test\"\n\t\t},\n\t\t\"$inc\": {\n\t\t\t\"orgs_assigned_users.OrgB\": 1\n\t\t}\n\t}\n}")))
+
+    .pause(Environment.constantthinkTime)
+
+  //Respondent Journey Requests - Create Case & Update Supplementary Case Data//
+
+  val RJElasticSearchGetRef =
+
+    feed(feedCaseSearchData)
+
+    .exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
+      .post(ccdDataStoreUrl + "/searchCases")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .queryParam("ctid", "${caseType}") //${caseType}
+      .body(StringBody("{ \n   \"query\":{ \n      \"bool\":{ \n         \"filter\":{ \n            \"wildcard\":{ \n               \"reference\":\"${caseId}\"\n            }\n         }\n      }\n   }\n}"))
+      .check(status in  (200)))
+
+    .pause(Environment.constantthinkTime)
+  
+
+
 }

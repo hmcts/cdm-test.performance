@@ -54,12 +54,40 @@ class CCDDataStoreSimulation extends Simulation  {
         }
     }
 
+  val CreateCase = scenario("CaseCreate")
+    .repeat(1) {
+      exec(ccddatastore.CitizenLogin)
+      .exec(ccddatastore.CreateCaseForCaseSharing)
+    }
+
+  //Respondent Journey Requests//
+
+  val RJUpdateSupplementaryCaseData = scenario("UpdateSupplementaryCaseData")
+  .repeat(1) {
+      exec(ccddatastore.CDSGetRequest)
+        .repeat(300) {
+          exec(ccddatastore.RJCreateCase)
+          .exec(ccddatastore.RJUpdateSupplementaryCaseData)
+        }
+    }
+
+  val RJSearchCases = scenario("UpdateSupplementaryCaseData")
+  .repeat(1) {
+      exec(ccddatastore.CDSGetRequest)
+        .repeat(300) {
+          exec(ccddatastore.RJElasticSearchGetRef)
+        }
+    }
+
   setUp(
     //CCDElasticSearch.inject(rampUsers(1) during(1 minutes)),
     //CCDElasticSearchGoR.inject(rampUsers(1) during(1 minutes)),
     //CCDElasticSearchGoRState.inject(rampUsers(1) during(1 minutes)),
-    CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(1) during(1 minutes))
+    //CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(1) during(1 minutes))
+    //CreateCase.inject(rampUsers(1) during(1 minutes))
+    RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes))
+    RJSearchCases.inject(rampUsers(100) during (10 minutes))    
   )
     .protocols(httpProtocol)
-  //.maxDuration(60 minutes)
+  .maxDuration(60 minutes)
 }
