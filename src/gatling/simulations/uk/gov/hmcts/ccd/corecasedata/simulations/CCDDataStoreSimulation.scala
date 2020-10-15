@@ -65,7 +65,7 @@ class CCDDataStoreSimulation extends Simulation  {
   val RJUpdateSupplementaryCaseData = scenario("UpdateSupplementaryCaseData")
   .repeat(1) {
       exec(ccddatastore.CDSGetRequest)
-        .repeat(300) {
+        .repeat(200) {
           exec(ccddatastore.RJCreateCase)
           .exec(ccddatastore.RJUpdateSupplementaryCaseData)
         }
@@ -86,8 +86,8 @@ class CCDDataStoreSimulation extends Simulation  {
     //CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(1) during(1 minutes))
     //CreateCase.inject(rampUsers(1) during(1 minutes))
     RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes)),
-    RJSearchCases.inject(rampUsers(100) during (10 minutes))   
+    RJSearchCases.inject(rampUsers(200) during (10 minutes))   
   )
     .protocols(httpProtocol)
-  .maxDuration(60 minutes)
+  //.maxDuration(60 minutes)
 }
