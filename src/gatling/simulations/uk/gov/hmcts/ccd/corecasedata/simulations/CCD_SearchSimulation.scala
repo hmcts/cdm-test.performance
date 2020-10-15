@@ -72,6 +72,7 @@ class CCD_SearchSimulation extends Simulation  {
       exec(ExuiView.manageCasesHomePage)
       .exec(ExuiView.manageCaseslogin)
       .exec(ExuiView.XUILogout)
+      .exec(WaitforNextIteration.waitforNextIteration)
       //.exec(WaitforNextIteration.waitforNextIteration)
         // .repeat(9){ //20
         //   exec(ExuiView.searchCase)
