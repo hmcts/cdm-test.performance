@@ -15,27 +15,27 @@ val feedXUISearchData = csv("XUISearchData.csv").circular
     tryMax(2) {
 
       exec(http("XUI_010_005_Homepage")
-           .get(baseURL + "/")
-           .headers(LoginHeader.headers_0)
-           .check(status.in(200,304))).exitHereIfFailed
+        .get(baseURL + "/")
+        .headers(LoginHeader.headers_0)
+        .check(status.in(200,304))).exitHereIfFailed
 
       .exec(http("XUI_010_010_Homepage")
-            .get(baseURL + "/assets/config/config.json")
-            .headers(LoginHeader.headers_1))
+        .get(baseURL + "/assets/config/config.json")
+        .headers(LoginHeader.headers_1))
 
       .exec(http("XUI_010_015_HomepageTCEnabled")
-            .get(baseURL + "/api/configuration?configurationKey=termsAndConditionsEnabled")
-            .headers(LoginHeader.headers_1))
+        .get(baseURL + "/api/configuration?configurationKey=termsAndConditionsEnabled")
+        .headers(LoginHeader.headers_1))
 
       .exec(http("XUI_010_020_HomepageIsAuthenticated")
-            .get(baseURL + "/auth/isAuthenticated")
-            .headers(LoginHeader.headers_1))
+        .get(baseURL + "/auth/isAuthenticated")
+        .headers(LoginHeader.headers_1))
 
       .exec(http("XUI_010_020_Homepage")
-            .get(baseURL + "/auth/login")
-            .headers(LoginHeader.headers_4)
-            .check(css("input[name='_csrf']", "value").saveAs("csrfToken"))
-            .check(regex("manage-user%20create-user&state=(.*)&client").saveAs("state")))
+        .get(baseURL + "/auth/login")
+        .headers(LoginHeader.headers_4)
+        .check(css("input[name='_csrf']", "value").saveAs("csrfToken"))
+        .check(regex("manage-user%20create-user&state=(.*)&client").saveAs("state")))
     }
 
   //==================================================================================
@@ -83,17 +83,17 @@ val feedXUISearchData = csv("XUISearchData.csv").circular
              .check(status.in(200, 304, 302)))
       }
 
-        .exec(http("XUI_020_025_GetWorkBasketInputs")
-              .get(baseURL + "/data/internal/case-types/DIVORCE/work-basket-inputs")
-              .headers(LoginHeader.headers_17))
+        // .exec(http("XUI_020_025_GetWorkBasketInputs")
+        //       .get(baseURL + "/data/internal/case-types/DIVORCE/work-basket-inputs")
+        //       .headers(LoginHeader.headers_17))
 
-        .exec(http("XUI_020_030_GetPaginationMetaData")
-              .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata?state=SOTAgreementPayAndSubmitRequired")
-              .headers(LoginHeader.headers_0))
+        // .exec(http("XUI_020_030_GetPaginationMetaData")
+        //       .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata?state=SOTAgreementPayAndSubmitRequired")
+        //       .headers(LoginHeader.headers_0))
 
-        .exec(http("XUI_020_035_GetDefaultWorkBasketView")
-              .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&state=SOTAgreementPayAndSubmitRequired&page=1")
-              .headers(LoginHeader.headers_0))
+        // .exec(http("XUI_020_035_GetDefaultWorkBasketView")
+        //       .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&state=SOTAgreementPayAndSubmitRequired&page=1")
+        //       .headers(LoginHeader.headers_0))
 
       .exec(getCookieValue(CookieKey("XSRF-TOKEN").withDomain("manage-case.perftest.platform.hmcts.net").saveAs("xsrfToken")))
 
@@ -260,5 +260,20 @@ val feedXUISearchData = csv("XUISearchData.csv").circular
 // //         .check(status.in(200,304)))
 
 // //     .pause(Environment.constantthinkTime)
+
+val headers_0 = Map(
+    "Pragma" -> "no-cache",
+    "Sec-Fetch-Dest" -> "document",
+    "Sec-Fetch-Mode" -> "navigate",
+    "Sec-Fetch-Site" -> "same-origin",
+    "Sec-Fetch-User" -> "?1")
+
+val XUILogout = 
+
+    exec(http("XUI_Logout")
+        .get(baseURL + "/auth/logout")
+        .headers(headers_0))
+
+    .pause(Environment.constantthinkTime)
 
 }

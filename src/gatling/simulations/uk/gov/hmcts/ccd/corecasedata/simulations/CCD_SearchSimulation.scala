@@ -71,11 +71,13 @@ class CCD_SearchSimulation extends Simulation  {
     .repeat(1) {
       exec(ExuiView.manageCasesHomePage)
       .exec(ExuiView.manageCaseslogin)
-        .repeat(9){ //20
-          exec(ExuiView.searchCase)
-          //.exec(ExuiView.searchDivorceCase)
-          .exec(WaitforNextIteration.waitforNextIteration)
-        }
+      .exec(ExuiView.XUILogout)
+      //.exec(WaitforNextIteration.waitforNextIteration)
+        // .repeat(9){ //20
+        //   exec(ExuiView.searchCase)
+        //   //.exec(ExuiView.searchDivorceCase)
+        //   .exec(WaitforNextIteration.waitforNextIteration)
+        // }
     }
 
 
@@ -107,9 +109,9 @@ class CCD_SearchSimulation extends Simulation  {
   setUp(
     //CCDUISearch.inject(rampUsers(5) during (5 minutes)),
     //CCDElasticSearchGoR.inject(rampUsers(5) during (5 minutes)),
-    CitizenSearch.inject(rampUsers(50) during (10 minutes)),
-    CaseworkerSearch.inject(rampUsers(50) during (10 minutes)),
-    CCDElasticSearch.inject(rampUsers(50) during (10 minutes)),
+    // CitizenSearch.inject(rampUsers(50) during (10 minutes)),
+    // CaseworkerSearch.inject(rampUsers(50) during (10 minutes)),
+    // CCDElasticSearch.inject(rampUsers(50) during (10 minutes)),
     XUISearch.inject(rampUsers(550) during (20 minutes))
     //XUICaseWorker.inject(rampUsers(550) during (10 minutes))
     //XUISearchNew.inject(rampUsers(1) during (10 minutes))
