@@ -68,17 +68,15 @@ class CCD_SearchSimulation extends Simulation  {
     }
 
   val XUISearch = scenario("XuiSearch")
-    .repeat(100) {
+    .repeat(1) {
       exec(ExuiView.manageCasesHomePage)
       .exec(ExuiView.manageCaseslogin)
-      .exec(ExuiView.XUILogout)
-      .exec(WaitforNextIteration.waitforNextIteration)
-      //.exec(WaitforNextIteration.waitforNextIteration)
-        // .repeat(9){ //20
-        //   exec(ExuiView.searchCase)
-        //   //.exec(ExuiView.searchDivorceCase)
-        //   .exec(WaitforNextIteration.waitforNextIteration)
-        // }
+        .repeat(20){ //20
+          exec(ExuiView.searchCase)
+          //.exec(ExuiView.searchDivorceCase)
+          .exec(WaitforNextIteration.waitforNextIteration)
+        }
+        .exec(ExuiView.XUILogout)
     }
 
 
@@ -101,7 +99,7 @@ class CCD_SearchSimulation extends Simulation  {
   val XUICaseWorker = scenario("Caseworker XUI API")
     .repeat(1) {
       exec(ccddatastore.XUIIdamLogin)
-      .repeat(36) {
+      .repeat(36) { //36
         exec(ccddatastore.XUICaseworkerSearch)
         .exec(WaitforNextIteration.waitforNextIteration)
       }
@@ -113,7 +111,7 @@ class CCD_SearchSimulation extends Simulation  {
     // CitizenSearch.inject(rampUsers(50) during (10 minutes)),
     // CaseworkerSearch.inject(rampUsers(50) during (10 minutes)),
     // CCDElasticSearch.inject(rampUsers(50) during (10 minutes)),
-    XUISearch.inject(rampUsers(550) during (20 minutes))
+    XUISearch.inject(rampUsers(200) during (10 minutes))
     //XUICaseWorker.inject(rampUsers(550) during (10 minutes))
     //XUISearchNew.inject(rampUsers(1) during (10 minutes))
     

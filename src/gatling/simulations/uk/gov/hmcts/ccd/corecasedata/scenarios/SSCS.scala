@@ -188,7 +188,7 @@ object SSCS {
 			.exec(http("SSCS_020_055_Login")
 				.get("/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?view=WORKBASKET&state=appealCreated&page=1")
 				.headers(headers_12)
-				.check(jsonPath("$..case_id").findAll.optional.saveAs("caseNumbers")))
+				.check(jsonPath("$.case_id").findAll.optional.saveAs("caseNumbers")))
 
 			.exec(http("SSCS_020_060_Login")
 				.get("/data/internal/case-types/Benefit/work-basket-inputs")
