@@ -22,7 +22,6 @@ val escaseDataUrl = "https://ccd-api-gateway-web-perftest.service.core-compute-p
 val ccdClientId = "ccd_gateway"
 val ccdGatewayClientSecret = config.getString("ccdGatewayCS")
 
-//  val ccdGatewayClientSecret = "vUstam6brAsT38ranuwRut65rakec4u6"
 val ccdScope = "openid profile authorities acr roles openid profile roles"
 val feedCSUserData = csv("CaseSharingUsers_Large.csv").circular
 val feedCaseSearchData = csv("caseSearchData.csv").random
@@ -42,7 +41,7 @@ val headers_0 = Map( //Authorization token needs to be generated with idam login
 
 val CDSGetRequest =
 
-  feed(feedCSUserData)
+  feed(feedXUIUserData)
 
   .exec(http("GetS2SToken")
       .post(s2sUrl + "/testing-support/lease")
@@ -54,8 +53,8 @@ val CDSGetRequest =
   .exec(http("OIDC01_Authenticate")
       .post(IdamAPI + "/authenticate")
       .header("Content-Type", "application/x-www-form-urlencoded")
-      .formParam("username", "${userEmail}") //${userEmail}
-      .formParam("password", "Pass19word")
+      .formParam("username", "${email}") //${userEmail}
+      .formParam("password", "Password12")
       .formParam("redirectUri", ccdRedirectUri)
       .formParam("originIp", "0:0:0:0:0:0:0:1")
       .check(status is 200)
@@ -194,7 +193,7 @@ val CDSGetRequest =
     feed(feedWorkbasketData)
 
     .exec(http("CCD_SearchCaseEndpoint_CaseworkerSearch")
-      .get(ccdDataStoreUrl + "/caseworkers/539560/jurisdictions/${jurisdiction}/case-types/${caseType}/cases")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${jurisdiction}/case-types/${caseType}/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
