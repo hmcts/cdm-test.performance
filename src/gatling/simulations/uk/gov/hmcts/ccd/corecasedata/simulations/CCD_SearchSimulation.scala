@@ -16,7 +16,7 @@ class CCD_SearchSimulation extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-//    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
+    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
   val CCDUISearch = scenario("CCDUISearch")
@@ -113,9 +113,7 @@ class CCD_SearchSimulation extends Simulation  {
     CCDElasticSearch.inject(rampUsers(50) during (10 minutes)),
     //XUISearch.inject(rampUsers(300) during (15 minutes))
     XUICaseWorker.inject(rampUsers(550) during (10 minutes))
-    
-
   )
     .protocols(httpProtocol)
-    //.maxDuration(60 minutes)
+    .maxDuration(60 minutes)
 }
