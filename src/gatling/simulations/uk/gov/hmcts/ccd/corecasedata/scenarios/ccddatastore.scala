@@ -41,7 +41,7 @@ val headers_0 = Map( //Authorization token needs to be generated with idam login
 
 val CDSGetRequest =
 
-  feed(feedCSUserData)
+  feed(feedXUIUserData)
 
   .exec(http("GetS2SToken")
       .post(s2sUrl + "/testing-support/lease")
@@ -54,7 +54,7 @@ val CDSGetRequest =
       .post(IdamAPI + "/authenticate")
       .header("Content-Type", "application/x-www-form-urlencoded")
       .formParam("username", "${email}") //${userEmail}
-      .formParam("password", "Pass19word")
+      .formParam("password", "Password12")
       .formParam("redirectUri", ccdRedirectUri)
       .formParam("originIp", "0:0:0:0:0:0:0:1")
       .check(status is 200)
