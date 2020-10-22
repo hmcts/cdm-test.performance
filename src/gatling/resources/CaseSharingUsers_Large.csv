@@ -1,4 +1,4 @@
-orgName,orgRefCode,superUserEmail,userEmail,idamUserId,assigneeUser,caseToShare
+orgName,orgRefCode,superUserEmail,email,idamId,assigneeUser,caseToShare
 ccdorg-5wb1s,3SIYNNK,ccdorg-5wb1s_mcsuperuser@mailinator.com,ccdorg-5wb1s_mcCcd.user118@mailinator.com,519c52bc-9d84-43a3-8514-10ea8e33c2be,558ab9e4-66a9-4f96-8048-c3486b46fe27,1597329953746492
 ccdorg-5wb1s,3SIYNNK,ccdorg-5wb1s_mcsuperuser@mailinator.com,ccdorg-5wb1s_mcCcd.user667@mailinator.com,558ab9e4-66a9-4f96-8048-c3486b46fe27,5aef67d9-0a7c-4609-868e-990a6479745c,1597329966612780
 ccdorg-5wb1s,3SIYNNK,ccdorg-5wb1s_mcsuperuser@mailinator.com,ccdorg-5wb1s_mcCcd.user100@mailinator.com,5aef67d9-0a7c-4609-868e-990a6479745c,ea457edb-1301-4dfd-b32a-fe4cc2753963,1597329979456571

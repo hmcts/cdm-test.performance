@@ -41,7 +41,7 @@ val headers_0 = Map( //Authorization token needs to be generated with idam login
 
 val CDSGetRequest =
 
-  feed(feedXUIUserData)
+  feed(feedCSUserData)
 
   .exec(http("GetS2SToken")
       .post(s2sUrl + "/testing-support/lease")
@@ -54,7 +54,7 @@ val CDSGetRequest =
       .post(IdamAPI + "/authenticate")
       .header("Content-Type", "application/x-www-form-urlencoded")
       .formParam("username", "${email}") //${userEmail}
-      .formParam("password", "Password12")
+      .formParam("password", "Pass19word")
       .formParam("redirectUri", ccdRedirectUri)
       .formParam("originIp", "0:0:0:0:0:0:0:1")
       .check(status is 200)
@@ -384,14 +384,14 @@ val CDSGetRequest =
   val RJCreateCase = 
 
     exec(http("GetEventToken")
-        .get(ccdDataStoreUrl + "/caseworkers/${idamUserId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/solicitorCreateApplication/token")
+        .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/solicitorCreateApplication/token")
         .header("ServiceAuthorization", "Bearer ${bearerToken}")
         .header("Authorization", "Bearer ${access_token}")
         .header("Content-Type","application/json")
         .check(jsonPath("$.token").saveAs("eventToken")))
 
     .exec(http("CreateCase")
-        .post(ccdDataStoreUrl + "/caseworkers/${idamUserId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+        .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
         .header("ServiceAuthorization", "Bearer ${bearerToken}")
         .header("Authorization", "Bearer ${access_token}")
         .header("Content-Type","application/json")
