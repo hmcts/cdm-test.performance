@@ -33,7 +33,7 @@ class CCD_SearchSimulation extends Simulation  {
   val CCDElasticSearch = scenario("CCDES")
     .repeat(1) {
       exec(ccddatastore.CDSGetRequest)
-        .repeat(100) {
+        .repeat(75) {
           exec(ccddatastore.ElasticSearchGetRef)
           .exec(ccddatastore.ElasticSearchGetByDate)
           .exec(ccddatastore.ElasticSearchEthos)

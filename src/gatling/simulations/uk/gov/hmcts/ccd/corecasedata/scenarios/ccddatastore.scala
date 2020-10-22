@@ -228,7 +228,7 @@ val CDSGetRequest =
       .queryParam("page", "1")
       .check(status in (200)))
 
-      .pause(Environment.constantthinkTime) 
+      //.pause(Environment.constantthinkTime) 
 
   val ElasticSearchWorkbasketGoR = 
 
