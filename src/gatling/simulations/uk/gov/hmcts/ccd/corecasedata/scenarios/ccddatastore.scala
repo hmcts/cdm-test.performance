@@ -195,6 +195,7 @@ val CDSGetRequest =
       .check(status in (200)))
 
       .pause(Environment.constantthinkTime)
+      .pause(Environment.constantthinkTime)
 
   val CaseworkerSearch = 
 

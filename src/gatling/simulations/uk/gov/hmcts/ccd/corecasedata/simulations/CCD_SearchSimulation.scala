@@ -33,7 +33,7 @@ class CCD_SearchSimulation extends Simulation  {
   val CCDElasticSearch = scenario("CCDES")
     .repeat(1) {
       exec(ccddatastore.CDSGetRequest)
-        .repeat(75) {
+        .repeat(50) {
           exec(ccddatastore.ElasticSearchGetRef)
           .exec(ccddatastore.ElasticSearchGetByDate)
           .exec(ccddatastore.ElasticSearchEthos)
@@ -108,9 +108,9 @@ class CCD_SearchSimulation extends Simulation  {
   setUp(
     //CCDUISearch.inject(rampUsers(5) during (5 minutes)),
     //CCDElasticSearchGoR.inject(rampUsers(5) during (5 minutes)),
-    CitizenSearch.inject(rampUsers(50) during (10 minutes)),
-    CaseworkerSearch.inject(rampUsers(50) during (10 minutes)),
-    CCDElasticSearch.inject(rampUsers(50) during (10 minutes)),
+    CitizenSearch.inject(rampUsers(50) during (20 minutes)),
+    CaseworkerSearch.inject(rampUsers(1) during (20 minutes)),
+    CCDElasticSearch.inject(rampUsers(50) during (15 minutes)),
     //XUISearch.inject(rampUsers(300) during (15 minutes))
     XUICaseWorker.inject(rampUsers(550) during (10 minutes))
   )
