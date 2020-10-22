@@ -85,8 +85,8 @@ class CCDDataStoreSimulation extends Simulation  {
     //CCDElasticSearchGoRState.inject(rampUsers(1) during(1 minutes)),
     //CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(1) during(1 minutes))
     //CreateCase.inject(rampUsers(1) during(1 minutes))
-    RJUpdateSupplementaryCaseData.inject(rampUsers(1) during (10 minutes)), //100
-    RJSearchCases.inject(rampUsers(1) during (10 minutes))   //200
+    RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes)), //100
+    RJSearchCases.inject(rampUsers(200) during (10 minutes))   //200
   )
     .protocols(httpProtocol)
   //.maxDuration(60 minutes)
