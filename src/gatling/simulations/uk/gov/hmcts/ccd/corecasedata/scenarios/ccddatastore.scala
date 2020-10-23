@@ -231,7 +231,7 @@ val CDSGetRequest =
 
       //.pause(Environment.constantthinkTime) 
 
-    .exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
+    .exec(http("XUI_${jurisdiction}_CaseworkerSearch")
       .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
