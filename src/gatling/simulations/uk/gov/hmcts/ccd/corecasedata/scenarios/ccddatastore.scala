@@ -220,16 +220,27 @@ val CDSGetRequest =
 
     feed(feedXUISearchData)
 
-    .exec(http("XUI_${jurisdiction}_CaseworkerSearch")
-      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${jurisdiction}/case-types/${caseType}/cases")
+    // .exec(http("XUI_${jurisdiction}_CaseworkerSearch")
+    //   .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${jurisdiction}/case-types/${caseType}/cases")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .header("Authorization", "Bearer ${access_token}")
+    //   .header("Content-Type","application/json")
+    //   .queryParam("state", "${state}")
+    //   .queryParam("page", "1")
+    //   .check(status in (200)))
+
+      //.pause(Environment.constantthinkTime) 
+
+    .exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
+      .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
-      .queryParam("state", "${state}")
-      .queryParam("page", "1")
-      .check(status in (200)))
+      .queryParam("ctid", "${caseType}")
+      .body(StringBody("{\n\t\"query\": {\n\t\t\"match_all\": {}\n\t\t},\n\t\t\"size\": 25,\n\t\t\"sort\":[ \n      { \n         \"last_modified\":\"desc\"\n      },\n      \"_score\"\n   ]\n}"))
+      .check(status in  (200)))
 
-      //.pause(Environment.constantthinkTime) 
+      .pause(Environment.constantthinkTime)
 
   val ElasticSearchWorkbasketGoR = 
 

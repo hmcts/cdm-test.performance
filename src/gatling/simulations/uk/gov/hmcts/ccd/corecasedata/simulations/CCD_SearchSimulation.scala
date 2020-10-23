@@ -3,7 +3,7 @@ package uk.gov.hmcts.ccd.corecasedata.simulations
 import io.gatling.core.Predef._
 import io.gatling.core.scenario.Simulation
 import com.typesafe.config.{Config, ConfigFactory}
-//import io.gatling.http.Predef._ //comment out for VM runs, only required for proxy
+// import io.gatling.http.Predef._ //comment out for VM runs, only required for proxy
 import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 import scala.concurrent.duration._
@@ -16,7 +16,7 @@ class CCD_SearchSimulation extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
+    // .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
   val CCDUISearch = scenario("CCDUISearch")
@@ -101,17 +101,17 @@ class CCD_SearchSimulation extends Simulation  {
       exec(ccddatastore.XUIIdamLogin)
       .repeat(36) { //36
         exec(ccddatastore.XUICaseworkerSearch)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        //.exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
   setUp(
     //CCDUISearch.inject(rampUsers(5) during (5 minutes)),
     //CCDElasticSearchGoR.inject(rampUsers(5) during (5 minutes)),
+    //XUISearch.inject(rampUsers(300) during (15 minutes))
     CitizenSearch.inject(rampUsers(50) during (20 minutes)),
     CaseworkerSearch.inject(rampUsers(50) during (20 minutes)),
     CCDElasticSearch.inject(rampUsers(50) during (15 minutes)),
-    //XUISearch.inject(rampUsers(300) during (15 minutes))
     XUICaseWorker.inject(rampUsers(550) during (10 minutes))
   )
     .protocols(httpProtocol)
