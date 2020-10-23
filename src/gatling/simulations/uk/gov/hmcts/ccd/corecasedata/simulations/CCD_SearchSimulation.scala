@@ -101,7 +101,7 @@ class CCD_SearchSimulation extends Simulation  {
       exec(ccddatastore.XUIIdamLogin)
       .repeat(36) { //36
         exec(ccddatastore.XUICaseworkerSearch)
-        //.exec(WaitforNextIteration.waitforNextIteration)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
