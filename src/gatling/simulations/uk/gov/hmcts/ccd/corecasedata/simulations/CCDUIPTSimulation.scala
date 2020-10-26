@@ -151,6 +151,12 @@ class CCDUIPTSimulation extends Simulation  {
         }
       }
 
+
+  val XUIAdminScn = scenario("XUI Admin Org Login")
+    .repeat(1){
+      exec(ExuiView.XUIAdminOrg)
+    }
+
   /*val CaseSharingLarge = scenario("CCDCSLarge")
     .repeat(1) {
       repeat(1) {
@@ -177,13 +183,13 @@ class CCDUIPTSimulation extends Simulation  {
 
   setUp(
     //These 5 scenarios required for CCD regression testing
-    // CCDProbateScenario.inject(rampUsers(70) during (10 minutes)), //150
-    // CCDSSCSScenario.inject(rampUsers(70) during (10 minutes)), //150
-    //CCDEthosScenario.inject(rampUsers(400) during (10 minutes)), //400
-    ProbateSearch.inject(rampUsers(250) during (1 minute)),
-    DivorceSearch.inject(rampUsers(250) during (1 minute))
-    // CCDCMCScenario.inject(rampUsers(70) during (10 minutes)), //150
-    // CCDDivScenario.inject(rampUsers(70) during (10 minutes)) //150
+     CCDProbateScenario.inject(rampUsers(150) during (1 minutes)), //150
+    CCDSSCSScenario.inject(rampUsers(150) during (10 minutes)), //150
+    CCDEthosScenario.inject(rampUsers(400) during (10 minutes)), //400
+    // ProbateSearch.inject(rampUsers(250) during (1 minute)),
+    // DivorceSearch.inject(rampUsers(250) during (1 minute))
+    CCDCMCScenario.inject(rampUsers(150) during (10 minutes)), //150
+    CCDDivScenario.inject(rampUsers(150) during (10 minutes)) //150
     
     // CaseSharingLarge.inject(rampUsers(100) during(20 minutes)),
     // CaseSharingSmall.inject(rampUsers(100) during(20 minutes))
@@ -197,6 +203,8 @@ class CCDUIPTSimulation extends Simulation  {
     //CCDCMCScenario.inject(rampUsers(1) during(1 minutes))
     //CaseShare.inject(rampUsers(1) during(30 minutes))
     //CCDEthosScenario.inject(rampUsers(1) during(1 minutes))
+
+    // XUIAdminScn.inject(rampUsers(1) during (1 minute))
   )
     .protocols(httpProtocol)
     .maxDuration(60 minutes)

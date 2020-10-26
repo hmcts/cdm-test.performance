@@ -19,8 +19,9 @@ class CreateUser extends Simulation  {
   val CreateIdam = scenario("CCDCreate")
       .repeat(1) {
         exec(CreateUser.IdamAdminLogin)
-        .repeat(20) {
-          exec(CreateUser.IdamUser)
+        .exec(CreateUser.IdamUser)
+        .repeat(14) {
+          exec(CreateUser.GetAndApplyRole)
         }
       }
       //CreateUser.DeleteUser

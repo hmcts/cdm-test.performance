@@ -236,18 +236,18 @@ val feedXUISearchData = csv("XUISearchData.csv").circular
 
 //     .pause(Environment.constantthinkTime)
 
-//     .exec(http("XUI_DivorceSearchResults_SearchMetadata")
-//         .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata")
-//         .headers(ProbateHeader.headers_search)
-//         //.header("X-XSRF-TOKEN", "${xsrfToken}")
-//         .check(status.in(200,304)))
+    .exec(http("XUI_DivorceSearchResults_SearchMetadata")
+        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata")
+        .headers(ProbateHeader.headers_search)
+        //.header("X-XSRF-TOKEN", "${xsrfToken}")
+        .check(status.in(200,304)))
 
-//     .exec(http("XUI_DivorceSearchResults_SearchUseCase")
-//         .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=SEARCH&page=1")
-//         //.post(baseURL + "/data/internal/searchCases?ctid=DIVORCE&use_case=SEARCH&view=SEARCH&page=1")
-//         .headers(ProbateHeader.headers_search)
-//         //.header("X-XSRF-TOKEN", "${xsrfToken}")
-//         .check(status.in(200,304)))
+    .exec(http("XUI_DivorceSearchResults_SearchUseCase")
+        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=SEARCH&page=1")
+        //.post(baseURL + "/data/internal/searchCases?ctid=DIVORCE&use_case=SEARCH&view=SEARCH&page=1")
+        .headers(ProbateHeader.headers_search)
+        //.header("X-XSRF-TOKEN", "${xsrfToken}")
+        .check(status.in(200,304)))
 
 //     .pause(Environment.constantthinkTime)
 
@@ -261,7 +261,7 @@ val feedXUISearchData = csv("XUISearchData.csv").circular
 
 // //     .pause(Environment.constantthinkTime)
 
-val headers_0 = Map(
+val headers_10 = Map(
     "Pragma" -> "no-cache",
     "Sec-Fetch-Dest" -> "document",
     "Sec-Fetch-Mode" -> "navigate",
@@ -272,8 +272,89 @@ val XUILogout =
 
     exec(http("XUI_Logout")
         .get(baseURL + "/auth/logout")
-        .headers(headers_0))
+        .headers(headers_10))
 
     .pause(Environment.constantthinkTime)
+
+
+val headers_0 = Map(
+		"Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "document",
+		"Sec-Fetch-Mode" -> "navigate",
+		"Sec-Fetch-Site" -> "none",
+		"Sec-Fetch-User" -> "?1",
+		"Upgrade-Insecure-Requests" -> "1")
+
+val headers_1 = Map(
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-origin")
+
+val headers_4 = Map(
+		"Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+		"Origin" -> "https://idam-web-public.perftest.platform.hmcts.net",
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "document",
+		"Sec-Fetch-Mode" -> "navigate",
+		"Sec-Fetch-Site" -> "same-origin",
+		"Sec-Fetch-User" -> "?1",
+		"Upgrade-Insecure-Requests" -> "1")
+
+var uri1 = "https://idam-web-public.perftest.platform.hmcts.net"
+val uri2 = "https://administer-orgs.perftest.platform.hmcts.net"
+
+val XUIAdminOrg = 
+
+    exec(http("request_0")
+			.get(uri2 + "/")
+			.headers(headers_0))
+
+    .exec(http("request_1")
+			.get(uri2 + "/api/environment/config")
+			.headers(headers_1))
+
+    .exec(http("request_2")
+			.get(uri2 + "/auth/isAuthenticated")
+			.headers(headers_1))
+
+    .exec(http("request_3")
+			.get(uri2 + "/api/user/details")
+			.headers(headers_1)
+      .check(regex("oauth2/callback&state=(.*)&nonce").saveAs("state"))
+      .check(regex("&nonce=(.*)&response_type").saveAs("nonce"))
+      .check(css("input[name='_csrf']", "value").saveAs("csrfToken")))
+
+		.pause(3)
+
+		.exec(http("request_4")
+			.post(uri1 + "/login?client_id=xuiaowebapp&redirect_uri=https://administer-orgs.perftest.platform.hmcts.net/oauth2/callback&state=${state}&nonce=${nonce}&response_type=code&scope=profile%20openid%20roles%20manage-user%20create-user&prompt=")
+			.headers(headers_4)
+			.formParam("username", "vmuniganti@mailnesia.com")
+			.formParam("password", "Monday01")
+			.formParam("save", "Sign in")
+			.formParam("selfRegistrationEnabled", "false")
+			.formParam("_csrf", "${csrfToken}"))
+
+    .exec(http("request_5")
+			.get(uri2 + "/api/environment/config")
+			.headers(headers_1))
+
+    .exec(http("request_6")
+			.get(uri2 + "/api/user/details")
+			.headers(headers_1))
+
+    .exec(http("request_7")
+			.get(uri2 + "/auth/isAuthenticated")
+			.headers(headers_1))
+
+    .exec(http("request_8")
+			.get(uri2 + "/api/organisations?status=PENDING")
+			.headers(headers_1))
+    
+    .exec(http("request_9")
+			.get(uri2 + "/api/organisations?status=ACTIVE")
+			.headers(headers_1))
 
 }

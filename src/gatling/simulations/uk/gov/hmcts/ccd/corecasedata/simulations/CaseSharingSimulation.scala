@@ -16,12 +16,12 @@ class CaseSharingSimulation extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
+    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
-  val csIterationLarge = 300
-  val csIterationSmall = 300
-  val AssignedCaseAndUsersIteration = 400
+  val csIterationLarge = 1 //300
+  val csIterationSmall = 300 //300
+  val AssignedCaseAndUsersIteration = 400 //400
 
   val CaseSharingLarge = scenario("CCDCSLarge")
     .repeat(1) {
@@ -55,10 +55,31 @@ class CaseSharingSimulation extends Simulation  {
         }
     }
 
+    //Respondent Journey Requests//
+
+  val RJUpdateSupplementaryCaseData = scenario("UpdateSupplementaryCaseData")
+  .repeat(1) {
+      exec(ccddatastore.CDSGetRequest)
+        .repeat(200) {
+          exec(ccddatastore.RJCreateCase)
+          .exec(ccddatastore.RJUpdateSupplementaryCaseData)
+        }
+    }
+
+  val RJSearchCases = scenario("SearchCases")
+  .repeat(1) {
+      exec(ccddatastore.CDSGetRequest)
+        .repeat(300) { //300
+          exec(ccddatastore.RJElasticSearchGetRef)
+        }
+    }
+
   setUp(
-    CaseSharingLarge.inject(rampUsers(100) during(10 minutes)),
-    CaseSharingSmall.inject(rampUsers(100) during(10 minutes)),
-    GetAssignedCaseAndUsers.inject(rampUsers(100) during(10 minutes))
+    CaseSharingLarge.inject(rampUsers(1) during(10 minutes)), //100
+    // CaseSharingSmall.inject(rampUsers(100) during(10 minutes)), //100
+    // GetAssignedCaseAndUsers.inject(rampUsers(100) during(10 minutes)) //100
+    // RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes)), //100
+    // RJSearchCases.inject(rampUsers(200) during (10 minutes))   //200
   )
     .protocols(httpProtocol)
   //.maxDuration(60 minutes)
