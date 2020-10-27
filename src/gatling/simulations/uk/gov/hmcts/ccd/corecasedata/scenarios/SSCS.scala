@@ -136,74 +136,74 @@ object SSCS {
 
   val SSCSLogin = group("SSCS_Login") {
 
-		exec(http("SSCS_020_005_Login")
-			.post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-			.disableFollowRedirect
-			.headers(idam_header)
-			.formParam("username", "${SSCSUserName}")
-			.formParam("password", "${SSCSUserPassword}")
-			.formParam("save", "Sign in")
-			.formParam("selfRegistrationEnabled", "false")
-			.formParam("_csrf", "${csrf}")
-			.check(headerRegex("Location", "(?<=code=)(.*)&client").saveAs("authCode"))
-			.check(status.in(200, 302)))
+	exec(http("SSCS_020_005_Login")
+		.post(IdamURL + "/login?response_type=code&client_id=ccd_gateway&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+		.disableFollowRedirect
+		.headers(idam_header)
+		.formParam("username", "${SSCSUserName}")
+		.formParam("password", "${SSCSUserPassword}")
+		.formParam("save", "Sign in")
+		.formParam("selfRegistrationEnabled", "false")
+		.formParam("_csrf", "${csrf}")
+		.check(headerRegex("Location", "(?<=code=)(.*)&client").saveAs("authCode"))
+		.check(status.in(200, 302)))
 
-			.exec(http("SSCS_020_010_Login")
-				.get(CCDEnvurl + "/config")
-				.headers(headers_1))
+	.exec(http("SSCS_020_010_Login")
+		.get(CCDEnvurl + "/config")
+		.headers(headers_1))
 
-			.exec(http("SSCS_020_015_Login")
-				.get("/oauth2?code=${authCode}&redirect_uri=www-ccd.perftest.platform.hmcts.net/oauth2redirect")
-				.headers(headers_2))
+	.exec(http("SSCS_020_015_Login")
+		.get("/oauth2?code=${authCode}&redirect_uri=www-ccd.perftest.platform.hmcts.net/oauth2redirect")
+		.headers(headers_2))
 
-			.exec(http("SSCS_020_020_Login")
-				.get(CCDEnvurl + "/config")
-				.headers(headers_1))
+	.exec(http("SSCS_020_020_Login")
+		.get(CCDEnvurl + "/config")
+		.headers(headers_1))
 
-			.exec(http("SSCS_020_025_Login")
-				.get("/activity/cases/0/activity")
-				.headers(headers_2))
-			//.check(status.is(404))
+	.exec(http("SSCS_020_025_Login")
+		.get("/activity/cases/0/activity")
+		.headers(headers_2))
+	//.check(status.is(404))
 
-			.exec(http("SSCS_020_030_Login")
-				.get("/data/internal/profile")
-				.headers(headers_5))
+	.exec(http("SSCS_020_030_Login")
+		.get("/data/internal/profile")
+		.headers(headers_5))
 
-			.exec(http("SSCS_020_035_Login")
-				.get("/data/internal/jurisdiction-ui-configs/?ids=DIVORCE&ids=AUTOTEST1&ids=CMC&ids=PROBATE&ids=SSCS&ids=EMPLOYMENT")
-				.headers(headers_6))
+	.exec(http("SSCS_020_035_Login")
+		.get("/data/internal/jurisdiction-ui-configs/?ids=DIVORCE&ids=AUTOTEST1&ids=CMC&ids=PROBATE&ids=SSCS&ids=EMPLOYMENT")
+		.headers(headers_6))
 
-			.exec(http("SSCS_020_040_Login")
-				.get("/data/internal/jurisdiction-ui-configs/?ids=DIVORCE&ids=AUTOTEST1&ids=CMC&ids=PROBATE&ids=SSCS&ids=EMPLOYMENT")
-				.headers(headers_6))
+	.exec(http("SSCS_020_040_Login")
+		.get("/data/internal/jurisdiction-ui-configs/?ids=DIVORCE&ids=AUTOTEST1&ids=CMC&ids=PROBATE&ids=SSCS&ids=EMPLOYMENT")
+		.headers(headers_6))
 
-			.exec(http("SSCS_020_045_Login")
-				.get("/data/internal/jurisdiction-ui-configs/?ids=DIVORCE&ids=AUTOTEST1&ids=CMC&ids=PROBATE&ids=SSCS&ids=EMPLOYMENT")
-				.headers(headers_6))
+	.exec(http("SSCS_020_045_Login")
+		.get("/data/internal/jurisdiction-ui-configs/?ids=DIVORCE&ids=AUTOTEST1&ids=CMC&ids=PROBATE&ids=SSCS&ids=EMPLOYMENT")
+		.headers(headers_6))
 
-			.exec(http("SSCS_020_050_Login")
-				.get("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/pagination_metadata?state=appealCreated")
-				.headers(headers_12))
+	.exec(http("SSCS_020_050_Login")
+		.get("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/pagination_metadata?state=appealCreated")
+		.headers(headers_12))
 
-			.exec(http("SSCS_020_055_Login")
-				.get("/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?view=WORKBASKET&state=appealCreated&page=1")
-				.headers(headers_12)
-				.check(jsonPath("$.case_id").findAll.optional.saveAs("caseNumbers")))
+	.exec(http("SSCS_020_055_Login")
+		.get("/aggregated/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?view=WORKBASKET&state=appealCreated&page=1")
+		.headers(headers_12)
+		.check(regex("""case_id":"(.+?)","case_fields""").findAll.optional.saveAs("caseNumbers")))
 
-			.exec(http("SSCS_020_060_Login")
-				.get("/data/internal/case-types/Benefit/work-basket-inputs")
-				.headers(headers_11))
+	.exec(http("SSCS_020_060_Login")
+		.get("/data/internal/case-types/Benefit/work-basket-inputs")
+		.headers(headers_11))
 
-			.exec(http("SSCS_020_065_Login")
-				.get("/activity/cases/${caseNumbers}/activity")
-				.headers(headers_2))
+	// .exec(http("SSCS_020_065_Login")
+	// 	.get("/activity/cases/${caseNumbers}/activity")
+	// 	.headers(headers_2))
 
-		//			 .exec {
-		//			   session =>
-		//					 println(session("Current logged in user is: "))
-		//					 println(session("SSCSUserName").as[String])
-		//			     session
-		//			 }
+	// .exec {
+	// session =>
+	// 		println(session("Current logged in user is: "))
+	// 		println(session("SSCSUserName").as[String])
+	// 	session
+	// }
 
 	}
   .pause(MinThinkTime seconds, MaxThinkTime seconds)
