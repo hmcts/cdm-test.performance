@@ -217,8 +217,8 @@ object SSCS {
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("SSCS_030_010_CreateCaseDetailsPage")
-			.get("/data/internal/case-types/Benefit/event-triggers/appealCreated?ignore-warning=false")
-			.headers(headers_3)
+		.get("/data/internal/case-types/Benefit/event-triggers/appealCreated?ignore-warning=false")
+		.headers(headers_3)
       .check(jsonPath("$.event_token").saveAs("New_Case_event_token")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -230,14 +230,14 @@ object SSCS {
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
 
     .repeat(sscsCaseActivityRepeat) {
-    exec(http("SSCS_CaseActivity")
+		exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
       .pause(3)
     }
 
-		.pause(MinThinkTime seconds, MaxThinkTime seconds)
+	.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val SSCSDocUpload = exec(http("SSCS_040_005_DocumentUploadPage1")
       .get("/data/internal/cases/${New_Case_Id}/event-triggers/uploadDocument?ignore-warning=false")
@@ -245,14 +245,14 @@ object SSCS {
         .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
     .repeat(sscsCaseActivityRepeat) {
-    exec(http("SSCS_CaseActivity")
+		exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
       .pause(3)
     }
 
-		.pause(MinThinkTime seconds, MaxThinkTime seconds)
+	.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(session => {
       session.set("FileName1", "3MB.pdf")
@@ -270,8 +270,8 @@ object SSCS {
       .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
 
     .exec(http("SSCS_CaseActivity")
-			.get("/activity/cases/${New_Case_Id}/activity")
-			.headers(headers_2))
+		.get("/activity/cases/${New_Case_Id}/activity")
+		.headers(headers_2))
 
     .exec(http("SSCS_040_015_DocumentUploadProcess")
       .post("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/${New_Case_Id}/events")
@@ -279,7 +279,7 @@ object SSCS {
       .body(StringBody("{\n  \"data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-11-12\",\n          \"documentComment\": \"${FileName1} upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"${FileName1} upload doc\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
     .repeat(sscsCaseActivityRepeat) {
-    exec(http("SSCS_CaseActivity")
+		exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
@@ -304,21 +304,21 @@ object SSCS {
       .headers(headers_8))
 
     .repeat(sscsCaseActivityRepeat) {
-    exec(http("SSCS_CaseActivity")
+		exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
       .pause(3)
     }
 
-		.pause(MinThinkTime seconds, MaxThinkTime seconds)
+	.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("SSCS_060_010_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_15))
 
     .repeat(sscsCaseActivityRepeat) {
-    exec(http("SSCS_CaseActivity")
+    	exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
