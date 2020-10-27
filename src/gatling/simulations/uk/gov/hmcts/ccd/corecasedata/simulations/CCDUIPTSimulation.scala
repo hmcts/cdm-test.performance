@@ -106,7 +106,7 @@ class CCDUIPTSimulation extends Simulation  {
       .repeat(Ethositeration) {
         exec(EthosSearchView.Search)
         .exec(EthosSearchView.OpenCase)
-        //.exec(WaitforNextIteration.waitforNextIteration)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
