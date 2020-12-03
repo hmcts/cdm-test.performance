@@ -18,9 +18,7 @@ object Environment {
   val maxThinkTime = 60 //60
   val constantthinkTime = 7
   val caseActivityPause = 3
-  val minThinkTime = 2 //20
-  val maxThinkTime = 6 //60
-  val constantthinkTime = 1
+
   val minWaitForNextIteration = 120 //120
   val maxWaitForNextIteration = 240 //240
   val HttpProtocol = http
