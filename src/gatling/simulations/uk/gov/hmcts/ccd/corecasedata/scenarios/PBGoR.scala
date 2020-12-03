@@ -15,7 +15,7 @@ object PBGoR {
   val feedUserData = csv("ProbateUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
-  val caseActivityRepeat = 30
+  val caseActivityRepeat = 3
 
   val headers_1 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-case-trigger.v2+json;charset=UTF-8",

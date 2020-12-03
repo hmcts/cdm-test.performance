@@ -15,7 +15,7 @@ object CMC {
   val feedUserData = csv("CMCUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
-  val cmcCaseActivityRepeat = 20
+  val cmcCaseActivityRepeat = 2
 
   val headers_0 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-workbasket-input-details.v2+json;charset=UTF-8",
