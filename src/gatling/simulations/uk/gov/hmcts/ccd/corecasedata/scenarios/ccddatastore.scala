@@ -53,7 +53,7 @@ val CDSGetRequest =
   .exec(http("OIDC01_Authenticate")
       .post(IdamAPI + "/authenticate")
       .header("Content-Type", "application/x-www-form-urlencoded")
-      .formParam("username", "${email}") //${userEmail}
+      .formParam("username", "ccdloadtest4501@gmail.com") //${email}
       .formParam("password", "Password12")
       .formParam("redirectUri", ccdRedirectUri)
       .formParam("originIp", "0:0:0:0:0:0:0:1")
@@ -136,6 +136,7 @@ val CDSGetRequest =
       .post(s2sUrl + "/testing-support/lease")
       .header("Content-Type", "application/json")
       .body(StringBody("{\"microservice\":\"ccd_data\"}"))
+      .body(StringBody("{\n  \"size\": 25\n}"))
       .check(bodyString.saveAs("bearerToken")))
       .exitHereIfFailed
 
@@ -255,6 +256,34 @@ val CDSGetRequest =
       .queryParam("page", "1")
       .queryParam("state", "IntCaseCreated")
       .body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":25,\"sort\":[{\"created_date\":\"DESC\"}]}"))
+      .check(status in (200)))
+
+      .pause(Environment.constantthinkTime)
+
+  val ElasticSearchWorkbasketGoR1000 = 
+
+    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
+      .post(ccdDataStoreUrl + "/internal/searchCases")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .queryParam("ctid", "GrantOfRepresentation")
+      //.body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":10000,\"}"))
+      .body(StringBody("{\"query\":{\"match_all\":{}},\"size\":10000}"))
+      .check(status in (200)))
+
+      .pause(Environment.constantthinkTime)
+
+  val GatewaySearchWorkbasketGoR1000 = 
+
+    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
+      .post("https://gateway-ccd.perftest.platform.hmcts.net/data/internal/searchCases")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .queryParam("ctid", "GrantOfRepresentation")
+      //.body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":10000,\"}"))
+      .body(StringBody("{\"query\":{\"match_all\":{}},\"size\":10000}"))
       .check(status in (200)))
 
       .pause(Environment.constantthinkTime)
@@ -441,7 +470,46 @@ val CDSGetRequest =
       .check(status in  (200)))
 
     .pause(Environment.constantthinkTime)
-  
+
+  val ETGetToken = 
+
+    exec(http("GetEventToken")
+        .get(ccdDataStoreUrl + "/caseworkers/554156/jurisdictions/EMPLOYMENT/case-types/Leeds/event-triggers/initiateCase/token")
+        .header("ServiceAuthorization", "Bearer ${bearerToken}")
+        .header("Authorization", "Bearer ${access_token}")
+        .header("Content-Type","application/json")
+        .check(jsonPath("$.token").saveAs("eventToken")))
+
+    .pause(4)
+
+  val feedEthosCaseRef = csv("EthosCaseRef.csv")
+
+  val ETCreateCase =
+
+    feed(feedEthosCaseRef)
+
+    .exec(http("CreateCase")
+        .post(ccdDataStoreUrl + "/caseworkers/554156/jurisdictions/EMPLOYMENT/case-types/Leeds/cases")
+        .header("ServiceAuthorization", "Bearer ${bearerToken}")
+        .header("Authorization", "Bearer ${access_token}")
+        .header("Content-Type","application/json")
+        .body(ElFileBody("Ethos_SingleCase.json"))
+        .check(jsonPath("$.id").saveAs("caseId"))
+        .check(status.saveAs("statusvalue")))
+
+//    .doIf(session=>session("statusvalue").as[String].contains("200")) {
+//      exec {
+//        session =>
+//          val fw = new BufferedWriter(new FileWriter("CreateSingles.csv", true))
+//          try {
+//            fw.write(session("caseId").as[String] + "\r\n")
+//          }
+//          finally fw.close()
+//          session
+//      }
+//    }
+
+  //val ETCreateMultipleCase =
 
 
 }

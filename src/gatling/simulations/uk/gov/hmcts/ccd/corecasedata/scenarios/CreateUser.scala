@@ -3,7 +3,6 @@ package uk.gov.hmcts.ccd.corecasedata.scenarios
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
-import java.io.{BufferedWriter, FileWriter}
 
 object CreateUser {
 
@@ -12,11 +11,10 @@ object CreateUser {
   val CommonHeader = Environment.commonHeader
   val CCDAPIEnvurl = Environment.baseURL
 //  val feedUserData = csv("CaseSharingUsers_Small.csv")
-  val feedUserData = csv("XUISearchUsers.csv")
+  val feedUserData = csv("RolesForUsers.csv")
   val roleFeeder = csv("RolesToAdd.csv").circular
 
   val headers_1 = Map( //ServiceAuthorization token can be called from http://rpe-service-auth-provider-perftest.service.core-compute-perftest.internal/testing-support/lease
-    //"ServiceAuthorization" -> "*******",
     "Content-Type" -> "application/json",
     "Accept" -> "application/json")
 
@@ -37,22 +35,22 @@ object CreateUser {
   val IdamUser = feed(feedUserData)
 
     .exec(http("GetUserID")
-      .get("https://idam-api.perftest.platform.hmcts.net/users?email=ccdloadtest4501@gmail.com") //${email}
+      .get("https://idam-api.perftest.platform.hmcts.net/users?email=${email}") //${email}
       .headers(headers_0)
       .check(jsonPath("$.id").saveAs("userId"))
       .check(status.saveAs("statusvalue"))
       )
-    // .doIf(session=>session("statusvalue").as[String].contains("200")) {
-    //   exec {
-    //     session =>
-    //       val fw = new BufferedWriter(new FileWriter("EmailAndIdamIDs.csv", true))
-    //       try {
-    //         fw.write(session("email").as[String] + ","+session("userId").as[String] + "\r\n")
-    //       }
-    //       finally fw.close()
-    //       session
-    //   }
-    // }
+//     .doIf(session=>session("statusvalue").as[String].contains("200")) {
+//       exec {
+//         session =>
+//           val fw = new BufferedWriter(new FileWriter("EmailAndIdamIDs.csv", true))
+//           try {
+//             fw.write(session("email").as[String] + ","+session("userId").as[String] + "\r\n")
+//           }
+//           finally fw.close()
+//           session
+//       }
+//     }
 
   val GetAndApplyRole = feed(roleFeeder)
 
@@ -65,7 +63,7 @@ object CreateUser {
       .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/${roleId}")
       .headers(headers_0))
 
-      .pause(1)
+    .pause(1)
 
 //   val DeleteUser = feed(feedDeleteData)
 
@@ -90,11 +88,11 @@ object CreateUser {
       .headers(headers_1)
       .body(StringBody("{\n    \"id\": \"${CCDUserName}\",\n    \"jurisdictions\": [{\"id\": \"DIVORCE\"},{\"id\": \"AUTOTEST1\"},{\"id\": \"CMC\"},{\"id\": \"PROBATE\"},{\"id\": \"SSCS\"},{\"id\": \"TRIBUNALS\"},{\"id\": \"EMPLOYMENT\"}],\n    \"work_basket_default_jurisdiction\": \"DIVORCE\",\n    \"work_basket_default_case_type\": \"DIVORCE\",\n    \"work_basket_default_state\": \"Submitted\"\n}")))
 
-    .exec {
-      session =>
-        println(session("CCDUserName").as[String])
-        session
-    }
+    // .exec {
+    //   session =>
+    //     println(session("CCDUserName").as[String])
+    //     session
+    // }
 
     .pause(1)
 
