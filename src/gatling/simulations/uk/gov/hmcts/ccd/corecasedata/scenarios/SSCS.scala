@@ -15,7 +15,7 @@ object SSCS {
   val feedUserData = csv("SSCSUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
-  val sscsCaseActivityRepeat = 3
+  val sscsCaseActivityRepeat = 30
 
   // val headers_0 = Map(
   //   "Sec-Fetch-Mode" -> "cors",
@@ -234,7 +234,7 @@ object SSCS {
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-      .pause(3)
+      .pause(1)
     }
 
 	.pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -249,7 +249,7 @@ object SSCS {
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-      .pause(3)
+      .pause(1)
     }
 
 	.pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -283,7 +283,7 @@ object SSCS {
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-      .pause(3)
+      .pause(1)
     }
 
 	.pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -308,7 +308,7 @@ object SSCS {
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-      .pause(3)
+      .pause(1)
     }
 
 	.pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -322,7 +322,7 @@ object SSCS {
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-      .pause(3)
+      .pause(1)
     }
   
 

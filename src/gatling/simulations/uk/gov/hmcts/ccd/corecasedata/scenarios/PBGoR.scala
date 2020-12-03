@@ -15,7 +15,7 @@ object PBGoR {
   val feedUserData = csv("ProbateUserData.csv").circular
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
-  val caseActivityRepeat = 3
+  val caseActivityRepeat = 30
 
   val headers_1 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-case-trigger.v2+json;charset=UTF-8",
@@ -217,7 +217,7 @@ object PBGoR {
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(3)
+        .pause(1)
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -233,7 +233,7 @@ object PBGoR {
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(3)
+        .pause(1)
         }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -255,7 +255,7 @@ object PBGoR {
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))
 
-          .pause(3)
+          .pause(1)
           }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -300,7 +300,7 @@ object PBGoR {
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(3)
+        .pause(1)
         }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -331,7 +331,7 @@ object PBGoR {
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(3)
+        .pause(1)
         }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -358,7 +358,7 @@ object PBGoR {
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(3)
+        .pause(1)
         }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -372,6 +372,6 @@ object PBGoR {
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(3)
+        .pause(1)
         }
   }
