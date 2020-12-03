@@ -189,7 +189,7 @@ object EthosSearchView {
           .get("/activity/cases/${EthosCaseRef}/activity")
           .headers(headers_2))
 
-          .pause(1)
+          .pause(Environment.caseActivityPause)
       }
     //}
 }

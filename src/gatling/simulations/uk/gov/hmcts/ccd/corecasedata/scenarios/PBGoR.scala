@@ -217,7 +217,7 @@ object PBGoR {
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(1)
+        .pause(Environment.caseActivityPause)
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -233,7 +233,7 @@ object PBGoR {
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(1)
+        .pause(Environment.caseActivityPause)
         }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -255,7 +255,7 @@ object PBGoR {
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))
 
-          .pause(1)
+          .pause(Environment.caseActivityPause)
           }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -300,7 +300,7 @@ object PBGoR {
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(1)
+        .pause(Environment.caseActivityPause)
         }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -331,7 +331,7 @@ object PBGoR {
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(1)
+        .pause(Environment.caseActivityPause)
         }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -358,7 +358,7 @@ object PBGoR {
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(1)
+        .pause(Environment.caseActivityPause)
         }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -372,6 +372,6 @@ object PBGoR {
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(1)
+        .pause(Environment.caseActivityPause)
         }
   }
