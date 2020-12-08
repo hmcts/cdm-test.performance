@@ -163,11 +163,11 @@ object PBGoR {
     //.exitHereIfFailed
 
     .exec(http("PBGoR_020_055_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases?view=WORKBASKET&state=BOCaseStopped&page=1"))
     //.exitHereIfFailed
 
     .exec(http("PBGoR_020_060_Login")
-      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/pagination_metadata?state=TODO"))
+      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/pagination_metadata?state=BOCaseStopped"))
     //.exitHereIfFailed
 
     .exec(http("PBGoR_020_065_Login")
@@ -176,12 +176,12 @@ object PBGoR {
     //.exitHereIfFailed
 
     .exec(http("PBGoR_020_070_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases?view=WORKBASKET&state=TODO&page=1")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases?view=WORKBASKET&state=BOCaseStopped&page=1")
       .headers(CommonHeader))
     //.exitHereIfFailed
 
     .exec(http("PBGoR_020_075_Login")
-      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/pagination_metadata?state=TODO")
+      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/pagination_metadata?state=BOCaseStopped")
       .headers(CommonHeader))
     //.exitHereIfFailed
 
