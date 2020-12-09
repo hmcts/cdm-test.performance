@@ -38,7 +38,7 @@ class CCD_SearchSimulation extends Simulation  {
           .exec(ccddatastore.ElasticSearchEthos)
           .exec(ccddatastore.ElasticSearchWorkbasket)
           .exec(ccddatastore.ElasticSearchGet25Divorce)
-          .exec(WaitforNextIteration.waitforNextIteration)
+          //.exec(WaitforNextIteration.waitforNextIteration)
         }
     }
 
@@ -100,7 +100,7 @@ class CCD_SearchSimulation extends Simulation  {
       exec(ccddatastore.CDSGetRequest) //CDSGetRequest XUIIdamLogin
       .repeat(36) { //36
         exec(ccddatastore.XUICaseworkerSearch)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        //.exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
