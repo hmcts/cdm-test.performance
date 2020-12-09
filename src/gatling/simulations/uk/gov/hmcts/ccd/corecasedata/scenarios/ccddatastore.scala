@@ -53,7 +53,7 @@ val CDSGetRequest =
   .exec(http("OIDC01_Authenticate")
       .post(IdamAPI + "/authenticate")
       .header("Content-Type", "application/x-www-form-urlencoded")
-      .formParam("username", "ccdloadtest4501@gmail.com") //${email}
+      .formParam("username", "${email}") //${email}
       .formParam("password", "Password12")
       .formParam("redirectUri", ccdRedirectUri)
       .formParam("originIp", "0:0:0:0:0:0:0:1")
@@ -69,8 +69,6 @@ val CDSGetRequest =
       .check(status is 302)
       .check(headerRegex("Location", "code=(.*)&client_id").saveAs("code")))
       .exitHereIfFailed
-
-    //MkVIBs0dfCwTIBeU-enTRbfGUh0
 
   .exec(http("OIDC03_Token_CCD")
       .post(IdamAPI + "/o/token?grant_type=authorization_code&code=${code}&client_id=" + ccdClientId +"&redirect_uri=" + ccdRedirectUri + "&client_secret=" + ccdGatewayClientSecret)
@@ -100,7 +98,7 @@ val CDSGetRequest =
     .exec(http("OIDC01_Authenticate")
       .post(IdamAPI + "/authenticate")
       .header("Content-Type", "application/x-www-form-urlencoded")
-      .formParam("username", "perftest-citizen@gmail.com") //${userEmail}
+      .formParam("username", "ccdloadtest1@gmail.com") //${userEmail}
       .formParam("password", "Password12")
       .formParam("redirectUri", ccdRedirectUri)
       .formParam("originIp", "0:0:0:0:0:0:0:1")
@@ -116,8 +114,6 @@ val CDSGetRequest =
       .check(status is 302)
       .check(headerRegex("Location", "code=(.*)&client_id").saveAs("code")))
       .exitHereIfFailed
-
-    //MkVIBs0dfCwTIBeU-enTRbfGUh0
 
     .exec(http("OIDC03_Token_CCD")
       .post(IdamAPI + "/o/token?grant_type=authorization_code&code=${code}&client_id=" + ccdClientId +"&redirect_uri=" + ccdRedirectUri + "&client_secret=" + ccdGatewayClientSecret)
@@ -189,7 +185,7 @@ val CDSGetRequest =
     feed(feedWorkbasketData)
 
     .exec(http("CCD_SearchCaseEndpoint_CitizenSearch")
-      .get(ccdDataStoreUrl + "/citizens/1f65a0df-b064-4f9b-85ea-3eec5a28ce86/jurisdictions/${jurisdiction}/case-types/${caseType}/cases")
+      .get(ccdDataStoreUrl + "/citizens/539560/jurisdictions/${jurisdiction}/case-types/${caseType}/cases") //1f65a0df-b064-4f9b-85ea-3eec5a28ce86
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
