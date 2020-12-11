@@ -65,7 +65,7 @@ class CCDDataStoreSimulation extends Simulation  {
   val CreateCase = scenario("CaseCreate")
     .repeat(1) {
       exec(ccddatastore.CDSGetRequest)
-      .repeat(250) {
+      .repeat(50) {
         exec(ccddatastore.CreateCaseForCaseSharing)
       }
     }
