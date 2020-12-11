@@ -269,7 +269,7 @@ object PBGoR {
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(session => {
-        session.set("FileName1", "3MB.pdf")
+        session.set("FileName1", "1MB.pdf")
       })
 
     .exec(http("PGBoR_050_010_DocumentUploadToDM")

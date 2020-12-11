@@ -64,17 +64,19 @@ class CCDDataStoreSimulation extends Simulation  {
 
   val CreateCase = scenario("CaseCreate")
     .repeat(1) {
-      exec(ccddatastore.CitizenLogin)
-      .exec(ccddatastore.CreateCaseForCaseSharing)
+      exec(ccddatastore.CDSGetRequest)
+      .repeat(250) {
+        exec(ccddatastore.CreateCaseForCaseSharing)
+      }
     }
 
   val ETCreateCase = scenario("ETCaseCreate")
     .repeat(1) {
       exec(ccddatastore.CDSGetRequest)
-//      .repeat(100) {
-////        .exec(ccddatastore.ETGetToken)
-////        .exec(ccddatastore.ETCreateCase)
-//      }
+     .repeat(50) {
+       exec(ccddatastore.ETGetToken)
+       .exec(ccddatastore.ETCreateCase)
+     }
     }
 
   //Respondent Journey Requests//
@@ -98,11 +100,11 @@ class CCDDataStoreSimulation extends Simulation  {
 
   setUp(
     //CCDElasticSearch.inject(rampUsers(1) during(1 minutes)),
-    ETCreateCase.inject(rampUsers(1) during(1 minutes))
+    // ETCreateCase.inject(rampUsers(1) during(1 minutes))
     //CCDElasticSearchGoR.inject(rampUsers(1) during(1 minutes)),
     //CCDElasticSearchGoRState.inject(rampUsers(1) during(1 minutes)),
     //CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(1) during(1 minutes))
-    //CreateCase.inject(rampUsers(1) during(1 minutes))
+    CreateCase.inject(rampUsers(50) during(5 minutes))
     // RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes)), //100
     // RJSearchCases.inject(rampUsers(200) during (10 minutes))   //200
   )
