@@ -53,7 +53,7 @@ val CDSGetRequest =
   .exec(http("OIDC01_Authenticate")
       .post(IdamAPI + "/authenticate")
       .header("Content-Type", "application/x-www-form-urlencoded")
-      .formParam("username", "${email}") //${email}
+      .formParam("username", "ccdloadtest1@gmail.com") //${email}
       .formParam("password", "Password12")
       .formParam("redirectUri", ccdRedirectUri)
       .formParam("originIp", "0:0:0:0:0:0:0:1")
@@ -388,14 +388,14 @@ val CDSGetRequest =
     //   .check(jsonPath("$.id").saveAs("userId")))
 
     exec(http("PB_GetEventToken")
-      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
+      .get(ccdDataStoreUrl + "/caseworkers/539560/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken")))
 
     .exec(http("PB_CreateCase")
-      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+      .post(ccdDataStoreUrl + "/caseworkers/539560/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
@@ -407,14 +407,14 @@ val CDSGetRequest =
     .pause(1)
 
     .exec(http("DIV_GetEventToken")
-      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/DIVORCE/case-types/DIVORCE/event-triggers/CREATE/token")
+      .get(ccdDataStoreUrl + "/caseworkers/539560/jurisdictions/DIVORCE/case-types/DIVORCE/event-triggers/CREATE/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken")))
 
     .exec(http("DIV_CreateCase")
-      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/DIVORCE/case-types/DIVORCE/cases")
+      .post(ccdDataStoreUrl + "/caseworkers/539560/jurisdictions/DIVORCE/case-types/DIVORCE/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
