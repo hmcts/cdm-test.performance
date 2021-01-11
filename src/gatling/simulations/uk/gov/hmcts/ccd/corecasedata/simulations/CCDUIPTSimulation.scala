@@ -166,7 +166,7 @@ class CCDUIPTSimulation extends Simulation  {
     CCDCMCScenario.inject(rampUsers(15) during (20 minutes)), //150
     CCDDivScenario.inject(rampUsers(15) during (20 minutes)) //150
 
-    // CCDEthosScenario.inject(rampUsers(1) during (20 minutes)), //150
+    // CCDProbateScenario.inject(rampUsers(1) during (20 minutes)), //150
   )
     .protocols(httpProtocol)
     //.maxDuration(60 minutes)
