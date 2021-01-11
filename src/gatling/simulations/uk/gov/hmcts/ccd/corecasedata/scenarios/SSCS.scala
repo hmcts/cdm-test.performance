@@ -245,14 +245,20 @@ object SSCS {
 			.options("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
+      	.pause(1)
+
 		.exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
+
+      	.pause(1)
 
 		.exec(http("SSCS_CaseActivity")
 			.post("/activity/cases/${New_Case_Id}/activity")
 			.body(StringBody("{\n  \"activity\": \"view\"\n}"))
 			.headers(headers_10))
+
+      	.pause(1)
 
 		.exec(http("SSCS_CaseActivity")
 			.options("/activity/cases/${New_Case_Id}/activity")
@@ -273,14 +279,20 @@ object SSCS {
 			.options("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
+      	.pause(1)
+
 		.exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
+
+      	.pause(1)
 
 		.exec(http("SSCS_CaseActivity")
 			.post("/activity/cases/${New_Case_Id}/activity")
 			.body(StringBody("{\n  \"activity\": \"view\"\n}"))
 			.headers(headers_10))
+
+      	.pause(1)
 
 		.exec(http("SSCS_CaseActivity")
 			.options("/activity/cases/${New_Case_Id}/activity")
@@ -316,14 +328,20 @@ object SSCS {
 			.options("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
+      	.pause(1)
+
 		.exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
+
+      	.pause(1)
 
 		.exec(http("SSCS_CaseActivity")
 			.post("/activity/cases/${New_Case_Id}/activity")
 			.body(StringBody("{\n  \"activity\": \"view\"\n}"))
 			.headers(headers_10))
+
+      	.pause(1)
 
 		.exec(http("SSCS_CaseActivity")
 			.options("/activity/cases/${New_Case_Id}/activity")
@@ -354,14 +372,20 @@ object SSCS {
 			.options("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
+      	.pause(1)
+
 		.exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
+
+      	.pause(1)
 
 		.exec(http("SSCS_CaseActivity")
 			.post("/activity/cases/${New_Case_Id}/activity")
 			.body(StringBody("{\n  \"activity\": \"view\"\n}"))
 			.headers(headers_10))
+
+      	.pause(1)
 
 		.exec(http("SSCS_CaseActivity")
 			.options("/activity/cases/${New_Case_Id}/activity")
@@ -381,14 +405,20 @@ object SSCS {
 			.options("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
+      	.pause(1)
+
 		.exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
+
+      	.pause(1)
 
 		.exec(http("SSCS_CaseActivity")
 			.post("/activity/cases/${New_Case_Id}/activity")
 			.body(StringBody("{\n  \"activity\": \"view\"\n}"))
 			.headers(headers_10))
+
+      	.pause(1)
 
 		.exec(http("SSCS_CaseActivity")
 			.options("/activity/cases/${New_Case_Id}/activity")

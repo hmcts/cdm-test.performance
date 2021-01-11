@@ -229,14 +229,20 @@ object PBGoR {
         .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
+      .pause(1)
+
       .exec(http("PB_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
+
+      .pause(1)
 
       .exec(http("PB_CaseActivity")
         .post("/activity/cases/${New_Case_Id}/activity")
         .body(StringBody("{\n  \"activity\": \"view\"\n}"))
         .headers(headers_5))
+
+      .pause(1)
 
       .exec(http("PB_CaseActivity")
         .options("/activity/cases/${New_Case_Id}/activity")
@@ -258,14 +264,20 @@ object PBGoR {
         .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
+      .pause(1)
+
       .exec(http("PB_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
+
+      .pause(1)
 
       .exec(http("PB_CaseActivity")
         .post("/activity/cases/${New_Case_Id}/activity")
         .body(StringBody("{\n  \"activity\": \"view\"\n}"))
         .headers(headers_5))
+
+      .pause(1)
 
       .exec(http("PB_CaseActivity")
         .options("/activity/cases/${New_Case_Id}/activity")
@@ -289,25 +301,31 @@ object PBGoR {
       .body(StringBody("{\n  \"data\": {\n    \"applicationSubmittedDate\": \"2019-03-01\"\n  },\n  \"event\": {\n    \"id\": \"paymentSuccessApp\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
     .repeat(caseActivityRepeat) {
-        exec(http("PB_CaseActivity")
+      exec(http("PB_CaseActivity")
         .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
+
+      .pause(1)
 
       .exec(http("PB_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
+
+      .pause(1)
 
       .exec(http("PB_CaseActivity")
         .post("/activity/cases/${New_Case_Id}/activity")
         .body(StringBody("{\n  \"activity\": \"view\"\n}"))
         .headers(headers_5))
 
+      .pause(1)
+
       .exec(http("PB_CaseActivity")
         .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-          .pause(Environment.caseActivityPause)
-          }
+      .pause(Environment.caseActivityPause)
+      }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -351,21 +369,27 @@ object PBGoR {
         .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
+      .pause(1)
+
       .exec(http("PB_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
+
+      .pause(1)
 
       .exec(http("PB_CaseActivity")
         .post("/activity/cases/${New_Case_Id}/activity")
         .body(StringBody("{\n  \"activity\": \"view\"\n}"))
         .headers(headers_5))
 
+      .pause(1)
+
       .exec(http("PB_CaseActivity")
         .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
-        }
+      .pause(Environment.caseActivityPause)
+      }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -395,21 +419,27 @@ object PBGoR {
         .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
+      .pause(1)
+
       .exec(http("PB_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
+
+      .pause(1)
 
       .exec(http("PB_CaseActivity")
         .post("/activity/cases/${New_Case_Id}/activity")
         .body(StringBody("{\n  \"activity\": \"view\"\n}"))
         .headers(headers_5))
 
+      .pause(1)
+
       .exec(http("PB_CaseActivity")
         .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
-        }
+      .pause(Environment.caseActivityPause)
+      }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -435,21 +465,27 @@ object PBGoR {
         .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
+      .pause(1)
+
       .exec(http("PB_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
+
+      .pause(1)
 
       .exec(http("PB_CaseActivity")
         .post("/activity/cases/${New_Case_Id}/activity")
         .body(StringBody("{\n  \"activity\": \"view\"\n}"))
         .headers(headers_5))
 
+      .pause(1)
+
       .exec(http("PB_CaseActivity")
         .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
-        }
+      .pause(Environment.caseActivityPause)
+      }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -457,24 +493,30 @@ object PBGoR {
       .get("/documents/${Document_ID}/binary")
       .headers(headers_15))
 
-      .repeat(caseActivityRepeat) {
-        exec(http("PB_CaseActivity")
-          .options("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
+    .repeat(caseActivityRepeat) {
+      exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
 
-        .exec(http("PB_CaseActivity")
-          .get("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
+      .pause(1)
 
-        .exec(http("PB_CaseActivity")
-          .post("/activity/cases/${New_Case_Id}/activity")
-          .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-          .headers(headers_5))
+      .exec(http("PB_CaseActivity")
+        .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
 
-        .exec(http("PB_CaseActivity")
-          .options("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
+      .pause(1)
 
-        .pause(Environment.caseActivityPause)
-        }
+      .exec(http("PB_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .pause(1)
+
+      .exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
+      }
   }

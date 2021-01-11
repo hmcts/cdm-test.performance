@@ -201,20 +201,26 @@ object EthosSearchView {
           .options("/activity/cases/${EthosCaseRef}/activity")
           .headers(headers_2))
 
+        .pause(1)
+
         .exec(http("Ethos_CaseActivity")
           .get("/activity/cases/${EthosCaseRef}/activity")
           .headers(headers_2))
+
+        .pause(1)
 
         .exec(http("Ethos_CaseActivity")
           .post("/activity/cases/${EthosCaseRef}/activity")
           .body(StringBody("{\n  \"activity\": \"view\"\n}"))
           .headers(headers_5))
 
+        .pause(1)
+
         .exec(http("Ethos_CaseActivity")
           .options("/activity/cases/${EthosCaseRef}/activity")
           .headers(headers_2))
 
-          .pause(Environment.caseActivityPause)
+        .pause(Environment.caseActivityPause)
       }
     //}
 }
