@@ -39,6 +39,18 @@ object CMC {
     "Sec-Fetch-Mode" -> "cors",
     "experimental" -> "true")
 
+  val headers_5 = Map(
+		"Accept" -> "application/json",
+		"Content-Type" -> "application/json",
+		"DNT" -> "1",
+		"Origin" -> CCDEnvurl,
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-site",
+		"sec-ch-ua" -> """Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87""",
+		"sec-ch-ua-mobile" -> "?0")
+
   val headers_8 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-case-view.v2+json",
     "Content-Type" -> "application/json",
@@ -170,10 +182,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -201,10 +226,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
         exec(http("CMC_CaseActivity")
+          .options("/activity/cases/${New_Case_Id}/activity")
+          .headers(headers_2))
+
+        .exec(http("CMC_CaseActivity")
           .get("/activity/cases/${New_Case_Id}/activity")
           .headers(headers_2))
 
-          .pause(Environment.caseActivityPause)
+        .exec(http("CMC_CaseActivity")
+          .post("/activity/cases/${New_Case_Id}/activity")
+          .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+          .headers(headers_5))
+
+        .exec(http("CMC_CaseActivity")
+          .options("/activity/cases/${New_Case_Id}/activity")
+          .headers(headers_2))
+
+        .pause(Environment.caseActivityPause)
       }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -213,7 +251,7 @@ object CMC {
     // Submit the Stay Claim step
     // ====================================================================
 
-    .pause(MinThinkTime)
+    // .pause(MinThinkTime)
     .exec(http("CMC_040_005_StayClaimSubmit")
       .post("/data/cases/${New_Case_Id}/events")
       .headers(headers_9)
@@ -221,10 +259,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -242,10 +293,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -261,10 +325,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -282,10 +359,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -301,10 +391,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -322,10 +425,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -341,10 +457,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -362,10 +491,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -381,10 +523,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -401,10 +556,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
     // ====================================================================
@@ -421,10 +589,23 @@ object CMC {
 
     .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
     // ====================================================================
@@ -435,12 +616,25 @@ object CMC {
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_8))
 
-      .repeat(cmcCaseActivityRepeat) {
+    .repeat(cmcCaseActivityRepeat) {
       exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("CMC_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
+      .exec(http("CMC_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("CMC_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
     }
 
 }

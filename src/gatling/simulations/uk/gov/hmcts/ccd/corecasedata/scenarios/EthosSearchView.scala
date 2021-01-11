@@ -38,6 +38,18 @@ object EthosSearchView {
     "Origin" -> CCDEnvurl,
     "Sec-Fetch-Mode" -> "cors")
 
+  val headers_5 = Map(
+		"Accept" -> "application/json",
+		"Content-Type" -> "application/json",
+		"DNT" -> "1",
+		"Origin" -> CCDEnvurl,
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-site",
+		"sec-ch-ua" -> """Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87""",
+		"sec-ch-ua-mobile" -> "?0")
+
   val headers_6 = Map(
     "Access-Control-Request-Headers" -> "content-type,experimental",
     "Access-Control-Request-Method" -> "GET",
@@ -81,69 +93,69 @@ object EthosSearchView {
       .check(status.in(200, 302)))
       //.exitHereIfFailed
 
-      .exec(http("ET_020_010_Login")
-        .get(CCDEnvurl + "/config")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
+    .exec(http("ET_020_010_Login")
+      .get(CCDEnvurl + "/config")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
 
-      .exec(http("ET_020_015_Login")
-        .options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
+    .exec(http("ET_020_015_Login")
+      .options(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
 
-      .exec(http("ET_020_020_Login")
-        .get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
+    .exec(http("ET_020_020_Login")
+      .get(BaseURL + "/oauth2?code=${authCode}&redirect_uri=" + CCDEnvurl + "/oauth2redirect")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
 
-      .exec(http("ET_020_025_Login")
-        .get(CCDEnvurl + "/config")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
+    .exec(http("ET_020_025_Login")
+      .get(CCDEnvurl + "/config")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
 
-      .exec(http("ET_020_030_Login")
-        .options(BaseURL + "/data/caseworkers/:uid/profile"))
-      //.exitHereIfFailed
+    .exec(http("ET_020_030_Login")
+      .options(BaseURL + "/data/caseworkers/:uid/profile"))
+    //.exitHereIfFailed
 
-      .exec(http("ET_020_035_Login")
-        .get(BaseURL + "/data/caseworkers/:uid/profile")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
+    .exec(http("ET_020_035_Login")
+      .get(BaseURL + "/data/caseworkers/:uid/profile")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
 
-      .exec(http("ET_020_040_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types?access=read")
-        .headers(CommonHeader))
+    .exec(http("ET_020_040_Login")
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types?access=read")
+      .headers(CommonHeader))
 
-      .exec(http("ET_020_045_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types?access=read")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
+    .exec(http("ET_020_045_Login")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types?access=read")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
 
-      .exec(http("ET_020_050_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/work-basket-inputs"))
-      //.exitHereIfFailed
+    .exec(http("ET_020_050_Login")
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/work-basket-inputs"))
+    //.exitHereIfFailed
 
-      .exec(http("ET_020_055_Login")
-        .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
-      //.exitHereIfFailed
+    .exec(http("ET_020_055_Login")
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?view=WORKBASKET&state=TODO&page=1"))
+    //.exitHereIfFailed
 
-      .exec(http("ET_020_060_Login")
-        .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO"))
-      //.exitHereIfFailed
+    .exec(http("ET_020_060_Login")
+      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO"))
+    //.exitHereIfFailed
 
-      .exec(http("ET_020_065_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/work-basket-inputs")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
+    .exec(http("ET_020_065_Login")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/work-basket-inputs")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
 
-      .exec(http("ET_020_070_Login")
-        .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?view=WORKBASKET&state=TODO&page=1")
-        .headers(CommonHeader))
-      //.exitHereIfFailed
+    .exec(http("ET_020_070_Login")
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?view=WORKBASKET&state=TODO&page=1")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
 
-      .exec(http("ET_020_075_Login")
-        .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO")
-        .headers(CommonHeader))
+    .exec(http("ET_020_075_Login")
+      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases/pagination_metadata?state=TODO")
+      .headers(CommonHeader))
     //.exitHereIfFailed
   }
 
@@ -186,7 +198,20 @@ object EthosSearchView {
 
       .repeat(caseActivityRepeat) {
         exec(http("Ethos_CaseActivity")
+          .options("/activity/cases/${EthosCaseRef}/activity")
+          .headers(headers_2))
+
+        .exec(http("Ethos_CaseActivity")
           .get("/activity/cases/${EthosCaseRef}/activity")
+          .headers(headers_2))
+
+        .exec(http("Ethos_CaseActivity")
+          .post("/activity/cases/${EthosCaseRef}/activity")
+          .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+          .headers(headers_5))
+
+        .exec(http("Ethos_CaseActivity")
+          .options("/activity/cases/${EthosCaseRef}/activity")
           .headers(headers_2))
 
           .pause(Environment.caseActivityPause)

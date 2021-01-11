@@ -363,7 +363,7 @@ val CDSGetRequest =
       .pause(5)
 
   val ElasticSearchEthos =
-
+ 
     exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
       .post(ccdDataStoreUrl + "/searchCases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")

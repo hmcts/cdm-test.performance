@@ -50,6 +50,18 @@ object PBGoR {
     "Sec-Fetch-Mode" -> "cors",
     "experimental" -> "true")
 
+  val headers_5 = Map(
+		"Accept" -> "application/json",
+		"Content-Type" -> "application/json",
+		"DNT" -> "1",
+		"Origin" -> CCDEnvurl,
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-site",
+		"sec-ch-ua" -> """Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87""",
+		"sec-ch-ua-mobile" -> "?0")
+
   val headers_7 = Map(
     "Accept" -> "application/json",
     "Accept-Encoding" -> "gzip, deflate, br",
@@ -214,7 +226,20 @@ object PBGoR {
 
     .repeat(caseActivityRepeat) {
       exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("PB_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("PB_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
         .pause(Environment.caseActivityPause)
@@ -230,11 +255,24 @@ object PBGoR {
 
     .repeat(caseActivityRepeat) {
       exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("PB_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
-        .pause(Environment.caseActivityPause)
-        }
+      .exec(http("PB_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .pause(Environment.caseActivityPause)
+      }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -252,8 +290,21 @@ object PBGoR {
 
     .repeat(caseActivityRepeat) {
         exec(http("PB_CaseActivity")
-          .get("/activity/cases/${New_Case_Id}/activity")
-          .headers(headers_2))
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("PB_CaseActivity")
+        .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("PB_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
 
           .pause(Environment.caseActivityPause)
           }
@@ -297,7 +348,20 @@ object PBGoR {
 
     .repeat(caseActivityRepeat) {
       exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("PB_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("PB_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
         .pause(Environment.caseActivityPause)
@@ -328,7 +392,20 @@ object PBGoR {
 
     .repeat(caseActivityRepeat) {
       exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("PB_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("PB_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
         .pause(Environment.caseActivityPause)
@@ -355,7 +432,20 @@ object PBGoR {
 
     .repeat(caseActivityRepeat) {
       exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("PB_CaseActivity")
         .get("/activity/cases/${New_Case_Id}/activity")
+        .headers(headers_2))
+
+      .exec(http("PB_CaseActivity")
+        .post("/activity/cases/${New_Case_Id}/activity")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .headers(headers_5))
+
+      .exec(http("PB_CaseActivity")
+        .options("/activity/cases/${New_Case_Id}/activity")
         .headers(headers_2))
 
         .pause(Environment.caseActivityPause)
@@ -368,9 +458,22 @@ object PBGoR {
       .headers(headers_15))
 
       .repeat(caseActivityRepeat) {
-      exec(http("PB_CaseActivity")
-        .get("/activity/cases/${New_Case_Id}/activity")
-        .headers(headers_2))
+        exec(http("PB_CaseActivity")
+          .options("/activity/cases/${New_Case_Id}/activity")
+          .headers(headers_2))
+
+        .exec(http("PB_CaseActivity")
+          .get("/activity/cases/${New_Case_Id}/activity")
+          .headers(headers_2))
+
+        .exec(http("PB_CaseActivity")
+          .post("/activity/cases/${New_Case_Id}/activity")
+          .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+          .headers(headers_5))
+
+        .exec(http("PB_CaseActivity")
+          .options("/activity/cases/${New_Case_Id}/activity")
+          .headers(headers_2))
 
         .pause(Environment.caseActivityPause)
         }

@@ -27,7 +27,7 @@ object SSCS {
 		"Sec-Fetch-Dest" -> "empty",
 		"Sec-Fetch-Mode" -> "cors",
 		"Sec-Fetch-Site" -> "same-site",
-    "experimental" -> "true")
+    	"experimental" -> "true")
 
   val headers_1 = Map(
 		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-jurisdiction-configs.v2+json;charset=UTF-8",
@@ -49,7 +49,7 @@ object SSCS {
 
   val headers_3 = Map(
 		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.case-data-validate.v2+json;charset=UTF-8",
-	  "Origin" -> CCDEnvurl,
+	  	"Origin" -> CCDEnvurl,
 		"Pragma" -> "no-cache",
 		"Sec-Fetch-Dest" -> "empty",
 		"Sec-Fetch-Mode" -> "cors",
@@ -94,21 +94,32 @@ object SSCS {
 		"Origin" -> CCDEnvurl,
 		"Sec-Fetch-Dest" -> "empty",
 		"Sec-Fetch-Mode" -> "cors",
-		"Sec-Fetch-Site" -> "same-site"
-	)
+		"Sec-Fetch-Site" -> "same-site")
 
-  val headers_8 = Map(
-    "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-case-view.v2+json",
-    "Content-Type" -> "application/json",
-    "Sec-Fetch-Mode" -> "cors",
-    "experimental" -> "true")
+	val headers_8 = Map(
+		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-case-view.v2+json",
+		"Content-Type" -> "application/json",
+		"Sec-Fetch-Mode" -> "cors",
+		"experimental" -> "true")
 
-  val headers_9 = Map(
-    "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-event-trigger.v2+json;charset=UTF-8",
-    "Sec-Fetch-Mode" -> "cors",
-    "experimental" -> "true")
+	val headers_9 = Map(
+		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-event-trigger.v2+json;charset=UTF-8",
+		"Sec-Fetch-Mode" -> "cors",
+		"experimental" -> "true")
 
-  val headers_11 = Map(
+	val headers_10 = Map(
+		"Accept" -> "application/json",
+		"Content-Type" -> "application/json",
+		"DNT" -> "1",
+		"Origin" -> CCDEnvurl,
+		"Pragma" -> "no-cache",
+		"Sec-Fetch-Dest" -> "empty",
+		"Sec-Fetch-Mode" -> "cors",
+		"Sec-Fetch-Site" -> "same-site",
+		"sec-ch-ua" -> """Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87""",
+		"sec-ch-ua-mobile" -> "?0")
+
+  	val headers_11 = Map(
 		"Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-workbasket-input-details.v2+json;charset=UTF-8",
 		"Content-Type" -> "application/json",
 		"Origin" -> CCDEnvurl,
@@ -118,7 +129,7 @@ object SSCS {
 		"Sec-Fetch-Site" -> "same-site",
 		"experimental" -> "true")
 
-  val headers_12 = Map(
+  	val headers_12 = Map(
 		"Content-Type" -> "application/json",
 		"Origin" -> CCDEnvurl,
 		"Pragma" -> "no-cache",
@@ -127,12 +138,12 @@ object SSCS {
 		"Sec-Fetch-Site" -> "same-site")
 
   val headers_15 = Map(
-    "Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
-    "Accept-Encoding" -> "gzip, deflate, br",
-    "Accept-Language" -> "en-US,en;q=0.9",
-    "Sec-Fetch-Mode" -> "navigate",
-    "Sec-Fetch-Site" -> "none",
-    "Upgrade-Insecure-Requests" -> "1")
+		"Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+		"Accept-Encoding" -> "gzip, deflate, br",
+		"Accept-Language" -> "en-US,en;q=0.9",
+		"Sec-Fetch-Mode" -> "navigate",
+		"Sec-Fetch-Site" -> "none",
+		"Upgrade-Insecure-Requests" -> "1")
 
   val SSCSLogin = group("SSCS_Login") {
 
@@ -219,22 +230,35 @@ object SSCS {
     .exec(http("SSCS_030_010_CreateCaseDetailsPage")
 		.get("/data/internal/case-types/Benefit/event-triggers/appealCreated?ignore-warning=false")
 		.headers(headers_3)
-      .check(jsonPath("$.event_token").saveAs("New_Case_event_token")))
+		.check(jsonPath("$.event_token").saveAs("New_Case_event_token")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("SSCS_030_015_CreateCaseSubmit")
-      .post("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?ignore-warning=false")
-      .headers(CommonHeader)
-      .body(StringBody("{\n  \"data\": {\n    \"caseReference\": null,\n    \"caseCreated\": \"2020-05-12\",\n    \"region\": null,\n    \"appeal\": {\n      \"receivedVia\": \"Online\",\n      \"mrnDetails\": {\n        \"dwpIssuingOffice\": \"DWP\",\n        \"mrnDate\": \"2019-11-22\",\n        \"mrnLateReason\": null,\n        \"mrnMissingReason\": null\n      },\n      \"appellant\": {\n        \"name\": {\n          \"title\": \"Mr\",\n          \"firstName\": \"Daniel\",\n          \"middleName\": null,\n          \"lastName\": \"Gleeballs\"\n        },\n        \"identity\": {\n          \"dob\": \"2000-03-01\",\n          \"nino\": \"AB1234567Z\"\n        },\n        \"address\": {\n          \"line1\": \"24 Test Street\",\n          \"line2\": null,\n          \"line3\": null,\n          \"town\": \"London\",\n          \"county\": null,\n          \"postcode\": \"KT2 5BU\",\n          \"country\": \"UK\"\n        },\n        \"contact\": {\n          \"phone\": \"07123456789\",\n          \"mobile\": null,\n          \"email\": null\n        },\n        \"isAppointee\": \"No\",\n        \"appointee\": {\n          \"name\": {\n            \"title\": null,\n            \"firstName\": null,\n            \"middleName\": null,\n            \"lastName\": null\n          },\n          \"identity\": {\n            \"dob\": null,\n            \"nino\": null\n          },\n          \"address\": {\n            \"line1\": null,\n            \"line2\": null,\n            \"line3\": null,\n            \"town\": null,\n            \"county\": null,\n            \"postcode\": null,\n            \"country\": null\n          },\n          \"contact\": {\n            \"phone\": null,\n            \"mobile\": null,\n            \"email\": null\n          }\n        },\n        \"isAddressSameAsAppointee\": null\n      },\n      \"benefitType\": {\n        \"code\": null,\n        \"description\": null\n      },\n      \"hearingType\": null,\n      \"hearingOptions\": {\n        \"wantsToAttend\": null,\n        \"languageInterpreter\": null,\n        \"other\": null,\n        \"signLanguageType\": null\n      },\n      \"appealReasons\": {\n        \"reasons\": [],\n        \"otherReasons\": null\n      },\n      \"supporter\": {\n        \"name\": {\n          \"title\": null,\n          \"firstName\": null,\n          \"middleName\": null,\n          \"lastName\": null\n        },\n        \"contact\": {\n          \"phone\": null,\n          \"mobile\": null,\n          \"email\": null\n        }\n      },\n      \"rep\": {\n        \"hasRepresentative\": null\n      },\n      \"signer\": null\n    },\n    \"regionalProcessingCenter\": {\n      \"name\": null,\n      \"address1\": null,\n      \"address2\": null,\n      \"address3\": null,\n      \"address4\": null,\n      \"postcode\": null,\n      \"city\": null,\n      \"phoneNumber\": null,\n      \"faxNumber\": null,\n      \"email\": null\n    },\n    \"panel\": {\n      \"assignedTo\": null,\n      \"medicalMember\": null,\n      \"disabilityQualifiedMember\": null\n    }\n  },\n  \"event\": {\n    \"id\": \"appealCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
-      .check(jsonPath("$.id").saveAs("New_Case_Id")))
+		.post("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases?ignore-warning=false")
+		.headers(CommonHeader)
+		.body(StringBody("{\n  \"data\": {\n    \"caseReference\": null,\n    \"caseCreated\": \"2020-05-12\",\n    \"region\": null,\n    \"appeal\": {\n      \"receivedVia\": \"Online\",\n      \"mrnDetails\": {\n        \"dwpIssuingOffice\": \"DWP\",\n        \"mrnDate\": \"2019-11-22\",\n        \"mrnLateReason\": null,\n        \"mrnMissingReason\": null\n      },\n      \"appellant\": {\n        \"name\": {\n          \"title\": \"Mr\",\n          \"firstName\": \"Daniel\",\n          \"middleName\": null,\n          \"lastName\": \"Gleeballs\"\n        },\n        \"identity\": {\n          \"dob\": \"2000-03-01\",\n          \"nino\": \"AB1234567Z\"\n        },\n        \"address\": {\n          \"line1\": \"24 Test Street\",\n          \"line2\": null,\n          \"line3\": null,\n          \"town\": \"London\",\n          \"county\": null,\n          \"postcode\": \"KT2 5BU\",\n          \"country\": \"UK\"\n        },\n        \"contact\": {\n          \"phone\": \"07123456789\",\n          \"mobile\": null,\n          \"email\": null\n        },\n        \"isAppointee\": \"No\",\n        \"appointee\": {\n          \"name\": {\n            \"title\": null,\n            \"firstName\": null,\n            \"middleName\": null,\n            \"lastName\": null\n          },\n          \"identity\": {\n            \"dob\": null,\n            \"nino\": null\n          },\n          \"address\": {\n            \"line1\": null,\n            \"line2\": null,\n            \"line3\": null,\n            \"town\": null,\n            \"county\": null,\n            \"postcode\": null,\n            \"country\": null\n          },\n          \"contact\": {\n            \"phone\": null,\n            \"mobile\": null,\n            \"email\": null\n          }\n        },\n        \"isAddressSameAsAppointee\": null\n      },\n      \"benefitType\": {\n        \"code\": null,\n        \"description\": null\n      },\n      \"hearingType\": null,\n      \"hearingOptions\": {\n        \"wantsToAttend\": null,\n        \"languageInterpreter\": null,\n        \"other\": null,\n        \"signLanguageType\": null\n      },\n      \"appealReasons\": {\n        \"reasons\": [],\n        \"otherReasons\": null\n      },\n      \"supporter\": {\n        \"name\": {\n          \"title\": null,\n          \"firstName\": null,\n          \"middleName\": null,\n          \"lastName\": null\n        },\n        \"contact\": {\n          \"phone\": null,\n          \"mobile\": null,\n          \"email\": null\n        }\n      },\n      \"rep\": {\n        \"hasRepresentative\": null\n      },\n      \"signer\": null\n    },\n    \"regionalProcessingCenter\": {\n      \"name\": null,\n      \"address1\": null,\n      \"address2\": null,\n      \"address3\": null,\n      \"address4\": null,\n      \"postcode\": null,\n      \"city\": null,\n      \"phoneNumber\": null,\n      \"faxNumber\": null,\n      \"email\": null\n    },\n    \"panel\": {\n      \"assignedTo\": null,\n      \"medicalMember\": null,\n      \"disabilityQualifiedMember\": null\n    }\n  },\n  \"event\": {\n    \"id\": \"appealCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
+		.check(jsonPath("$.id").saveAs("New_Case_Id")))
 
     .repeat(sscsCaseActivityRepeat) {
 		exec(http("SSCS_CaseActivity")
+			.options("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
+
+		.exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-      .pause(Environment.caseActivityPause)
+		.exec(http("SSCS_CaseActivity")
+			.post("/activity/cases/${New_Case_Id}/activity")
+			.body(StringBody("{\n  \"activity\": \"view\"\n}"))
+			.headers(headers_10))
+
+		.exec(http("SSCS_CaseActivity")
+			.options("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
+
+      	.pause(Environment.caseActivityPause)
     }
 
 	.pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -246,10 +270,23 @@ object SSCS {
 
     .repeat(sscsCaseActivityRepeat) {
 		exec(http("SSCS_CaseActivity")
+			.options("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
+
+		.exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-      .pause(Environment.caseActivityPause)
+		.exec(http("SSCS_CaseActivity")
+			.post("/activity/cases/${New_Case_Id}/activity")
+			.body(StringBody("{\n  \"activity\": \"view\"\n}"))
+			.headers(headers_10))
+
+		.exec(http("SSCS_CaseActivity")
+			.options("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
+
+      	.pause(Environment.caseActivityPause)
     }
 
 	.pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -269,10 +306,6 @@ object SSCS {
       .check(regex("""http://(.+)/""").saveAs("DMURL"))
       .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
 
-    .exec(http("SSCS_CaseActivity")
-		.get("/activity/cases/${New_Case_Id}/activity")
-		.headers(headers_2))
-
     .exec(http("SSCS_040_015_DocumentUploadProcess")
       .post("/data/caseworkers/:uid/jurisdictions/SSCS/case-types/Benefit/cases/${New_Case_Id}/events")
       .headers(CommonHeader)
@@ -280,10 +313,23 @@ object SSCS {
 
     .repeat(sscsCaseActivityRepeat) {
 		exec(http("SSCS_CaseActivity")
+			.options("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
+
+		.exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-      .pause(Environment.caseActivityPause)
+		.exec(http("SSCS_CaseActivity")
+			.post("/activity/cases/${New_Case_Id}/activity")
+			.body(StringBody("{\n  \"activity\": \"view\"\n}"))
+			.headers(headers_10))
+
+		.exec(http("SSCS_CaseActivity")
+			.options("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
+
+		.pause(Environment.caseActivityPause)
     }
 
 	.pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -305,10 +351,23 @@ object SSCS {
 
     .repeat(sscsCaseActivityRepeat) {
 		exec(http("SSCS_CaseActivity")
+			.options("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
+
+		.exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-      .pause(Environment.caseActivityPause)
+		.exec(http("SSCS_CaseActivity")
+			.post("/activity/cases/${New_Case_Id}/activity")
+			.body(StringBody("{\n  \"activity\": \"view\"\n}"))
+			.headers(headers_10))
+
+		.exec(http("SSCS_CaseActivity")
+			.options("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
+
+      	.pause(Environment.caseActivityPause)
     }
 
 	.pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -319,10 +378,23 @@ object SSCS {
 
     .repeat(sscsCaseActivityRepeat) {
     	exec(http("SSCS_CaseActivity")
+			.options("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
+
+		.exec(http("SSCS_CaseActivity")
 			.get("/activity/cases/${New_Case_Id}/activity")
 			.headers(headers_2))
 
-      .pause(Environment.caseActivityPause)
+		.exec(http("SSCS_CaseActivity")
+			.post("/activity/cases/${New_Case_Id}/activity")
+			.body(StringBody("{\n  \"activity\": \"view\"\n}"))
+			.headers(headers_10))
+
+		.exec(http("SSCS_CaseActivity")
+			.options("/activity/cases/${New_Case_Id}/activity")
+			.headers(headers_2))
+
+      	.pause(Environment.caseActivityPause)
     }
   
 
