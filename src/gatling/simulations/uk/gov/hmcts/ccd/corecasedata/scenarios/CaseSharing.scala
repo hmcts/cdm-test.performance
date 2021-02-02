@@ -14,6 +14,7 @@ object casesharing {
   val ccdScope = "openid profile authorities acr roles openid profile roles"
   val feedCSUserDataLarge = csv("CaseSharingUsers_Large.csv").circular
   val feedCSUserDataSmall = csv("CaseSharingUsers_Small.csv").circular
+  val mcaUrl = "http://aac-manage-case-assignment-perftest.service.core-compute-perftest.internal"
 
   val headers_0 = Map( //Authorization token needs to be generated with idam login
     "Authorization" -> "AdminApiAuthToken ",
@@ -222,7 +223,7 @@ object casesharing {
   val CaseSharingPostLarge =
 
     exec(http("02_CS_010_AssignCaseLargeOrg")
-      .post("http://aac-manage-case-assignment-perftest.service.core-compute-perftest.internal/case-assignments")
+      .post(mcaUrl + "/case-assignments")
       .header("ServiceAuthorization", "Bearer ${bearerTokenShare}")
       .header("Authorization", "Bearer ${access_tokenShare}")
       .header("Content-Type", "application/json")
@@ -234,7 +235,7 @@ object casesharing {
   val CaseSharingPostSmall =
 
     exec(http("02_CS_010_AssignCaseSmallOrg")
-      .post("http://aac-manage-case-assignment-perftest.service.core-compute-perftest.internal/case-assignments")
+      .post(mcaUrl + "/case-assignments")
       .header("ServiceAuthorization", "Bearer ${bearerTokenShare}")
       .header("Authorization", "Bearer ${access_tokenShare}")
       .header("Content-Type", "application/json")
@@ -243,5 +244,16 @@ object casesharing {
 
       .pause(Environment.constantthinkTime)
 
+  val NoticeOfChangeRequest =
+
+    exec(http("NoC_010_ApplyDecision")
+      .post(mcaUrl + "/noc/apply-decision")
+      .header("ServiceAuthorization", "Bearer ${bearerTokenShare}")
+      .header("Authorization", "Bearer ${access_tokenShare}")
+      .header("Content-Type", "application/json")
+      .header("Accept", "application/json")
+      .body(StringBody("{\n\t\"case_details\": {\n\t\t\"reference\": \"1601639930193327\",\n\t\t\"data\": {\n\t\t    \"DateField\": null,\n\t\t    \"TextField\": \"TextFieldValue\",\n\t\t    \"EmailField\": \"aca72@gmail.com\",\n\t\t    \"NumberField\": \"123\",\n\t\t    \"CollectionField\": [],\n\t\t    \"FixedRadioListField\": null,\n\t\t    \"MultiSelectListField\": [],\n\t\t    \"OrganisationPolicyField1\": {\n\t\t        \"Organisation\": {\n\t\t            \"OrganisationID\": \"AddingOrg\",\n\t\t            \"OrganisationName\": null\n\t\t        },\n\t\t        \"OrgPolicyReference\": \"DefendantPolicy\",\n\t\t        \"OrgPolicyCaseAssignedRole\": \"[Defendant]\"\n\t\t    },\n\t\t    \"OrganisationPolicyField2\": {\n\t\t        \"Organisation\": {\n\t\t            \"OrganisationID\": null,\n\t\t            \"OrganisationName\": null\n\t\t        },\n\t\t        \"OrgPolicyReference\": \"ClaimantPolicy\",\n\t\t        \"OrgPolicyCaseAssignedRole\": \"[Claimant]\"\n\t\t    },\n\t\t    \"ChangeOrganisationRequestField\": {\n\t\t        \"Reason\": null,\n\t\t        \"CaseRoleId\": \"[Defendant]\",\n\t\t        \"NotesReason\": \"Some notes\",\n\t\t        \"ApprovalStatus\": 1,\n\t\t        \"RequestTimestamp\": null,\n\t\t        \"OrganisationToAdd\": {\n\t\t        \t  \"OrganisationID\": \"AddingOrg\",\n\t\t            \"OrganisationName\": null\n\t\t        },\n\t\t        \"OrganisationToRemove\": {\n\t\t\t\t  \"OrganisationID\": \"QUK822N\",\n\t\t            \"OrganisationName\": null\n\t\t        },\n\t\t        \"ApprovalRejectionTimestamp\": null\n\t\t    }\n\t\t}\n\t}\n}")))
+
+      .pause(Environment.constantthinkTime)
   
 }

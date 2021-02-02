@@ -10,5 +10,5 @@ object WaitforNextIteration {
   val MinWaitForNextIteration = Environment.minWaitForNextIteration
   val MaxWaitForNextIteration = Environment.maxWaitForNextIteration
     
-  val waitforNextIteration = pace(MinWaitForNextIteration seconds, MaxWaitForNextIteration seconds)
+  val waitforNextIteration = pause(MinWaitForNextIteration seconds, MaxWaitForNextIteration seconds)
 }

@@ -240,70 +240,12 @@ object SSCS {
 		.body(StringBody("{\n  \"data\": {\n    \"caseReference\": null,\n    \"caseCreated\": \"2020-05-12\",\n    \"region\": null,\n    \"appeal\": {\n      \"receivedVia\": \"Online\",\n      \"mrnDetails\": {\n        \"dwpIssuingOffice\": \"DWP\",\n        \"mrnDate\": \"2019-11-22\",\n        \"mrnLateReason\": null,\n        \"mrnMissingReason\": null\n      },\n      \"appellant\": {\n        \"name\": {\n          \"title\": \"Mr\",\n          \"firstName\": \"Daniel\",\n          \"middleName\": null,\n          \"lastName\": \"Gleeballs\"\n        },\n        \"identity\": {\n          \"dob\": \"2000-03-01\",\n          \"nino\": \"AB1234567Z\"\n        },\n        \"address\": {\n          \"line1\": \"24 Test Street\",\n          \"line2\": null,\n          \"line3\": null,\n          \"town\": \"London\",\n          \"county\": null,\n          \"postcode\": \"KT2 5BU\",\n          \"country\": \"UK\"\n        },\n        \"contact\": {\n          \"phone\": \"07123456789\",\n          \"mobile\": null,\n          \"email\": null\n        },\n        \"isAppointee\": \"No\",\n        \"appointee\": {\n          \"name\": {\n            \"title\": null,\n            \"firstName\": null,\n            \"middleName\": null,\n            \"lastName\": null\n          },\n          \"identity\": {\n            \"dob\": null,\n            \"nino\": null\n          },\n          \"address\": {\n            \"line1\": null,\n            \"line2\": null,\n            \"line3\": null,\n            \"town\": null,\n            \"county\": null,\n            \"postcode\": null,\n            \"country\": null\n          },\n          \"contact\": {\n            \"phone\": null,\n            \"mobile\": null,\n            \"email\": null\n          }\n        },\n        \"isAddressSameAsAppointee\": null\n      },\n      \"benefitType\": {\n        \"code\": null,\n        \"description\": null\n      },\n      \"hearingType\": null,\n      \"hearingOptions\": {\n        \"wantsToAttend\": null,\n        \"languageInterpreter\": null,\n        \"other\": null,\n        \"signLanguageType\": null\n      },\n      \"appealReasons\": {\n        \"reasons\": [],\n        \"otherReasons\": null\n      },\n      \"supporter\": {\n        \"name\": {\n          \"title\": null,\n          \"firstName\": null,\n          \"middleName\": null,\n          \"lastName\": null\n        },\n        \"contact\": {\n          \"phone\": null,\n          \"mobile\": null,\n          \"email\": null\n        }\n      },\n      \"rep\": {\n        \"hasRepresentative\": null\n      },\n      \"signer\": null\n    },\n    \"regionalProcessingCenter\": {\n      \"name\": null,\n      \"address1\": null,\n      \"address2\": null,\n      \"address3\": null,\n      \"address4\": null,\n      \"postcode\": null,\n      \"city\": null,\n      \"phoneNumber\": null,\n      \"faxNumber\": null,\n      \"email\": null\n    },\n    \"panel\": {\n      \"assignedTo\": null,\n      \"medicalMember\": null,\n      \"disabilityQualifiedMember\": null\n    }\n  },\n  \"event\": {\n    \"id\": \"appealCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
 		.check(jsonPath("$.id").saveAs("New_Case_Id")))
 
-	.doIf(session => session.contains("New_Case_Id")) {
-		repeat(sscsCaseActivityRepeat) {
-			exec(http("SSCS_CaseActivity")
-				.options("/activity/cases/${New_Case_Id}/activity")
-				.headers(headers_2))
-
-			.pause(1)
-
-			.exec(http("SSCS_CaseActivity")
-				.get("/activity/cases/${New_Case_Id}/activity")
-				.headers(headers_2))
-
-			.pause(1)
-
-			.exec(http("SSCS_CaseActivity")
-				.post("/activity/cases/${New_Case_Id}/activity")
-				.body(StringBody("{\n  \"activity\": \"view\"\n}"))
-				.headers(headers_10))
-
-			.pause(1)
-
-			.exec(http("SSCS_CaseActivity")
-				.options("/activity/cases/${New_Case_Id}/activity")
-				.headers(headers_2))
-
-			.pause(Environment.caseActivityPause)
-		}
-	}
-
 	.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val SSCSDocUpload = exec(http("SSCS_040_005_DocumentUploadPage1")
       .get("/data/internal/cases/${New_Case_Id}/event-triggers/uploadDocument?ignore-warning=false")
         .headers(headers_9)
         .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
-
-    .doIf(session => session.contains("New_Case_Id")) {
-		repeat(sscsCaseActivityRepeat) {
-			exec(http("SSCS_CaseActivity")
-				.options("/activity/cases/${New_Case_Id}/activity")
-				.headers(headers_2))
-
-			.pause(1)
-
-			.exec(http("SSCS_CaseActivity")
-				.get("/activity/cases/${New_Case_Id}/activity")
-				.headers(headers_2))
-
-			.pause(1)
-
-			.exec(http("SSCS_CaseActivity")
-				.post("/activity/cases/${New_Case_Id}/activity")
-				.body(StringBody("{\n  \"activity\": \"view\"\n}"))
-				.headers(headers_10))
-
-			.pause(1)
-
-			.exec(http("SSCS_CaseActivity")
-				.options("/activity/cases/${New_Case_Id}/activity")
-				.headers(headers_2))
-
-			.pause(Environment.caseActivityPause)
-		}
-	}
 
 	.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -327,35 +269,6 @@ object SSCS {
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-11-12\",\n          \"documentComment\": \"${FileName1} upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"${FileName1} upload doc\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
-    .doIf(session => session.contains("New_Case_Id")) {
-		repeat(sscsCaseActivityRepeat) {
-			exec(http("SSCS_CaseActivity")
-				.options("/activity/cases/${New_Case_Id}/activity")
-				.headers(headers_2))
-
-			.pause(1)
-
-			.exec(http("SSCS_CaseActivity")
-				.get("/activity/cases/${New_Case_Id}/activity")
-				.headers(headers_2))
-
-			.pause(1)
-
-			.exec(http("SSCS_CaseActivity")
-				.post("/activity/cases/${New_Case_Id}/activity")
-				.body(StringBody("{\n  \"activity\": \"view\"\n}"))
-				.headers(headers_10))
-
-			.pause(1)
-
-			.exec(http("SSCS_CaseActivity")
-				.options("/activity/cases/${New_Case_Id}/activity")
-				.headers(headers_2))
-
-			.pause(Environment.caseActivityPause)
-		}
-	}
-
 	.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val SSCSSearchAndView = 
@@ -373,42 +286,15 @@ object SSCS {
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_8))
 
-    .doIf(session => session.contains("New_Case_Id")) {
-		repeat(sscsCaseActivityRepeat) {
-			exec(http("SSCS_CaseActivity")
-				.options("/activity/cases/${New_Case_Id}/activity")
-				.headers(headers_2))
-
-			.pause(1)
-
-			.exec(http("SSCS_CaseActivity")
-				.get("/activity/cases/${New_Case_Id}/activity")
-				.headers(headers_2))
-
-			.pause(1)
-
-			.exec(http("SSCS_CaseActivity")
-				.post("/activity/cases/${New_Case_Id}/activity")
-				.body(StringBody("{\n  \"activity\": \"view\"\n}"))
-				.headers(headers_10))
-
-			.pause(1)
-
-			.exec(http("SSCS_CaseActivity")
-				.options("/activity/cases/${New_Case_Id}/activity")
-				.headers(headers_2))
-
-			.pause(Environment.caseActivityPause)
-		}
-	}
-
 	.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(http("SSCS_060_010_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_15))
 
-    .doIf(session => session.contains("New_Case_Id")) {
+	val SSCSCaseActivity =
+	
+	  doIf(session => session.contains("New_Case_Id")) {
 		repeat(sscsCaseActivityRepeat) {
 			exec(http("SSCS_CaseActivity")
 				.options("/activity/cases/${New_Case_Id}/activity")
@@ -436,7 +322,6 @@ object SSCS {
 			.pause(Environment.caseActivityPause)
 		}
 	}
-  
 
   // .exec {
   //   session =>

@@ -74,12 +74,22 @@ class CaseSharingSimulation extends Simulation  {
         }
     }
 
+  val NoCScenario = scenario("Notice of Change - Apply Decision")
+  .repeat(1) {
+      exec(casesharing.CDSGetRequestSmall)
+        .repeat(1) { //300
+          exec(casesharing.NoticeOfChangeRequest)
+        }
+    }
+
   setUp(
-    CaseSharingLarge.inject(rampUsers(1) during(10 minutes)), //100
+    // CaseSharingLarge.inject(rampUsers(1) during(10 minutes)), //100
     // CaseSharingSmall.inject(rampUsers(100) during(10 minutes)), //100
     // GetAssignedCaseAndUsers.inject(rampUsers(100) during(10 minutes)) //100
     // RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes)), //100
     // RJSearchCases.inject(rampUsers(200) during (10 minutes))   //200
+    NoCScenario.inject(rampUsers(1) during(1 minutes))
+
   )
     .protocols(httpProtocol)
   //.maxDuration(60 minutes)

@@ -180,35 +180,6 @@ object CMC {
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"CreateClaim\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
 
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
-
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
 //  .exec { session =>
@@ -232,35 +203,6 @@ object CMC {
       .headers(headers_11)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
-
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     // ====================================================================
@@ -272,35 +214,6 @@ object CMC {
       .post("/data/cases/${New_Case_Id}/events")
       .headers(headers_9)
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"StayClaim\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
-
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -315,35 +228,6 @@ object CMC {
       .headers(headers_11)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
-
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     // ====================================================================
@@ -354,35 +238,6 @@ object CMC {
       .post("/data/cases/${New_Case_Id}/events")
       .headers(headers_9)
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"WaitingTransfer\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
-
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -397,35 +252,6 @@ object CMC {
       .headers(headers_11)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
-
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     // ====================================================================
@@ -436,35 +262,6 @@ object CMC {
       .post("/data/cases/${New_Case_Id}/events")
       .headers(headers_9)
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"Transfer\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
-
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -479,35 +276,6 @@ object CMC {
       .headers(headers_11)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
-
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     // ====================================================================
@@ -518,35 +286,6 @@ object CMC {
       .post("/data/cases/${New_Case_Id}/events")
       .headers(headers_9)
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"attachScannedDocs\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
-
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -561,35 +300,6 @@ object CMC {
       .headers(headers_11)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
-
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     // ====================================================================
@@ -600,35 +310,6 @@ object CMC {
       .post("/data/cases/${New_Case_Id}/events")
       .headers(headers_9)
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"SupportUpdate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
-
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -642,35 +323,6 @@ object CMC {
       .get("/data/internal/case-types/${CMCCaseType}/work-basket-inputs")
       .headers(headers_0))
 
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
-
     // ====================================================================
     // Search for the newly created case
     // ==================================================================== 
@@ -683,34 +335,7 @@ object CMC {
       .get("/data/caseworkers/:uid/jurisdictions/CMC/case-types/MoneyClaimCase/cases/pagination_metadata?case_reference=${New_Case_Id}")
       .headers(CommonHeader))
 
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
-
-          .pause(1)
-
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
-
-          .pause(Environment.caseActivityPause)
-        }
-    }
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     // ====================================================================
     // Open the Case
@@ -720,33 +345,35 @@ object CMC {
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_8))
 
-    .doIf(session => session.contains("New_Case_Id")) {
-        repeat(cmcCaseActivityRepeat) {
-          exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
+  val CMCCaseActivity = 
 
-          .pause(1)
+    doIf(session => session.contains("New_Case_Id")) {
+      repeat(cmcCaseActivityRepeat) {
+        exec(http("CMC_CaseActivity")
+          .options("/activity/cases/${New_Case_Id}/activity")
+          .headers(headers_2))
 
-          .exec(http("CMC_CaseActivity")
-            .get("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
+        .pause(1)
 
-          .pause(1)
+        .exec(http("CMC_CaseActivity")
+          .get("/activity/cases/${New_Case_Id}/activity")
+          .headers(headers_2))
 
-          .exec(http("CMC_CaseActivity")
-            .post("/activity/cases/${New_Case_Id}/activity")
-            .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-            .headers(headers_5))
+        .pause(1)
 
-          .pause(1)
+        .exec(http("CMC_CaseActivity")
+          .post("/activity/cases/${New_Case_Id}/activity")
+          .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+          .headers(headers_5))
 
-          .exec(http("CMC_CaseActivity")
-            .options("/activity/cases/${New_Case_Id}/activity")
-            .headers(headers_2))
+        .pause(1)
 
-          .pause(Environment.caseActivityPause)
-        }
+        .exec(http("CMC_CaseActivity")
+          .options("/activity/cases/${New_Case_Id}/activity")
+          .headers(headers_2))
+
+        .pause(Environment.caseActivityPause)
+      }
     }
 
 }

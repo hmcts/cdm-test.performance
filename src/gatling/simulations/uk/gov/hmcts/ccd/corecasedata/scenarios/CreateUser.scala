@@ -38,8 +38,7 @@ object CreateUser {
       .get("https://idam-api.perftest.platform.hmcts.net/users?email=${email}") //${email}
       .headers(headers_0)
       .check(jsonPath("$.id").saveAs("userId"))
-      .check(status.saveAs("statusvalue"))
-      )
+      .check(status.saveAs("statusvalue")))
 //     .doIf(session=>session("statusvalue").as[String].contains("200")) {
 //       exec {
 //         session =>
@@ -62,6 +61,13 @@ object CreateUser {
     .exec(http("ApplyRole_${role}")
       .patch("https://idam-api.perftest.platform.hmcts.net/users/${userId}/roles/${roleId}")
       .headers(headers_0))
+
+    .exec {
+      session =>
+        println(session("email").as[String])
+        println(session("role").as[String])
+        session
+    }
 
     .pause(1)
 

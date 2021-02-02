@@ -17,10 +17,10 @@ class CreateUser extends Simulation  {
     .doNotTrackHeader("1")
 
   val CreateIdam = scenario("CCDCreate")
-      .repeat(201) {
+      .repeat(1) {
         exec(CreateUser.IdamAdminLogin)
         .exec(CreateUser.IdamUser)
-        .repeat(5) {
+        .repeat(13) {
           exec(CreateUser.GetAndApplyRole)
         }
       }
@@ -28,7 +28,7 @@ class CreateUser extends Simulation  {
       //CreateUser.CreateUserProfile //This requests sets the user profile in CCD, which controls what jurisdictions are visible to the user
 
   setUp(
-    CreateIdam.inject(rampUsers(1) during (1 minutes)))
+    CreateIdam.inject(rampUsers(349) during (30 minutes)))
     .protocols(httpProtocol)
   //.maxDuration(1 minutes)
 }
