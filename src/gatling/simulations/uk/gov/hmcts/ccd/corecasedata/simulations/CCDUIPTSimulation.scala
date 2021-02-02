@@ -174,7 +174,7 @@ class CCDUIPTSimulation extends Simulation  {
   val CaseActivityScn = scenario("CCD Case Activity Requests")
     .repeat(1) {
       exec(ccdcaseactivity.CDSGetRequest)
-      .repeat(1) {
+      .repeat(100) {
         exec(ccdcaseactivity.CaseActivityRequests)
       }
     }
