@@ -85,11 +85,11 @@ feed(caseActivityFeeder)
     .header("Authorization", "Bearer ${access_token}")
     .body(StringBody("{\n  \"activity\": \"view\"\n}")))
 
-  .exec {
-    session =>
-      println(session("caseRef").as[String])
-      session
-  }
+  // .exec {
+  //   session =>
+  //     println(session("caseRef").as[String])
+  //     session
+  // }
 
   .pause(Environment.caseActivityPause)
 
