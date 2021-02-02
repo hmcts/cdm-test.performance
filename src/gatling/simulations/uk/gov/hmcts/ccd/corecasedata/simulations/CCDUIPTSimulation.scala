@@ -182,12 +182,12 @@ class CCDUIPTSimulation extends Simulation  {
   //CCD Regression UI Scenario
   setUp(
     //These 5 scenarios required for CCD regression testing (case activity added 28/01/2021)
-    CCDProbateScenario.inject(rampUsers(10) during (2 minutes)), //150
-    CCDSSCSScenario.inject(rampUsers(10) during (2 minutes)), //150
-    CCDEthosScenario.inject(rampUsers(10) during (2 minutes)), //400
-    CCDCMCScenario.inject(rampUsers(10) during (2 minutes)), //150
-    CCDDivScenario.inject(rampUsers(10) during (2 minutes)), //150
-    CaseActivityScn.inject(rampUsers(10) during (2 minutes)) //100
+    CCDProbateScenario.inject(rampUsers(150) during (2 minutes)), //150
+    // CCDSSCSScenario.inject(rampUsers(10) during (2 minutes)), //150
+    // CCDEthosScenario.inject(rampUsers(10) during (2 minutes)), //400
+    // CCDCMCScenario.inject(rampUsers(10) during (2 minutes)), //150
+    // CCDDivScenario.inject(rampUsers(10) during (2 minutes)), //150
+    // CaseActivityScn.inject(rampUsers(10) during (2 minutes)) //100
 
     // CaseActivityScn.inject(rampUsers(1) during (1 minutes)),
   )
