@@ -17,7 +17,7 @@ object Environment {
   val minThinkTime = 1 //10
   val maxThinkTime = 3 //30
   val constantthinkTime = 7
-  val caseActivityPause = 3
+  val caseActivityPause = 2
 
   val minWaitForNextIteration = 120 //120
   val maxWaitForNextIteration = 240 //240

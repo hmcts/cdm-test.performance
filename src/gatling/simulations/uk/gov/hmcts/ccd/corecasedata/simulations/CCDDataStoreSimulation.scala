@@ -129,6 +129,14 @@ class CCDDataStoreSimulation extends Simulation  {
       }
     }
 
+  val CaseActivityScn = scenario("CCD Case Activity Requests")
+    .repeat(1) {
+      exec(ccdcaseactivity.CDSGetRequest)
+      .repeat(1000) {
+        exec(ccdcaseactivity.CaseActivityRequests)
+      }
+    }
+
   setUp(
     //CCDElasticSearch.inject(rampUsers(1) during(1 minutes)),
     // ETCreateCase.inject(rampUsers(1) during(1 minutes))
@@ -137,7 +145,8 @@ class CCDDataStoreSimulation extends Simulation  {
     //CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(1) during(1 minutes))
     ProbateCreateCase.inject(rampUsers(250) during(10 minutes)),
     SSCSCreateCase.inject(rampUsers(250) during(10 minutes)),
-    DivorceCreateCase.inject(rampUsers(250) during(10 minutes))
+    DivorceCreateCase.inject(rampUsers(250) during(10 minutes)),
+    CaseActivityScn.inject(rampUsers(100) during(10 minutes))
     // RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes)), //100
     // RJSearchCases.inject(rampUsers(200) during (10 minutes))   //200
   )
