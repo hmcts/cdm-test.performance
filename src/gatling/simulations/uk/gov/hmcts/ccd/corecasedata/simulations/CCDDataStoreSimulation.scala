@@ -11,9 +11,9 @@ import scala.concurrent.duration._
 class CCDDataStoreSimulation extends Simulation  {
 
   //Repeat volumes
-  val probateIteration = 20
-  val sscsIteration = 20
-  val divorceIteration = 20
+  val probateIteration = 50
+  val sscsIteration = 50
+  val divorceIteration = 50
 
   val BaseURL = Environment.baseURL
   val config: Config = ConfigFactory.load()
@@ -135,9 +135,9 @@ class CCDDataStoreSimulation extends Simulation  {
     //CCDElasticSearchGoR.inject(rampUsers(1) during(1 minutes)),
     //CCDElasticSearchGoRState.inject(rampUsers(1) during(1 minutes)),
     //CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(1) during(1 minutes))
-    ProbateCreateCase.inject(rampUsers(150) during(10 minutes)),
-    SSCSCreateCase.inject(rampUsers(150) during(10 minutes)),
-    DivorceCreateCase.inject(rampUsers(150) during(10 minutes))
+    ProbateCreateCase.inject(rampUsers(250) during(10 minutes)),
+    SSCSCreateCase.inject(rampUsers(250) during(10 minutes)),
+    DivorceCreateCase.inject(rampUsers(250) during(10 minutes))
     // RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes)), //100
     // RJSearchCases.inject(rampUsers(200) during (10 minutes))   //200
   )
