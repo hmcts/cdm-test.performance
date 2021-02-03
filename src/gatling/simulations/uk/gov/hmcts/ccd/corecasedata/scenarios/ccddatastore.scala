@@ -485,7 +485,7 @@ val CDSGetRequest =
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"applyForGrant\",\n    \"summary\": \"test case\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
-    .pause(2)
+    .pause(4)
 
     .exec(http("PB_GetEventTokenPaymentSuccessful")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/paymentSuccessApp/token")
@@ -502,7 +502,7 @@ val CDSGetRequest =
       .body(ElFileBody("CCD_PaymentSuccess.json"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
-    .pause(2)
+    .pause(4)
 
     .exec(http("PB_GetEventTokenDocUpload")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/boUploadDocumentsForCaseCreated/token")
@@ -534,7 +534,7 @@ val CDSGetRequest =
       .header("Content-Type","application/json")
       .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken3}\",\n  \"ignore_warning\": false\n}")))
 
-    .pause(2)
+    .pause(4)
 
     .exec(http("PB_GetEventTokenStopCase")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/boStopCaseForCaseCreated/token")
@@ -551,7 +551,7 @@ val CDSGetRequest =
       .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken4}\",\n  \"ignore_warning\": false\n}"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
-      .pause(2)
+      .pause(4)
 
   val CCDLogin_SSCS = 
 

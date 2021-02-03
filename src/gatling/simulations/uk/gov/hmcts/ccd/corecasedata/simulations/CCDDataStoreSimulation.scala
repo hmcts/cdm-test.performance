@@ -14,6 +14,7 @@ class CCDDataStoreSimulation extends Simulation  {
   val probateIteration = 50
   val sscsIteration = 50
   val divorceIteration = 50
+  val caseActivityIteration = 400
 
   val BaseURL = Environment.baseURL
   val config: Config = ConfigFactory.load()
@@ -132,7 +133,7 @@ class CCDDataStoreSimulation extends Simulation  {
   val CaseActivityScn = scenario("CCD Case Activity Requests")
     .repeat(1) {
       exec(ccdcaseactivity.CDSGetRequest)
-      .repeat(1000) {
+      .repeat(caseActivityIteration) {
         exec(ccdcaseactivity.CaseActivityRequests)
       }
     }
