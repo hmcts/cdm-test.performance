@@ -12,6 +12,8 @@ class CCDDataStoreSimulation extends Simulation  {
 
   //Repeat volumes
   val probateIteration = 20
+  val sscsIteration = 20
+  val divorceIteration = 20
 
   val BaseURL = Environment.baseURL
   val config: Config = ConfigFactory.load()
@@ -111,13 +113,31 @@ class CCDDataStoreSimulation extends Simulation  {
       }
     }
 
+  val SSCSCreateCase = scenario("SSCS Case Create")
+    .repeat(1) {
+      exec(ccddatastore.CCDLogin_SSCS)
+      .repeat(sscsIteration) {
+        exec(ccddatastore.CCDAPI_SSCSJourney)
+      }
+    }
+
+  val DivorceCreateCase = scenario("Divorce Case Create")
+    .repeat(1) {
+      exec(ccddatastore.CCDLogin_Divorce)
+      .repeat(divorceIteration) {
+        exec(ccddatastore.CCDAPI_DivorceJourney)
+      }
+    }
+
   setUp(
     //CCDElasticSearch.inject(rampUsers(1) during(1 minutes)),
     // ETCreateCase.inject(rampUsers(1) during(1 minutes))
     //CCDElasticSearchGoR.inject(rampUsers(1) during(1 minutes)),
     //CCDElasticSearchGoRState.inject(rampUsers(1) during(1 minutes)),
     //CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(1) during(1 minutes))
-    ProbateCreateCase.inject(rampUsers(150) during(10 minutes))
+    ProbateCreateCase.inject(rampUsers(150) during(10 minutes)),
+    SSCSCreateCase.inject(rampUsers(150) during(10 minutes)),
+    DivorceCreateCase.inject(rampUsers(150) during(10 minutes))
     // RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes)), //100
     // RJSearchCases.inject(rampUsers(200) during (10 minutes))   //200
   )

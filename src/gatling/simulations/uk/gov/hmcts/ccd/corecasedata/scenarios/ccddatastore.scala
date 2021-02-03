@@ -31,6 +31,8 @@ val feedWorkbasketData = csv("workbasketCaseTypes.csv").circular
 val feedXUISearchData = csv("XUISearchData.csv").circular
 val feedXUIUserData = csv("XUISearchUsers.csv").circular
 val feedProbateUserData = csv("ProbateUserData.csv").circular
+val feedSSCSUserData = csv("SSCSUserData.csv").circular
+val feedDivorceUserData = csv("DivorceUserData.csv").circular
 
 val MinThinkTime = Environment.minThinkTime
 val MaxThinkTime = Environment.maxThinkTime
@@ -466,7 +468,6 @@ val CDSGetRequest =
       .check(jsonPath("$.access_token").saveAs("access_token")))
       .exitHereIfFailed
 
-
   val CCDAPI_ProbateJourney = 
 
     exec(http("PB_GetEventTokenCreateCase")
@@ -514,7 +515,7 @@ val CDSGetRequest =
       session.set("FileName1", "1MB.pdf")
     })
 
-    .exec(http("PB_DocUpload")
+    .exec(http("PB_DocUploadProcess")
       .post(dmStoreUrl + "/documents")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .bodyPart(RawFileBodyPart("files", "${FileName1}")
@@ -552,9 +553,204 @@ val CDSGetRequest =
 
       .pause(Environment.constantthinkTime)
 
-  // val CCDAPI_SSCSJourney =
+  val CCDLogin_SSCS = 
+
+    feed(feedSSCSUserData)
+
+    // .exec(http("GetIdamUserID")
+    //   .get("https://idam-api.perftest.platform.hmcts.net/users?email=${SSCSUserName}") //1f65a0df-b064-4f9b-85ea-3eec5a28ce86 ${caseSharingUser}
+    //   .headers(headers_0)
+    //   .check(jsonPath("$.id").saveAs("userId"))
+    //   .check(status.saveAs("statusvalue")))
+
+    // .doIf(session=>session("statusvalue").as[String].contains("200")) {
+    //   exec {
+    //     session =>
+    //       val fw = new BufferedWriter(new FileWriter("SSCSEmailAndIdamIDs.csv", true))
+    //       try {
+    //         fw.write(session("SSCSUserName").as[String] + "," + session("userId").as[String] + "\r\n")
+    //       }
+    //       finally fw.close()
+    //       session
+    //   }
+    // }
+
+    .exec(http("GetS2SToken")
+      .post(s2sUrl + "/testing-support/lease")
+      .header("Content-Type", "application/json")
+      .body(StringBody("{\"microservice\":\"ccd_data\"}"))
+      .check(bodyString.saveAs("bearerToken")))
+      .exitHereIfFailed
+
+    .exec(http("OIDC01_Authenticate")
+      .post(IdamAPI + "/authenticate")
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .formParam("username", "${SSCSUserName}") //${email}
+      .formParam("password", "${SSCSUserPassword}")
+      .formParam("redirectUri", ccdRedirectUri)
+      .formParam("originIp", "0:0:0:0:0:0:0:1")
+      .check(status is 200)
+      .check(headerRegex("Set-Cookie", "Idam.Session=(.*)").saveAs("authCookie")))
+      .exitHereIfFailed
+
+   .exec(http("OIDC02_Authorize_CCD")
+      .post(IdamAPI + "/o/authorize?response_type=code&client_id=" + ccdClientId + "&redirect_uri=" + ccdRedirectUri + "&scope=" + ccdScope).disableFollowRedirect
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .header("Cookie", "Idam.Session=${authCookie}")
+      .header("Content-Length", "0")
+      .check(status is 302)
+      .check(headerRegex("Location", "code=(.*)&client_id").saveAs("code")))
+      .exitHereIfFailed
+
+   .exec(http("OIDC03_Token_CCD")
+      .post(IdamAPI + "/o/token?grant_type=authorization_code&code=${code}&client_id=" + ccdClientId +"&redirect_uri=" + ccdRedirectUri + "&client_secret=" + ccdGatewayClientSecret)
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .header("Content-Length", "0")
+      .check(status is 200)
+      .check(jsonPath("$.access_token").saveAs("access_token")))
+      .exitHereIfFailed
+
+  val CCDAPI_SSCSJourney =
+
+    exec(http("SSCS_GetEventTokenCreateCase")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/event-triggers/appealCreated/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken")))
+
+    .exec(http("SSCS_CreateCase")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(StringBody("{\n  \"data\": {\n    \"caseReference\": null,\n    \"caseCreated\": \"2021-02-03\",\n    \"region\": null,\n    \"appeal\": {\n      \"receivedVia\": \"Online\",\n      \"mrnDetails\": {\n        \"dwpIssuingOffice\": \"DWP\",\n        \"mrnDate\": \"2020-12-22\",\n        \"mrnLateReason\": null,\n        \"mrnMissingReason\": null\n      },\n      \"appellant\": {\n        \"name\": {\n          \"title\": \"Mr\",\n          \"firstName\": \"John\",\n          \"middleName\": null,\n          \"lastName\": \"Smith\"\n        },\n        \"identity\": {\n          \"dob\": \"2000-03-01\",\n          \"nino\": \"AB1234567Z\"\n        },\n        \"address\": {\n          \"line1\": \"24 Test Street\",\n          \"line2\": null,\n          \"line3\": null,\n          \"town\": \"London\",\n          \"county\": null,\n          \"postcode\": \"KT2 5BU\",\n          \"country\": \"UK\"\n        },\n        \"contact\": {\n          \"phone\": \"07123456789\",\n          \"mobile\": null,\n          \"email\": null\n        },\n        \"isAppointee\": \"No\",\n        \"appointee\": {\n          \"name\": {\n            \"title\": null,\n            \"firstName\": null,\n            \"middleName\": null,\n            \"lastName\": null\n          },\n          \"identity\": {\n            \"dob\": null,\n            \"nino\": null\n          },\n          \"address\": {\n            \"line1\": null,\n            \"line2\": null,\n            \"line3\": null,\n            \"town\": null,\n            \"county\": null,\n            \"postcode\": null,\n            \"country\": null\n          },\n          \"contact\": {\n            \"phone\": null,\n            \"mobile\": null,\n            \"email\": null\n          }\n        },\n        \"isAddressSameAsAppointee\": null\n      },\n      \"benefitType\": {\n        \"code\": null,\n        \"description\": null\n      },\n      \"hearingType\": null,\n      \"hearingOptions\": {\n        \"wantsToAttend\": null,\n        \"languageInterpreter\": null,\n        \"other\": null,\n        \"signLanguageType\": null\n      },\n      \"appealReasons\": {\n        \"reasons\": [],\n        \"otherReasons\": null\n      },\n      \"supporter\": {\n        \"name\": {\n          \"title\": null,\n          \"firstName\": null,\n          \"middleName\": null,\n          \"lastName\": null\n        },\n        \"contact\": {\n          \"phone\": null,\n          \"mobile\": null,\n          \"email\": null\n        }\n      },\n      \"rep\": {\n        \"hasRepresentative\": null\n      },\n      \"signer\": null\n    },\n    \"regionalProcessingCenter\": {\n      \"name\": null,\n      \"address1\": null,\n      \"address2\": null,\n      \"address3\": null,\n      \"address4\": null,\n      \"postcode\": null,\n      \"city\": null,\n      \"phoneNumber\": null,\n      \"faxNumber\": null,\n      \"email\": null\n    },\n    \"panel\": {\n      \"assignedTo\": null,\n      \"medicalMember\": null,\n      \"disabilityQualifiedMember\": null\n    }\n  },\n  \"event\": {\n    \"id\": \"appealCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
+      .check(jsonPath("$.id").saveAs("caseId")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("SSCS_GetEventTokenDocUpload")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases/${caseId}/event-triggers/uploadDocument/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken3")))
 
 
+    .exec(session => {
+      session.set("FileName1", "1MB.pdf")
+    })
+
+    .exec(http("SSCS_DocUploadProcess")
+      .post(dmStoreUrl + "/documents")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .bodyPart(RawFileBodyPart("files", "${FileName1}")
+        .fileName("${FileName1}")
+        .transferEncoding("binary"))
+      .asMultipartForm
+      .formParam("classification", "PUBLIC")
+      .check(status.is(200))
+      .check(regex("""http://(.+)/""").saveAs("DMURL"))
+      .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
+
+    .exec(http("SSCS_DocUpload")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(StringBody("{\n  \"data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-11-12\",\n          \"documentComment\": \"${FileName1} upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"${FileName1} upload doc\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken3}\",\n  \"ignore_warning\": false\n}")))
+
+    .pause(Environment.constantthinkTime)
+
+  val CCDLogin_Divorce =
+
+    feed(feedDivorceUserData)
+
+    .exec(http("GetS2SToken")
+      .post(s2sUrl + "/testing-support/lease")
+      .header("Content-Type", "application/json")
+      .body(StringBody("{\"microservice\":\"ccd_data\"}"))
+      .check(bodyString.saveAs("bearerToken")))
+      .exitHereIfFailed
+
+    .exec(http("OIDC01_Authenticate")
+      .post(IdamAPI + "/authenticate")
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .formParam("username", "${DivorceUserName}") 
+      .formParam("password", "${DivorceUserPassword}")
+      .formParam("redirectUri", ccdRedirectUri)
+      .formParam("originIp", "0:0:0:0:0:0:0:1")
+      .check(status is 200)
+      .check(headerRegex("Set-Cookie", "Idam.Session=(.*)").saveAs("authCookie")))
+      .exitHereIfFailed
+
+   .exec(http("OIDC02_Authorize_CCD")
+      .post(IdamAPI + "/o/authorize?response_type=code&client_id=" + ccdClientId + "&redirect_uri=" + ccdRedirectUri + "&scope=" + ccdScope).disableFollowRedirect
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .header("Cookie", "Idam.Session=${authCookie}")
+      .header("Content-Length", "0")
+      .check(status is 302)
+      .check(headerRegex("Location", "code=(.*)&client_id").saveAs("code")))
+      .exitHereIfFailed
+
+   .exec(http("OIDC03_Token_CCD")
+      .post(IdamAPI + "/o/token?grant_type=authorization_code&code=${code}&client_id=" + ccdClientId +"&redirect_uri=" + ccdRedirectUri + "&client_secret=" + ccdGatewayClientSecret)
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .header("Content-Length", "0")
+      .check(status is 200)
+      .check(jsonPath("$.access_token").saveAs("access_token")))
+      .exitHereIfFailed
+
+  val CCDAPI_DivorceJourney =
+
+    exec(http("Divorce_GetEventTokenCreateCase")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/event-triggers/solicitorCreate/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken")))
+
+    .exec(http("Divorce_CreateCase")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(StringBody("{\n  \"data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"Jane\",\n    \"D8PetitionerLastName\": \"Deer\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"Steve\",\n    \"D8RespondentLastName\": \"Smith\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"Jane Deer\",\n    \"D8MarriageRespondentName\": \"Steve Smith\",\n    \"D8MarriedInUk\": \"Yes\",\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ],\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\",\n    \"D8ReasonForDivorceBehaviourDetails\": \"bad behaviour\",\n    \"D8LegalProceedings\": \"No\",\n    \"D8FinancialOrder\": \"No\",\n    \"D8DivorceCostsClaim\": \"No\",\n    \"D8DocumentsUploaded\": []\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
+      .check(jsonPath("$.id").saveAs("caseId")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("Divorce_GetEventTokenDocUpload")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/uploadDocument/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken3")))
+
+     .exec(session => {
+      session.set("FileName1", "1MB.pdf")
+    })
+
+    .exec(http("Divorce_DocUploadProcess")
+      .post(dmStoreUrl + "/documents")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .bodyPart(RawFileBodyPart("files", "${FileName1}")
+        .fileName("${FileName1}")
+        .transferEncoding("binary"))
+      .asMultipartForm
+      .formParam("classification", "PUBLIC")
+      .check(status.is(200))
+      .check(regex("""http://(.+)/""").saveAs("DMURL"))
+      .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
+
+    .exec(http("Divorce_DocUpload")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")      
+      .body(StringBody("{\n  \"data\": {\n    \"D8DocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"other\",\n          \"DocumentEmailContent\": null,\n          \"DocumentDateAdded\": null,\n          \"DocumentComment\": null,\n          \"DocumentFileName\": null,\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken3}\",\n  \"ignore_warning\": false\n}")))
+
+    .pause(Environment.constantthinkTime)
 
   //CreateCaseForCaseSharing
 
