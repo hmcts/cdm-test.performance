@@ -4,6 +4,7 @@ import com.typesafe.config.{Config, ConfigFactory}
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
+import java.io.{BufferedWriter, FileWriter}
 
 object ccddatastore {
 
@@ -19,6 +20,7 @@ val s2sUrl = Environment.s2sUrl
 val ccdRedirectUri = "https://ccd-data-store-api-perftest.service.core-compute-perftest.internal/oauth2redirect"
 val ccdDataStoreUrl = "http://ccd-data-store-api-perftest.service.core-compute-perftest.internal"
 val escaseDataUrl = "https://ccd-api-gateway-web-perftest.service.core-compute-perftest.internal"
+val dmStoreUrl = "http://dm-store-perftest.service.core-compute-perftest.internal"
 val ccdClientId = "ccd_gateway"
 val ccdGatewayClientSecret = config.getString("ccdGatewayCS")
 
@@ -28,6 +30,7 @@ val feedCaseSearchData = csv("caseSearchData.csv").random
 val feedWorkbasketData = csv("workbasketCaseTypes.csv").circular
 val feedXUISearchData = csv("XUISearchData.csv").circular
 val feedXUIUserData = csv("XUISearchUsers.csv").circular
+val feedProbateUserData = csv("ProbateUserData.csv").circular
 
 val MinThinkTime = Environment.minThinkTime
 val MaxThinkTime = Environment.maxThinkTime
@@ -36,7 +39,7 @@ val MinWaitForNextIteration = Environment.minWaitForNextIteration
 val MaxWaitForNextIteration = Environment.maxWaitForNextIteration
 
 val headers_0 = Map( //Authorization token needs to be generated with idam login
-  "Authorization" -> "AdminApiAuthToken ",
+  "Authorization" -> "AdminApiAuthToken eyJtb25rZXkiOiJJX1hpWW1iZmpyN0stOTJudm1OYXRDVTVnbXMuKkFBSlRTUUFDTURJQUFsTkxBQnhSWjFWRVEwUmlNbEZpYTBkUlJuWldVblpQYjFVM1IxaExNa1U5QUFSMGVYQmxBQU5EVkZNQUFsTXhBQUl3TkEuLioiLCJyYWJiaXQiOiJzZXNzaW9uLWp3dD1leUowZVhBaU9pSktWMVFpTENKcmFXUWlPaUp2Y0dWdWFXUnRMV3AzZEhObGMzTnBiMjVvYldGakxXdGxlU0lzSW1OMGVTSTZJa3BYVkNJc0ltRnNaeUk2SWtoVE1qVTJJbjAuWlhsS01HVllRV2xQYVVwTFZqRlJhVXhEU25KaFYxRnBUMmxLZWxwWVNqSmFXRWwwV1RKV2VXUkRTWE5KYlZaMVdYbEpOa2xyUlhoTmFtaEVVV3ROZEZOR1RYbE9WRmxwVEVOS2FHSkhZMmxQYVVwVFZUQkZlRmg2VldsbVVTNW5ablpsYVU4eExUVlBia3BRUTNsWU1Va3hTMUpsU25vd1kyNXRia1pEUlVkblpsaEJkVUU1TkVWNWJXSXdlamRuUkRWT2NHMWlOMjk1YkZGR1UyMVJhMWwxUzA4eFVubHZTM2xIWDJsQ1EzaEZZVGxPZEZoTVZTMVhiRFZDVEVGT2J6UlJSMk51TmxoUk1qQTJVbVZoTm5OalVuVTBNRzUzVHpWd2JVTlNPWE5YY1dwVmFFcDJURWt3UzBoQldWaExiR3hKVEdsZlFWUnhOV1V6WDE5eVdIVlVPVGxQZFdnNVZtaHRVVzlFVVZwTVprUnRPSGhZZFhodloybGpaMWcyZFZSVFdFRmxObVo2ZHpWM1NEQTNiWEZSZWpaRGIzaFdWbUowVEdOT04yRnhXSFZQU1RrM1VGUk9kaTFtVEMxRE0yUk1XRGgzY0VWSWVsSlFSMnhYTkhkTk1rZGpPREpDZVZSWFYwSjZZM2t3ZUdwWmVYUTBUMjlCYUZkd1RXbDNTV3g1WWtKc2FrMU1NMk50YzNKcVNITmxRVlpCTFZrdFlsSTNiMUV0ZGpKR2RsZE1VWGxPYVdnNE5GRTFOMGhHYTFsbGNsRXVhMUUwZFdKS2RHdHZRM1J0WVZwa2VqaEpXa0ZQWnk1SU5FZFFkbGRNYVZkZlQzQlNPVkZYZG5RNGIwVmZhbEpLVkRSM1psbGhlR1JhYzI1dUxWQkliV1puYWpSNmQxRkZUbXRLVTFaaFJIQm9TMFJOUVU5cFdXNXdjRkpmUlZaTVVXTkNURVo1VFhOZk56ZG9VSGN5T1ZJeGJHZ3RVMW8wV2psM1YwMUVVRVp6VlZFMGEycGxSbUp5UkRWSmJ6WnNjbUl5YmpaYWQxTk5ZV0ZIVGxwSmRWUnhWVWRTVGpkRVZVTndMVkF4WDB4Q2VqVkJhVXhWUmxsRE5uTmpaelZtVFd0Q2RqZDVUak5WWjE5U1FtWnlUMjlWY0c5V1JERlNjbE15ZFdsU2FVRjZaMloyU1VsTllWRkVWbVZ1TFcxc1NYaDNiRUoxWkc1eU5uRjVVR0pITFhONWRtbG5UMHh4YlVKUlZrZEpOalpYU0ZwclMyNXJZek01TFZRMlQybFlSR0ZPTW5CT2Fub3RjamxFTTJRd2VGTjBlV0ZaYmpJNGRrMDFZVW80YVc1WmRTMDFjRzEyVTBKUmNHNDJUMFp2VUZSM2JVWk9WV3R2YkRkV1duRkZNMkZmVDJSSlVFaFNabEJEWTJ4c1p6RnBOVmRDVldFd05qUmFORzVsYjJzNVdubFNVMHcyV25GUU5sbERaWEI0TW1OV1kzUnRTSFpqWjI1MVJrVkRhamQ1TW1VdGQzTjRXalp4VEhWWWN6Rm5UVmsyVFRCMFFWSkROa2RSTUZwemQweENhemRYTFU5SVdVaHlZVEZuUW5oUFltOTJaRk42UVdSTE5sSnZUM1pyTkZSV2RYVjRXRVl3TVRjeWMxUm5kRmxvTVdsYVJYSk9WREJyYTNGSGFEaHNSbVZ2ZDFoM1IwZG9hMmM1U1V4b1lVcHZkbUpLVEZCeWNpMXhTMXBKY2t0MVZsRkZhVXBpV2xWa1luUkJRVTlEVWpWUFZXaExaMWhOZWxsRWQxVjBNMGhmZHpabFZqbE5XRmgyUzJ0TlRqWlpUM05oVkdocWVuWlpNMVF3UW10elRUbFVVWE5XTjB0Q2IxODVXV05zV25WbmRrb3phRmhTWlZKT1YxTmplRVZPUzBWUGRFdDJaVTQ0VGxoNVNHUnpXR0pyYWpKVlpHRXpSV3czVTJaNU1FTkRPV2c0Y0RaNlJHMWFhMWx6ZDJOR1Ntd3RWbEZrVjNSRFlrOVFRbXRsWjJsbGVFaEtZemd3UlRkQmJFVk1TMXAwT0ZKdFdYbHNWSEZDZEc5SGIyOXhaM2RRTjNjM1UwZ3RWazVSVDI1aVptWTBUWEUwU2xNeFRHOVRORFIxTjA5S1RuRlFYM3BvTldGUFJHZHlaVGRaU0VOaVVYaEdWV1IwWVRGZk9VNU9hazFtUkdGRFQwZHZiVzlTTWtGMmQxOUpXRmwwZGt0cVQwaHVVRkV6YW5sdGJVMUZaVXhyWjBwNlRtdHFOMDFvUnpsb2NtOUpjVVJKYW5rM1JGTkhXVlpqYzFFNVoxZFlWMEl3Y1hseE5reEhkbEpFVFd4MmJUZExiV3BFVVdGall5NUtRa2xLUTJkalZGOTBZMTgyUmpaSk1sVnhRamgzLnRkNWNJblpRUVRMYUxKMC1kZEVGTTRiWkRzNFU5Mmhvb01wX2cyTkFvRUE7IFBhdGg9LzsgSHR0cE9ubHkifQ==",
   "Content-Type" -> "application/json")
 
 val CDSGetRequest =
@@ -404,22 +407,171 @@ val CDSGetRequest =
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"applyForGrant\",\n    \"summary\": \"test case\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
-    // .pause(1)
+    .pause(1)
 
-    .exec(http("DIV_GetEventToken")
-      .get(ccdDataStoreUrl + "/caseworkers/539560/jurisdictions/DIVORCE/case-types/DIVORCE/event-triggers/CREATE/token")
+  val CCDLogin_Probate = 
+
+    feed(feedProbateUserData)
+
+    // .exec(http("GetIdamUserID")
+    //   .get("https://idam-api.perftest.platform.hmcts.net/users?email=${ProbateUserName}") //1f65a0df-b064-4f9b-85ea-3eec5a28ce86 ${caseSharingUser}
+    //   .headers(headers_0)
+    //   .check(jsonPath("$.id").saveAs("userId"))
+    //   .check(status.saveAs("statusvalue")))
+
+    // .doIf(session=>session("statusvalue").as[String].contains("200")) {
+    //   exec {
+    //     session =>
+    //       val fw = new BufferedWriter(new FileWriter("ProbateEmailAndIdamIDs.csv", true))
+    //       try {
+    //         fw.write(session("ProbateUserName").as[String] + "," + session("userId").as[String] + "\r\n")
+    //       }
+    //       finally fw.close()
+    //       session
+    //   }
+    // }
+
+    .exec(http("GetS2SToken")
+      .post(s2sUrl + "/testing-support/lease")
+      .header("Content-Type", "application/json")
+      .body(StringBody("{\"microservice\":\"ccd_data\"}"))
+      .check(bodyString.saveAs("bearerToken")))
+      .exitHereIfFailed
+
+    .exec(http("OIDC01_Authenticate")
+      .post(IdamAPI + "/authenticate")
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .formParam("username", "${ProbateUserName}") //${email}
+      .formParam("password", "${ProbateUserPassword}")
+      .formParam("redirectUri", ccdRedirectUri)
+      .formParam("originIp", "0:0:0:0:0:0:0:1")
+      .check(status is 200)
+      .check(headerRegex("Set-Cookie", "Idam.Session=(.*)").saveAs("authCookie")))
+      .exitHereIfFailed
+
+   .exec(http("OIDC02_Authorize_CCD")
+      .post(IdamAPI + "/o/authorize?response_type=code&client_id=" + ccdClientId + "&redirect_uri=" + ccdRedirectUri + "&scope=" + ccdScope).disableFollowRedirect
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .header("Cookie", "Idam.Session=${authCookie}")
+      .header("Content-Length", "0")
+      .check(status is 302)
+      .check(headerRegex("Location", "code=(.*)&client_id").saveAs("code")))
+      .exitHereIfFailed
+
+   .exec(http("OIDC03_Token_CCD")
+      .post(IdamAPI + "/o/token?grant_type=authorization_code&code=${code}&client_id=" + ccdClientId +"&redirect_uri=" + ccdRedirectUri + "&client_secret=" + ccdGatewayClientSecret)
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .header("Content-Length", "0")
+      .check(status is 200)
+      .check(jsonPath("$.access_token").saveAs("access_token")))
+      .exitHereIfFailed
+
+
+  val CCDAPI_ProbateJourney = 
+
+    exec(http("PB_GetEventTokenCreateCase")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken")))
 
-    .exec(http("DIV_CreateCase")
-      .post(ccdDataStoreUrl + "/caseworkers/539560/jurisdictions/DIVORCE/case-types/DIVORCE/cases")
+    .exec(http("PB_CreateCase")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
-      .body(StringBody("{\n  \"data\": {\n    \"D8legalProcess\": null,\n    \"createdDate\": null,\n    \"D8ScreenHasMarriageBroken\": null,\n    \"D8ScreenHasRespondentAddress\": null,\n    \"D8ScreenHasMarriageCert\": null,\n    \"D8ScreenHasPrinter\": null,\n    \"D8DivorceWho\": null,\n    \"D8MarriageIsSameSexCouple\": null,\n    \"D8InferredPetitionerGender\": null,\n    \"D8InferredRespondentGender\": null,\n    \"D8MarriageDate\": null,\n    \"D8MarriedInUk\": null,\n    \"D8CertificateInEnglish\": null,\n    \"D8CertifiedTranslation\": null,\n    \"D8MarriagePlaceOfMarriage\": null,\n    \"D8CountryName\": null,\n    \"D8MarriagePetitionerName\": null,\n    \"D8MarriageRespondentName\": null,\n    \"D8PetitionerNameDifferentToMarriageCert\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerFirstName\": null,\n    \"D8PetitionerLastName\": null,\n    \"D8DerivedPetitionerCurrentFullName\": null,\n    \"D8PetitionerNameChangedHow\": [],\n    \"D8PetitionerNameChangedHowOtherDetails\": null,\n    \"D8PetitionerContactDetailsConfidential\": null,\n    \"D8PetitionerHomeAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedPetitionerHomeAddress\": null,\n    \"D8PetitionerCorrespondenceAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedPetitionerCorrespondenceAddr\": null,\n    \"D8PetitionerCorrespondenceUseHomeAddress\": null,\n    \"D8RespondentNameAsOnMarriageCertificate\": null,\n    \"D8RespondentFirstName\": null,\n    \"D8RespondentLastName\": null,\n    \"D8DerivedRespondentCurrentName\": null,\n    \"D8DerivedRespondentSolicitorDetails\": null,\n    \"D8RespondentHomeAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedRespondentCorrespondenceAddr\": null,\n    \"D8RespondentSolicitorName\": null,\n    \"D8RespondentSolicitorCompany\": null,\n    \"D8RespondentCorrespondenceSendToSol\": null,\n    \"D8RespondentSolicitorAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedRespondentSolicitorAddr\": null,\n    \"D8RespondentCorrespondenceUseHomeAddress\": null,\n    \"D8RespondentKnowsHomeAddress\": null,\n    \"D8RespondentLivesAtLastAddress\": null,\n    \"D8LivingArrangementsTogetherSeparated\": null,\n    \"D8LivingArrangementsLastLivedTogether\": null,\n    \"D8LivingArrangementsLiveTogether\": null,\n    \"D8LivingArrangementsLastLivedTogethAddr\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedLivingArrangementsLastLivedAddr\": null,\n    \"D8LegalProceedings\": null,\n    \"D8LegalProceedingsRelated\": [],\n    \"D8LegalProceedingsDetails\": null,\n    \"D8ReasonForDivorce\": null,\n    \"D8DerivedStatementOfCase\": null,\n    \"D8ReasonForDivorceBehaviourDetails\": null,\n    \"D8ReasonForDivorceDesertionDate\": null,\n    \"D8ReasonForDivorceDesertionAgreed\": null,\n    \"D8ReasonForDivorceDesertionDetails\": null,\n    \"D8ReasonForDivorceSeperationDate\": null,\n    \"D8ReasonForDivorceAdultery3rdPartyFName\": null,\n    \"D8ReasonForDivorceAdultery3rdPartyLName\": null,\n    \"D8DerivedReasonForDivorceAdultery3dPtyNm\": null,\n    \"D8ReasonForDivorceAdulteryDetails\": null,\n    \"D8ReasonForDivorceAdulteryKnowWhen\": null,\n    \"D8ReasonForDivorceAdulteryWishToName\": null,\n    \"D8ReasonForDivorceAdulteryKnowWhere\": null,\n    \"D8ReasonForDivorceAdulteryWhereDetails\": null,\n    \"D8ReasonForDivorceAdulteryWhenDetails\": null,\n    \"D8ReasonForDivorceAdulteryIsNamed\": null,\n    \"D8ReasonForDivorceAdultery3rdAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8FinancialOrder\": null,\n    \"D8FinancialOrderFor\": [],\n    \"D8HelpWithFeesNeedHelp\": null,\n    \"D8HelpWithFeesAppliedForFees\": null,\n    \"D8HelpWithFeesReferenceNumber\": null,\n    \"D8PaymentMethod\": null,\n    \"D8DivorceCostsClaim\": null,\n    \"D8DivorceIsNamed\": null,\n    \"D8DivorceClaimFrom\": [],\n    \"D8JurisdictionConfidentLegal\": null,\n    \"D8JurisdictionConnection\": [],\n    \"D8JurisdictionLastTwelveMonths\": null,\n    \"D8JurisdictionPetitionerDomicile\": null,\n    \"D8JurisdictionPetitionerResidence\": null,\n    \"D8JurisdictionRespondentDomicile\": null,\n    \"D8JurisdictionRespondentResidence\": null,\n    \"D8JurisdictionHabituallyResLast6Months\": null,\n    \"Payments\": [],\n    \"D8DocumentsUploaded\": [],\n    \"D8DocumentsGenerated\": [],\n    \"D8StatementOfTruth\": null,\n    \"D8DivorceUnit\": null,\n    \"D8Cohort\": null\n  },\n  \"event\": {\n    \"id\": \"create\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"D8legalProcess\": null,\n    \"createdDate\": null,\n    \"D8ScreenHasMarriageBroken\": null,\n    \"D8ScreenHasRespondentAddress\": null,\n    \"D8ScreenHasMarriageCert\": null,\n    \"D8ScreenHasPrinter\": null,\n    \"D8DivorceWho\": null,\n    \"D8MarriageIsSameSexCouple\": null,\n    \"D8InferredPetitionerGender\": null,\n    \"D8InferredRespondentGender\": null,\n    \"D8MarriageDate\": null,\n    \"D8MarriedInUk\": null,\n    \"D8CertificateInEnglish\": null,\n    \"D8CertifiedTranslation\": null,\n    \"D8MarriagePlaceOfMarriage\": null,\n    \"D8CountryName\": null,\n    \"D8MarriagePetitionerName\": null,\n    \"D8MarriageRespondentName\": null,\n    \"D8PetitionerNameDifferentToMarriageCert\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerFirstName\": null,\n    \"D8PetitionerLastName\": null,\n    \"D8DerivedPetitionerCurrentFullName\": null,\n    \"D8PetitionerNameChangedHow\": [],\n    \"D8PetitionerNameChangedHowOtherDetails\": null,\n    \"D8PetitionerContactDetailsConfidential\": null,\n    \"D8PetitionerHomeAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedPetitionerHomeAddress\": null,\n    \"D8PetitionerCorrespondenceAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedPetitionerCorrespondenceAddr\": null,\n    \"D8PetitionerCorrespondenceUseHomeAddress\": null,\n    \"D8RespondentNameAsOnMarriageCertificate\": null,\n    \"D8RespondentFirstName\": null,\n    \"D8RespondentLastName\": null,\n    \"D8DerivedRespondentCurrentName\": null,\n    \"D8DerivedRespondentSolicitorDetails\": null,\n    \"D8RespondentHomeAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedRespondentCorrespondenceAddr\": null,\n    \"D8RespondentSolicitorName\": null,\n    \"D8RespondentSolicitorCompany\": null,\n    \"D8RespondentCorrespondenceSendToSol\": null,\n    \"D8RespondentSolicitorAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedRespondentSolicitorAddr\": null,\n    \"D8RespondentCorrespondenceUseHomeAddress\": null,\n    \"D8RespondentKnowsHomeAddress\": null,\n    \"D8RespondentLivesAtLastAddress\": null,\n    \"D8LivingArrangementsTogetherSeparated\": null,\n    \"D8LivingArrangementsLastLivedTogether\": null,\n    \"D8LivingArrangementsLiveTogether\": null,\n    \"D8LivingArrangementsLastLivedTogethAddr\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedLivingArrangementsLastLivedAddr\": null,\n    \"D8LegalProceedings\": null,\n    \"D8LegalProceedingsRelated\": [],\n    \"D8LegalProceedingsDetails\": null,\n    \"D8ReasonForDivorce\": null,\n    \"D8DerivedStatementOfCase\": null,\n    \"D8ReasonForDivorceBehaviourDetails\": null,\n    \"D8ReasonForDivorceDesertionDate\": null,\n    \"D8ReasonForDivorceDesertionAgreed\": null,\n    \"D8ReasonForDivorceDesertionDetails\": null,\n    \"D8ReasonForDivorceSeperationDate\": null,\n    \"D8ReasonForDivorceAdultery3rdPartyFName\": null,\n    \"D8ReasonForDivorceAdultery3rdPartyLName\": null,\n    \"D8DerivedReasonForDivorceAdultery3dPtyNm\": null,\n    \"D8ReasonForDivorceAdulteryDetails\": null,\n    \"D8ReasonForDivorceAdulteryKnowWhen\": null,\n    \"D8ReasonForDivorceAdulteryWishToName\": null,\n    \"D8ReasonForDivorceAdulteryKnowWhere\": null,\n    \"D8ReasonForDivorceAdulteryWhereDetails\": null,\n    \"D8ReasonForDivorceAdulteryWhenDetails\": null,\n    \"D8ReasonForDivorceAdulteryIsNamed\": null,\n    \"D8ReasonForDivorceAdultery3rdAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8FinancialOrder\": null,\n    \"D8FinancialOrderFor\": [],\n    \"D8HelpWithFeesNeedHelp\": null,\n    \"D8HelpWithFeesAppliedForFees\": null,\n    \"D8HelpWithFeesReferenceNumber\": null,\n    \"D8PaymentMethod\": null,\n    \"D8DivorceCostsClaim\": null,\n    \"D8DivorceIsNamed\": null,\n    \"D8DivorceClaimFrom\": [],\n    \"D8JurisdictionConfidentLegal\": null,\n    \"D8JurisdictionConnection\": [],\n    \"D8JurisdictionLastTwelveMonths\": null,\n    \"D8JurisdictionPetitionerDomicile\": null,\n    \"D8JurisdictionPetitionerResidence\": null,\n    \"D8JurisdictionRespondentDomicile\": null,\n    \"D8JurisdictionRespondentResidence\": null,\n    \"D8JurisdictionHabituallyResLast6Months\": null,\n    \"Payments\": [],\n    \"D8DocumentsUploaded\": [],\n    \"D8DocumentsGenerated\": [],\n    \"D8StatementOfTruth\": null,\n    \"D8DivorceUnit\": null,\n    \"D8Cohort\": null\n  }\n}"))
+      .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"applyForGrant\",\n    \"summary\": \"test case\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("caseId")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("PB_GetEventTokenPaymentSuccessful")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/paymentSuccessApp/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken2")))
+
+    .exec(http("PB_PaymentSuccessful")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(ElFileBody("CCD_PaymentSuccess.json"))
+      .check(jsonPath("$.id").saveAs("caseId")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("PB_GetEventTokenDocUpload")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/boUploadDocumentsForCaseCreated/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken3")))
+
+    .exec(session => {
+      session.set("FileName1", "1MB.pdf")
+    })
+
+    .exec(http("PB_DocUpload")
+      .post(dmStoreUrl + "/documents")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .bodyPart(RawFileBodyPart("files", "${FileName1}")
+        .fileName("${FileName1}")
+        .transferEncoding("binary"))
+      .asMultipartForm
+      .formParam("classification", "PUBLIC")
+      .check(status.is(200))
+      .check(regex("""http://(.+)/""").saveAs("DMURL"))
+      .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
+
+    .exec(http("PB_DocUpload")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken3}\",\n  \"ignore_warning\": false\n}")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("PB_GetEventTokenStopCase")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/boStopCaseForCaseCreated/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken4")))
+
+    .exec(http("PB_StopCase")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken4}\",\n  \"ignore_warning\": false\n}"))
+      .check(jsonPath("$.id").saveAs("caseId")))
+
+      .pause(Environment.constantthinkTime)
+
+  // val CCDAPI_SSCSJourney =
+
+
+
+  //CreateCaseForCaseSharing
+
+    // .exec(http("DIV_GetEventToken")
+    //   .get(ccdDataStoreUrl + "/caseworkers/539560/jurisdictions/DIVORCE/case-types/DIVORCE/event-triggers/CREATE/token")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .header("Authorization", "Bearer ${access_token}")
+    //   .header("Content-Type","application/json")
+    //   .check(jsonPath("$.token").saveAs("eventToken")))
+
+    // .exec(http("DIV_CreateCase")
+    //   .post(ccdDataStoreUrl + "/caseworkers/539560/jurisdictions/DIVORCE/case-types/DIVORCE/cases")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .header("Authorization", "Bearer ${access_token}")
+    //   .header("Content-Type","application/json")
+    //   .body(StringBody("{\n  \"data\": {\n    \"D8legalProcess\": null,\n    \"createdDate\": null,\n    \"D8ScreenHasMarriageBroken\": null,\n    \"D8ScreenHasRespondentAddress\": null,\n    \"D8ScreenHasMarriageCert\": null,\n    \"D8ScreenHasPrinter\": null,\n    \"D8DivorceWho\": null,\n    \"D8MarriageIsSameSexCouple\": null,\n    \"D8InferredPetitionerGender\": null,\n    \"D8InferredRespondentGender\": null,\n    \"D8MarriageDate\": null,\n    \"D8MarriedInUk\": null,\n    \"D8CertificateInEnglish\": null,\n    \"D8CertifiedTranslation\": null,\n    \"D8MarriagePlaceOfMarriage\": null,\n    \"D8CountryName\": null,\n    \"D8MarriagePetitionerName\": null,\n    \"D8MarriageRespondentName\": null,\n    \"D8PetitionerNameDifferentToMarriageCert\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerFirstName\": null,\n    \"D8PetitionerLastName\": null,\n    \"D8DerivedPetitionerCurrentFullName\": null,\n    \"D8PetitionerNameChangedHow\": [],\n    \"D8PetitionerNameChangedHowOtherDetails\": null,\n    \"D8PetitionerContactDetailsConfidential\": null,\n    \"D8PetitionerHomeAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedPetitionerHomeAddress\": null,\n    \"D8PetitionerCorrespondenceAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedPetitionerCorrespondenceAddr\": null,\n    \"D8PetitionerCorrespondenceUseHomeAddress\": null,\n    \"D8RespondentNameAsOnMarriageCertificate\": null,\n    \"D8RespondentFirstName\": null,\n    \"D8RespondentLastName\": null,\n    \"D8DerivedRespondentCurrentName\": null,\n    \"D8DerivedRespondentSolicitorDetails\": null,\n    \"D8RespondentHomeAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedRespondentCorrespondenceAddr\": null,\n    \"D8RespondentSolicitorName\": null,\n    \"D8RespondentSolicitorCompany\": null,\n    \"D8RespondentCorrespondenceSendToSol\": null,\n    \"D8RespondentSolicitorAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedRespondentSolicitorAddr\": null,\n    \"D8RespondentCorrespondenceUseHomeAddress\": null,\n    \"D8RespondentKnowsHomeAddress\": null,\n    \"D8RespondentLivesAtLastAddress\": null,\n    \"D8LivingArrangementsTogetherSeparated\": null,\n    \"D8LivingArrangementsLastLivedTogether\": null,\n    \"D8LivingArrangementsLiveTogether\": null,\n    \"D8LivingArrangementsLastLivedTogethAddr\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedLivingArrangementsLastLivedAddr\": null,\n    \"D8LegalProceedings\": null,\n    \"D8LegalProceedingsRelated\": [],\n    \"D8LegalProceedingsDetails\": null,\n    \"D8ReasonForDivorce\": null,\n    \"D8DerivedStatementOfCase\": null,\n    \"D8ReasonForDivorceBehaviourDetails\": null,\n    \"D8ReasonForDivorceDesertionDate\": null,\n    \"D8ReasonForDivorceDesertionAgreed\": null,\n    \"D8ReasonForDivorceDesertionDetails\": null,\n    \"D8ReasonForDivorceSeperationDate\": null,\n    \"D8ReasonForDivorceAdultery3rdPartyFName\": null,\n    \"D8ReasonForDivorceAdultery3rdPartyLName\": null,\n    \"D8DerivedReasonForDivorceAdultery3dPtyNm\": null,\n    \"D8ReasonForDivorceAdulteryDetails\": null,\n    \"D8ReasonForDivorceAdulteryKnowWhen\": null,\n    \"D8ReasonForDivorceAdulteryWishToName\": null,\n    \"D8ReasonForDivorceAdulteryKnowWhere\": null,\n    \"D8ReasonForDivorceAdulteryWhereDetails\": null,\n    \"D8ReasonForDivorceAdulteryWhenDetails\": null,\n    \"D8ReasonForDivorceAdulteryIsNamed\": null,\n    \"D8ReasonForDivorceAdultery3rdAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8FinancialOrder\": null,\n    \"D8FinancialOrderFor\": [],\n    \"D8HelpWithFeesNeedHelp\": null,\n    \"D8HelpWithFeesAppliedForFees\": null,\n    \"D8HelpWithFeesReferenceNumber\": null,\n    \"D8PaymentMethod\": null,\n    \"D8DivorceCostsClaim\": null,\n    \"D8DivorceIsNamed\": null,\n    \"D8DivorceClaimFrom\": [],\n    \"D8JurisdictionConfidentLegal\": null,\n    \"D8JurisdictionConnection\": [],\n    \"D8JurisdictionLastTwelveMonths\": null,\n    \"D8JurisdictionPetitionerDomicile\": null,\n    \"D8JurisdictionPetitionerResidence\": null,\n    \"D8JurisdictionRespondentDomicile\": null,\n    \"D8JurisdictionRespondentResidence\": null,\n    \"D8JurisdictionHabituallyResLast6Months\": null,\n    \"Payments\": [],\n    \"D8DocumentsUploaded\": [],\n    \"D8DocumentsGenerated\": [],\n    \"D8StatementOfTruth\": null,\n    \"D8DivorceUnit\": null,\n    \"D8Cohort\": null\n  },\n  \"event\": {\n    \"id\": \"create\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"D8legalProcess\": null,\n    \"createdDate\": null,\n    \"D8ScreenHasMarriageBroken\": null,\n    \"D8ScreenHasRespondentAddress\": null,\n    \"D8ScreenHasMarriageCert\": null,\n    \"D8ScreenHasPrinter\": null,\n    \"D8DivorceWho\": null,\n    \"D8MarriageIsSameSexCouple\": null,\n    \"D8InferredPetitionerGender\": null,\n    \"D8InferredRespondentGender\": null,\n    \"D8MarriageDate\": null,\n    \"D8MarriedInUk\": null,\n    \"D8CertificateInEnglish\": null,\n    \"D8CertifiedTranslation\": null,\n    \"D8MarriagePlaceOfMarriage\": null,\n    \"D8CountryName\": null,\n    \"D8MarriagePetitionerName\": null,\n    \"D8MarriageRespondentName\": null,\n    \"D8PetitionerNameDifferentToMarriageCert\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerFirstName\": null,\n    \"D8PetitionerLastName\": null,\n    \"D8DerivedPetitionerCurrentFullName\": null,\n    \"D8PetitionerNameChangedHow\": [],\n    \"D8PetitionerNameChangedHowOtherDetails\": null,\n    \"D8PetitionerContactDetailsConfidential\": null,\n    \"D8PetitionerHomeAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedPetitionerHomeAddress\": null,\n    \"D8PetitionerCorrespondenceAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedPetitionerCorrespondenceAddr\": null,\n    \"D8PetitionerCorrespondenceUseHomeAddress\": null,\n    \"D8RespondentNameAsOnMarriageCertificate\": null,\n    \"D8RespondentFirstName\": null,\n    \"D8RespondentLastName\": null,\n    \"D8DerivedRespondentCurrentName\": null,\n    \"D8DerivedRespondentSolicitorDetails\": null,\n    \"D8RespondentHomeAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedRespondentCorrespondenceAddr\": null,\n    \"D8RespondentSolicitorName\": null,\n    \"D8RespondentSolicitorCompany\": null,\n    \"D8RespondentCorrespondenceSendToSol\": null,\n    \"D8RespondentSolicitorAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedRespondentSolicitorAddr\": null,\n    \"D8RespondentCorrespondenceUseHomeAddress\": null,\n    \"D8RespondentKnowsHomeAddress\": null,\n    \"D8RespondentLivesAtLastAddress\": null,\n    \"D8LivingArrangementsTogetherSeparated\": null,\n    \"D8LivingArrangementsLastLivedTogether\": null,\n    \"D8LivingArrangementsLiveTogether\": null,\n    \"D8LivingArrangementsLastLivedTogethAddr\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8DerivedLivingArrangementsLastLivedAddr\": null,\n    \"D8LegalProceedings\": null,\n    \"D8LegalProceedingsRelated\": [],\n    \"D8LegalProceedingsDetails\": null,\n    \"D8ReasonForDivorce\": null,\n    \"D8DerivedStatementOfCase\": null,\n    \"D8ReasonForDivorceBehaviourDetails\": null,\n    \"D8ReasonForDivorceDesertionDate\": null,\n    \"D8ReasonForDivorceDesertionAgreed\": null,\n    \"D8ReasonForDivorceDesertionDetails\": null,\n    \"D8ReasonForDivorceSeperationDate\": null,\n    \"D8ReasonForDivorceAdultery3rdPartyFName\": null,\n    \"D8ReasonForDivorceAdultery3rdPartyLName\": null,\n    \"D8DerivedReasonForDivorceAdultery3dPtyNm\": null,\n    \"D8ReasonForDivorceAdulteryDetails\": null,\n    \"D8ReasonForDivorceAdulteryKnowWhen\": null,\n    \"D8ReasonForDivorceAdulteryWishToName\": null,\n    \"D8ReasonForDivorceAdulteryKnowWhere\": null,\n    \"D8ReasonForDivorceAdulteryWhereDetails\": null,\n    \"D8ReasonForDivorceAdulteryWhenDetails\": null,\n    \"D8ReasonForDivorceAdulteryIsNamed\": null,\n    \"D8ReasonForDivorceAdultery3rdAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8FinancialOrder\": null,\n    \"D8FinancialOrderFor\": [],\n    \"D8HelpWithFeesNeedHelp\": null,\n    \"D8HelpWithFeesAppliedForFees\": null,\n    \"D8HelpWithFeesReferenceNumber\": null,\n    \"D8PaymentMethod\": null,\n    \"D8DivorceCostsClaim\": null,\n    \"D8DivorceIsNamed\": null,\n    \"D8DivorceClaimFrom\": [],\n    \"D8JurisdictionConfidentLegal\": null,\n    \"D8JurisdictionConnection\": [],\n    \"D8JurisdictionLastTwelveMonths\": null,\n    \"D8JurisdictionPetitionerDomicile\": null,\n    \"D8JurisdictionPetitionerResidence\": null,\n    \"D8JurisdictionRespondentDomicile\": null,\n    \"D8JurisdictionRespondentResidence\": null,\n    \"D8JurisdictionHabituallyResLast6Months\": null,\n    \"Payments\": [],\n    \"D8DocumentsUploaded\": [],\n    \"D8DocumentsGenerated\": [],\n    \"D8StatementOfTruth\": null,\n    \"D8DivorceUnit\": null,\n    \"D8Cohort\": null\n  }\n}"))
+    //   .check(jsonPath("$.id").saveAs("caseId")))
 
     // .pause(1)
 
