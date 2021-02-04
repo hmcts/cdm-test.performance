@@ -130,8 +130,8 @@ class CCDDataStoreSimulation extends Simulation  {
     SSCSCreateCase.inject(rampUsers(250) during(10 minutes)),
     DivorceCreateCase.inject(rampUsers(250) during(10 minutes)),
     CaseActivityScn.inject(rampUsers(100) during(10 minutes)),
-    CCDElasticSearch.inject(rampUsers(100) during(1 minutes)),
-    EthosSearchView.inject(rampUsers(100) during(1 minutes)),
+    CCDElasticSearch.inject(rampUsers(100) during(10 minutes)),
+    EthosSearchView.inject(rampUsers(100) during(10 minutes)),
     // RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes)), //100
     // RJSearchCases.inject(rampUsers(200) during (10 minutes))   //200
   )
