@@ -14,10 +14,10 @@ class CCDDataStoreSimulation extends Simulation  {
   val probateIteration = 200
   val sscsIteration = 300
   val divorceIteration = 300
-  val caseActivityIteration = 700
-  val elasticSearchIteration = 40
+  val caseActivityIteration = 1000
+  val elasticSearchIteration = 80
   val caseworkerSearchIteration = 100
-  val ethosIteration = 100
+  val ethosIteration = 200
 
   val BaseURL = Environment.baseURL
   val config: Config = ConfigFactory.load()
