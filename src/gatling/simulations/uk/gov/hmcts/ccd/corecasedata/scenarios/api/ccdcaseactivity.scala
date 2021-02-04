@@ -21,12 +21,13 @@ val ccdClientId = "ccd_gateway"
 val ccdGatewayClientSecret = config.getString("ccdGatewayCS")
 val ccdScope = "openid profile authorities acr roles openid profile roles"
 val caseActivityFeeder = csv("CaseActivityData.csv").random
+val feedXUIUserData = csv("XUISearchUsers.csv").circular
 
 val CDSGetRequest =
 
-  //feed(feedXUIUserData)
+  feed(feedXUIUserData)
 
-  exec(http("GetS2SToken")
+  .exec(http("GetS2SToken")
       .post(s2sUrl + "/testing-support/lease")
       .header("Content-Type", "application/json")
       .body(StringBody("{\"microservice\":\"ccd_data\"}"))
@@ -36,7 +37,7 @@ val CDSGetRequest =
   .exec(http("OIDC01_Authenticate")
       .post(IdamAPI + "/authenticate")
       .header("Content-Type", "application/x-www-form-urlencoded")
-      .formParam("username", "ccdloadtest1@gmail.com") //${email}
+      .formParam("username", "${email}")
       .formParam("password", "Password12")
       .formParam("redirectUri", ccdRedirectUri)
       .formParam("originIp", "0:0:0:0:0:0:0:1")
@@ -64,7 +65,7 @@ val CDSGetRequest =
 
 val CaseActivityRequests = 
 
-feed(caseActivityFeeder)
+  feed(caseActivityFeeder)
 
   .exec(http("CaseActivity_GET")
     .get(ccdCaseActivityUrl + "/cases/${caseRef}/activity")
@@ -84,12 +85,6 @@ feed(caseActivityFeeder)
     .header("ServiceAuthorization", "Bearer ${bearerToken}")
     .header("Authorization", "Bearer ${access_token}")
     .body(StringBody("{\n  \"activity\": \"view\"\n}")))
-
-  // .exec {
-  //   session =>
-  //     println(session("caseRef").as[String])
-  //     session
-  // }
 
   .pause(Environment.caseActivityPause)
 

@@ -15,57 +15,36 @@ class CCDDataStoreSimulation extends Simulation  {
   val sscsIteration = 50
   val divorceIteration = 50
   val caseActivityIteration = 400
+  val elasticSearchIteration = 50
+  val caseworkerSearchIteration = 100
+  val ethosIteration = 100
 
   val BaseURL = Environment.baseURL
   val config: Config = ConfigFactory.load()
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    // .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
+    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
   val CCDElasticSearch = scenario("CCDES")
     .repeat(1) {
-      exec(ccddatastore.CDSGetRequest)
-        .repeat(1) {
-          exec(ccddatastore.ElasticSearchGetRef)
-          .exec(ccddatastore.ElasticSearchGetByDate)
-          .exec(ccddatastore.ElasticSearchEthos)
-          .exec(ccddatastore.ElasticSearchWorkbasket)
-          .exec(ccddatastore.ElasticSearchGet25Divorce)
+      exec(elasticsearch.CDSGetRequest)
+        .repeat(elasticSearchIteration) {
+          exec(elasticsearch.ElasticSearchGetRef)
+          .exec(elasticsearch.ElasticSearchGetByDate)
+          .exec(elasticsearch.ElasticSearchEthos)
+          .exec(elasticsearch.ElasticSearchWorkbasket)
+          .exec(elasticsearch.ElasticSearchGet25Divorce)
         }
     }
 
-  val CCDElasticSearchGoR = scenario("CCDESGoR")
+  val CaseworkerSearch = scenario("Caseworker Search")
     .repeat(1) {
-      exec(ccddatastore.CDSGetRequest)
-        .repeat(1) {
-          exec(ccddatastore.ElasticSearchGet25GoR)
-        }
-    }
-
-  val CCDElasticSearchGoRState = scenario("CCDESGoRState")
-    .repeat(1) {
-      exec(ccddatastore.CDSGetRequest)
-        .repeat(10) {
-          exec(ccddatastore.ElasticSearchWorkbasketGoR)
-        }
-    }
-
-  val CCDElasticSearchGoR10000 = scenario("CCDESGoR 10000")
-    .repeat(1) {
-      exec(ccddatastore.CDSGetRequest)
-        .repeat(10) {
-          exec(ccddatastore.GatewaySearchWorkbasketGoR1000)
-        }
-    }
-
-  val CCDElasticSearchBenefitEvidenceHandled = scenario("CCDESBenefitEvidenceHandled")
-    .repeat(1) {
-      exec(ccddatastore.CDSGetRequest)
-        .repeat(1) {
-          exec(ccddatastore.ElasticSearchWorkbasketSSCS)
-        }
+      exec(elasticsearch.CDSGetRequest)
+      .repeat(caseworkerSearchIteration) {
+        exec(elasticsearch.CaseworkerSearch)
+      }
     }
 
   val CreateCase = scenario("CaseCreate")
@@ -138,16 +117,21 @@ class CCDDataStoreSimulation extends Simulation  {
       }
     }
 
+  val EthosSearchView = scenario("Ethos Search and View Cases")
+    .repeat(1) {
+      exec(ccddatastore.CCDLogin_Ethos)
+      .repeat(ethosIteration) {
+        exec(ccddatastore.CCDAPI_EthosJourney)
+      }
+    }
+
   setUp(
-    //CCDElasticSearch.inject(rampUsers(1) during(1 minutes)),
-    // ETCreateCase.inject(rampUsers(1) during(1 minutes))
-    //CCDElasticSearchGoR.inject(rampUsers(1) during(1 minutes)),
-    //CCDElasticSearchGoRState.inject(rampUsers(1) during(1 minutes)),
-    //CCDElasticSearchBenefitEvidenceHandled.inject(rampUsers(1) during(1 minutes))
     ProbateCreateCase.inject(rampUsers(250) during(10 minutes)),
     SSCSCreateCase.inject(rampUsers(250) during(10 minutes)),
     DivorceCreateCase.inject(rampUsers(250) during(10 minutes)),
-    CaseActivityScn.inject(rampUsers(100) during(10 minutes))
+    CaseActivityScn.inject(rampUsers(100) during(10 minutes)),
+    CCDElasticSearch.inject(rampUsers(100) during(1 minutes)),
+    EthosSearchView.inject(rampUsers(100) during(1 minutes)),
     // RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes)), //100
     // RJSearchCases.inject(rampUsers(200) during (10 minutes))   //200
   )

@@ -33,6 +33,8 @@ val feedXUIUserData = csv("XUISearchUsers.csv").circular
 val feedProbateUserData = csv("ProbateUserData.csv").circular
 val feedSSCSUserData = csv("SSCSUserData.csv").circular
 val feedDivorceUserData = csv("DivorceUserData.csv").circular
+val feedEthosUserData = csv("EthosUserData.csv").circular
+val feedEthosSearchData = csv("EthosSearchData.csv").random
 
 val MinThinkTime = Environment.minThinkTime
 val MaxThinkTime = Environment.maxThinkTime
@@ -41,7 +43,7 @@ val MinWaitForNextIteration = Environment.minWaitForNextIteration
 val MaxWaitForNextIteration = Environment.maxWaitForNextIteration
 
 val headers_0 = Map( //Authorization token needs to be generated with idam login
-  "Authorization" -> "AdminApiAuthToken eyJtb25rZXkiOiJJX1hpWW1iZmpyN0stOTJudm1OYXRDVTVnbXMuKkFBSlRTUUFDTURJQUFsTkxBQnhSWjFWRVEwUmlNbEZpYTBkUlJuWldVblpQYjFVM1IxaExNa1U5QUFSMGVYQmxBQU5EVkZNQUFsTXhBQUl3TkEuLioiLCJyYWJiaXQiOiJzZXNzaW9uLWp3dD1leUowZVhBaU9pSktWMVFpTENKcmFXUWlPaUp2Y0dWdWFXUnRMV3AzZEhObGMzTnBiMjVvYldGakxXdGxlU0lzSW1OMGVTSTZJa3BYVkNJc0ltRnNaeUk2SWtoVE1qVTJJbjAuWlhsS01HVllRV2xQYVVwTFZqRlJhVXhEU25KaFYxRnBUMmxLZWxwWVNqSmFXRWwwV1RKV2VXUkRTWE5KYlZaMVdYbEpOa2xyUlhoTmFtaEVVV3ROZEZOR1RYbE9WRmxwVEVOS2FHSkhZMmxQYVVwVFZUQkZlRmg2VldsbVVTNW5ablpsYVU4eExUVlBia3BRUTNsWU1Va3hTMUpsU25vd1kyNXRia1pEUlVkblpsaEJkVUU1TkVWNWJXSXdlamRuUkRWT2NHMWlOMjk1YkZGR1UyMVJhMWwxUzA4eFVubHZTM2xIWDJsQ1EzaEZZVGxPZEZoTVZTMVhiRFZDVEVGT2J6UlJSMk51TmxoUk1qQTJVbVZoTm5OalVuVTBNRzUzVHpWd2JVTlNPWE5YY1dwVmFFcDJURWt3UzBoQldWaExiR3hKVEdsZlFWUnhOV1V6WDE5eVdIVlVPVGxQZFdnNVZtaHRVVzlFVVZwTVprUnRPSGhZZFhodloybGpaMWcyZFZSVFdFRmxObVo2ZHpWM1NEQTNiWEZSZWpaRGIzaFdWbUowVEdOT04yRnhXSFZQU1RrM1VGUk9kaTFtVEMxRE0yUk1XRGgzY0VWSWVsSlFSMnhYTkhkTk1rZGpPREpDZVZSWFYwSjZZM2t3ZUdwWmVYUTBUMjlCYUZkd1RXbDNTV3g1WWtKc2FrMU1NMk50YzNKcVNITmxRVlpCTFZrdFlsSTNiMUV0ZGpKR2RsZE1VWGxPYVdnNE5GRTFOMGhHYTFsbGNsRXVhMUUwZFdKS2RHdHZRM1J0WVZwa2VqaEpXa0ZQWnk1SU5FZFFkbGRNYVZkZlQzQlNPVkZYZG5RNGIwVmZhbEpLVkRSM1psbGhlR1JhYzI1dUxWQkliV1puYWpSNmQxRkZUbXRLVTFaaFJIQm9TMFJOUVU5cFdXNXdjRkpmUlZaTVVXTkNURVo1VFhOZk56ZG9VSGN5T1ZJeGJHZ3RVMW8wV2psM1YwMUVVRVp6VlZFMGEycGxSbUp5UkRWSmJ6WnNjbUl5YmpaYWQxTk5ZV0ZIVGxwSmRWUnhWVWRTVGpkRVZVTndMVkF4WDB4Q2VqVkJhVXhWUmxsRE5uTmpaelZtVFd0Q2RqZDVUak5WWjE5U1FtWnlUMjlWY0c5V1JERlNjbE15ZFdsU2FVRjZaMloyU1VsTllWRkVWbVZ1TFcxc1NYaDNiRUoxWkc1eU5uRjVVR0pITFhONWRtbG5UMHh4YlVKUlZrZEpOalpYU0ZwclMyNXJZek01TFZRMlQybFlSR0ZPTW5CT2Fub3RjamxFTTJRd2VGTjBlV0ZaYmpJNGRrMDFZVW80YVc1WmRTMDFjRzEyVTBKUmNHNDJUMFp2VUZSM2JVWk9WV3R2YkRkV1duRkZNMkZmVDJSSlVFaFNabEJEWTJ4c1p6RnBOVmRDVldFd05qUmFORzVsYjJzNVdubFNVMHcyV25GUU5sbERaWEI0TW1OV1kzUnRTSFpqWjI1MVJrVkRhamQ1TW1VdGQzTjRXalp4VEhWWWN6Rm5UVmsyVFRCMFFWSkROa2RSTUZwemQweENhemRYTFU5SVdVaHlZVEZuUW5oUFltOTJaRk42UVdSTE5sSnZUM1pyTkZSV2RYVjRXRVl3TVRjeWMxUm5kRmxvTVdsYVJYSk9WREJyYTNGSGFEaHNSbVZ2ZDFoM1IwZG9hMmM1U1V4b1lVcHZkbUpLVEZCeWNpMXhTMXBKY2t0MVZsRkZhVXBpV2xWa1luUkJRVTlEVWpWUFZXaExaMWhOZWxsRWQxVjBNMGhmZHpabFZqbE5XRmgyUzJ0TlRqWlpUM05oVkdocWVuWlpNMVF3UW10elRUbFVVWE5XTjB0Q2IxODVXV05zV25WbmRrb3phRmhTWlZKT1YxTmplRVZPUzBWUGRFdDJaVTQ0VGxoNVNHUnpXR0pyYWpKVlpHRXpSV3czVTJaNU1FTkRPV2c0Y0RaNlJHMWFhMWx6ZDJOR1Ntd3RWbEZrVjNSRFlrOVFRbXRsWjJsbGVFaEtZemd3UlRkQmJFVk1TMXAwT0ZKdFdYbHNWSEZDZEc5SGIyOXhaM2RRTjNjM1UwZ3RWazVSVDI1aVptWTBUWEUwU2xNeFRHOVRORFIxTjA5S1RuRlFYM3BvTldGUFJHZHlaVGRaU0VOaVVYaEdWV1IwWVRGZk9VNU9hazFtUkdGRFQwZHZiVzlTTWtGMmQxOUpXRmwwZGt0cVQwaHVVRkV6YW5sdGJVMUZaVXhyWjBwNlRtdHFOMDFvUnpsb2NtOUpjVVJKYW5rM1JGTkhXVlpqYzFFNVoxZFlWMEl3Y1hseE5reEhkbEpFVFd4MmJUZExiV3BFVVdGall5NUtRa2xLUTJkalZGOTBZMTgyUmpaSk1sVnhRamgzLnRkNWNJblpRUVRMYUxKMC1kZEVGTTRiWkRzNFU5Mmhvb01wX2cyTkFvRUE7IFBhdGg9LzsgSHR0cE9ubHkifQ==",
+  "Authorization" -> "AdminApiAuthToken eyJtb25rZXkiOiJBYWlPN2dTVTBTZ2tiMzNDdF9UV1dPM1E5RDQuKkFBSlRTUUFDTURJQUFsTkxBQnh6YW1aS2NGSnRTVlJYY1RSRlpVOHJTWFV3VXpSdEwxVldNakE5QUFSMGVYQmxBQU5EVkZNQUFsTXhBQUl3TkEuLioiLCJyYWJiaXQiOiJzZXNzaW9uLWp3dD1leUowZVhBaU9pSktWMVFpTENKcmFXUWlPaUp2Y0dWdWFXUnRMV3AzZEhObGMzTnBiMjVvYldGakxXdGxlU0lzSW1OMGVTSTZJa3BYVkNJc0ltRnNaeUk2SWtoVE1qVTJJbjAuWlhsS01HVllRV2xQYVVwTFZqRlJhVXhEU25KaFYxRnBUMmxLZWxwWVNqSmFXRWwwV1RKV2VXUkRTWE5KYlZaMVdYbEpOa2xyUlhoTmFtaEVVV3ROZEZOR1RYbE9WRmxwVEVOS2FHSkhZMmxQYVVwVFZUQkZlRmg2VldsbVVTNUpNbEpqUlhKZmJUbEJNVzFhZEU1emN5MWZVV3cyYm5WcGQwTmhVVkF4TXpocE0xUlJSRzk2VUZaeFpXc3pjMUJZVEVFeGEzaFpaV1JSYmtGRVptVmpkbko2TjFsRmEzQlFRM052U21SdVNGQk1hRWh5UnpoVmFVa3lWR2xzVFVaZlUwSklkekJtTlRWS09GTkpWams0ZEVkbFNtSlRaVlY2WVRobWVIQmZVSFowWjFKbVZuTm9UazFDVkhOR1gweDVaMjlyWkY5M1pFUXlNbFJ1TmtacFFUZHBVMXB3TlMxNFVVUnlXa3gyZG1walIxbHljVEJtVHpkcVMyTlVaV2xpUm1aMVQwRm1UMGxsT0RRdFJFOUNMVFpCTjFKMVZEbDBkbGwwZUcxU1MweGxXV05IWnpFMVdYVk1NRWMyYUVzeVFtSnBTRlZyVURnelFWUlJUR05FUTJkWmVUbFdURGxSVVZOa2FFdGxha1IxUlZBd1FYZ3hiVzlMVWpScGVqUnpNMnRHV0djNFgzSTNZMGQ0VFhCclYwTjVkSFJyUVVFd2JtMUZjbWQyUTJrd1JXVk1ZMHRCWVdKVmRXOU9jbVZoZVRoSU1VRXVZMjgzZUVSbVprVTNSUzFyTjB4Q1ZUbG5lWEl6VVM0M1owSXhhVmhNTlZsSU5UZE1VVGxvZFhkRFpWcHdkWFExUmxOdlRGZFZhSGxoVEdKelkzbENhMnN6VVd4c1RXWlVjRWt3Tm00d1VYbGpRVGxyTWxvdExXbFBjM1ZxTFhCeWFGcHRUMFZXVldzNGNHYzFWR0ZGVlV4dVkyUTFTRFpZTm00MmJHVlphRWx0UlUxM2NrRnFaMGhuTmpSRGNUQjRWMUZvYkhsVWMwVnlUM1F0WlZZeWEyVTNZbGcyYlRWMmNGcHFWMGhZYjB4S1VFMDFiMnhMY0dSR1lrWlRTbDkzU2w5cGNsVndTVXc1VDNKamVrcHljM2ROTkVSalVYbFBWMjA0UjBsb2JsSTRNRjlTZUVOelVUTmxPVUZzY0dobWQwZDBjRlJ0ZVZOM2NsUmtUM3BSVUhvMlkzcHhVSEZ6WXkxbmJtNXFURFYzVTE5VGEwaERTemh2YVRkWWFUaFFSRXBrVjJKU2RuUkNSRUpDWmpOSFptTkRlbVZDTW5aa2JIcG5SUzEwTld4SWNqVkNNbEJOUVVSdmRGaERaR010ZVZkbUxWVlVORXhrZUhSVGEwVTJTV1pHTFhKaGNEWTJUREJSTW5BeWMyRjBkVnBRTVd4U2EwMDVjVmM0UmprelZHbFBkbFJPVEhGWVVGTlRTa1ZQUzJseGVrSjVaek5RYTFrNWVHUmpUMDFZZWxRMmFuTXhhbEoyVjJnNGExSllkMmd3YVd0NVRVZDNObDlQY0dWYWFGSkRaSFpzWWtReWJYRXpja3RsZW5OMFV6TkxSME5uUjFKNVRsQmlZVGxUTkVoTk1td3pPRlJFUmxndFZHeGhkM1p2ZERZd1NIRTBUMUl0UVhSVWRURnBjV1ZJZDJoT1R6TnNPRFpEWTNsNlJHcEJUMEkxYVRVeVZUUjZUV3AwYzJ0ZlVVZGFlRkpZUTNKamVqVTFhMHBFWjJSTFdYVlpla2hXYWxsYU5WSk1kUzFwTlZaQ1luQXpWVVZLY0dwMGJFVmFWMUZYYVMwd1NHVm9kakV3ZUVOck56SldWMjFIZDB0SExUaFVaVGhaVnpOSGFtZHpXbkJLTFVrNWRIbHdRVFZDTlZGNmVTMTNjalZLU0d4Rk5reFJZVEZHUVY5NVNsZDFWa2RPYjIxc01tRkNOV1pmU21GSFZuVnZORFU0VUZWVlMxOXpMVFkxWjFNd1oyWkdVbWhKTTNvdFpXSndkV2xZVlZoQloxRldZbXRXYjB0dmRsZHBjVFpWUWpCMlF5MDJVVEJZZW5scllsVktjbnBqYkRoQ2VtbENURjlQU1VsMVlXaDZiRmhDU0ZrNWRITlFNMlZYTjI5aFZ6UlRSbEpzTTNsUFJHTkpXRmw2V21Ga2QyRlVNVE5CU0dSa1ZuRkZTeloyV0ZWamMyMVhNVGR4YW1GRlRUVkRlRmRvYVd0MlJWZzJObWw1UTE5SloyUkdRM3BUWmtsQlVuTmxjakZtWXpVd1JtMU9VeTFLUmt0QlpWbElTM055VW5JeFYxWmZSSE55V0dOSFdHOWtia0p4VXpBek1DNXFVVWR0TjBFMk1XbEVkVEJmYTBSSWEwSTFSRVJCLk12SVVpRTJQMlBYSk55QXJpMnpPajdtWnVMQVkzaEVFMFdxOTVaczZkX1E7IFBhdGg9LzsgSHR0cE9ubHkifQ==",
   "Content-Type" -> "application/json")
 
 val CDSGetRequest =
@@ -84,305 +86,50 @@ val CDSGetRequest =
       .check(jsonPath("$.access_token").saveAs("access_token")))
       .exitHereIfFailed
 
-//  .exec {
-//      session =>
-//        println(session("bearerToken").as[String])
-//        println(session("access_token").as[String])
-//        session
-//    }
+  // val XUIIdamLogin =
 
-  val CitizenLogin = 
+  // feed(feedXUIUserData)
 
-    exec(http("GetS2SToken")
-      .post(s2sUrl + "/testing-support/lease")
-      .header("Content-Type", "application/json")
-      .body(StringBody("{\"microservice\":\"ccd_data\"}"))
-      .check(bodyString.saveAs("bearerToken")))
-      .exitHereIfFailed
+  // .exec(http("GetS2SToken")
+  //     .post(s2sUrl + "/testing-support/lease")
+  //     .header("Content-Type", "application/json")
+  //     .body(StringBody("{\"microservice\":\"ccd_data\"}"))
+  //     .body(StringBody("{\n  \"size\": 25\n}"))
+  //     .check(bodyString.saveAs("bearerToken")))
+  //     .exitHereIfFailed
 
-    .exec(http("OIDC01_Authenticate")
-      .post(IdamAPI + "/authenticate")
-      .header("Content-Type", "application/x-www-form-urlencoded")
-      .formParam("username", "ccdloadtest1@gmail.com") //${userEmail}
-      .formParam("password", "Password12")
-      .formParam("redirectUri", ccdRedirectUri)
-      .formParam("originIp", "0:0:0:0:0:0:0:1")
-      .check(status is 200)
-      .check(headerRegex("Set-Cookie", "Idam.Session=(.*)").saveAs("authCookie")))
-      .exitHereIfFailed
+  // .exec(http("OIDC01_Authenticate")
+  //     .post(IdamAPI + "/authenticate")
+  //     .header("Content-Type", "application/x-www-form-urlencoded")
+  //     .formParam("username", "${email}") //${userEmail}
+  //     .formParam("password", "Password12")
+  //     .formParam("redirectUri", ccdRedirectUri)
+  //     .formParam("originIp", "0:0:0:0:0:0:0:1")
+  //     .check(status is 200)
+  //     .check(headerRegex("Set-Cookie", "Idam.Session=(.*)").saveAs("authCookie")))
+  //     .exitHereIfFailed
 
-    .exec(http("OIDC02_Authorize_CCD")
-      .post(IdamAPI + "/o/authorize?response_type=code&client_id=" + ccdClientId + "&redirect_uri=" + ccdRedirectUri + "&scope=" + ccdScope).disableFollowRedirect
-      .header("Content-Type", "application/x-www-form-urlencoded")
-      .header("Cookie", "Idam.Session=${authCookie}")
-      .header("Content-Length", "0")
-      .check(status is 302)
-      .check(headerRegex("Location", "code=(.*)&client_id").saveAs("code")))
-      .exitHereIfFailed
+  // .exec(http("OIDC02_Authorize_CCD")
+  //     .post(IdamAPI + "/o/authorize?response_type=code&client_id=" + ccdClientId + "&redirect_uri=" + ccdRedirectUri + "&scope=" + ccdScope).disableFollowRedirect
+  //     .header("Content-Type", "application/x-www-form-urlencoded")
+  //     .header("Cookie", "Idam.Session=${authCookie}")
+  //     .header("Content-Length", "0")
+  //     .check(status is 302)
+  //     .check(headerRegex("Location", "code=(.*)&client_id").saveAs("code")))
+  //     .exitHereIfFailed
 
-    .exec(http("OIDC03_Token_CCD")
-      .post(IdamAPI + "/o/token?grant_type=authorization_code&code=${code}&client_id=" + ccdClientId +"&redirect_uri=" + ccdRedirectUri + "&client_secret=" + ccdGatewayClientSecret)
-      .header("Content-Type", "application/x-www-form-urlencoded")
-      .header("Content-Length", "0")
-      //.header("Cookie", "Idam.Session=${authCookie}")
-      .check(status is 200)
-      .check(jsonPath("$.access_token").saveAs("access_token")))
-      .exitHereIfFailed
+  //   //MkVIBs0dfCwTIBeU-enTRbfGUh0
 
-  val XUIIdamLogin =
+  // .exec(http("OIDC03_Token_CCD")
+  //     .post(IdamAPI + "/o/token?grant_type=authorization_code&code=${code}&client_id=" + ccdClientId +"&redirect_uri=" + ccdRedirectUri + "&client_secret=" + ccdGatewayClientSecret)
+  //     .header("Content-Type", "application/x-www-form-urlencoded")
+  //     .header("Content-Length", "0")
+  //     //.header("Cookie", "Idam.Session=${authCookie}")
+  //     .check(status is 200)
+  //     .check(jsonPath("$.access_token").saveAs("access_token")))
+  //     .exitHereIfFailed
 
-  feed(feedXUIUserData)
-
-  .exec(http("GetS2SToken")
-      .post(s2sUrl + "/testing-support/lease")
-      .header("Content-Type", "application/json")
-      .body(StringBody("{\"microservice\":\"ccd_data\"}"))
-      .body(StringBody("{\n  \"size\": 25\n}"))
-      .check(bodyString.saveAs("bearerToken")))
-      .exitHereIfFailed
-
-  .exec(http("OIDC01_Authenticate")
-      .post(IdamAPI + "/authenticate")
-      .header("Content-Type", "application/x-www-form-urlencoded")
-      .formParam("username", "${email}") //${userEmail}
-      .formParam("password", "Password12")
-      .formParam("redirectUri", ccdRedirectUri)
-      .formParam("originIp", "0:0:0:0:0:0:0:1")
-      .check(status is 200)
-      .check(headerRegex("Set-Cookie", "Idam.Session=(.*)").saveAs("authCookie")))
-      .exitHereIfFailed
-
-  .exec(http("OIDC02_Authorize_CCD")
-      .post(IdamAPI + "/o/authorize?response_type=code&client_id=" + ccdClientId + "&redirect_uri=" + ccdRedirectUri + "&scope=" + ccdScope).disableFollowRedirect
-      .header("Content-Type", "application/x-www-form-urlencoded")
-      .header("Cookie", "Idam.Session=${authCookie}")
-      .header("Content-Length", "0")
-      .check(status is 302)
-      .check(headerRegex("Location", "code=(.*)&client_id").saveAs("code")))
-      .exitHereIfFailed
-
-    //MkVIBs0dfCwTIBeU-enTRbfGUh0
-
-  .exec(http("OIDC03_Token_CCD")
-      .post(IdamAPI + "/o/token?grant_type=authorization_code&code=${code}&client_id=" + ccdClientId +"&redirect_uri=" + ccdRedirectUri + "&client_secret=" + ccdGatewayClientSecret)
-      .header("Content-Type", "application/x-www-form-urlencoded")
-      .header("Content-Length", "0")
-      //.header("Cookie", "Idam.Session=${authCookie}")
-      .check(status is 200)
-      .check(jsonPath("$.access_token").saveAs("access_token")))
-      .exitHereIfFailed
-
-  val ElasticSearchGet25GoR =
-
-    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
-      .post(ccdDataStoreUrl + "/searchCases")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .queryParam("ctid", "GrantOfRepresentation")
-      .body(StringBody("{\n\t\"query\": {\n\t\t\"match_all\": {}\n\t\t},\n\t\t\"size\": 25,\n\t\t\"sort\":[ \n      { \n         \"last_modified\":\"desc\"\n      },\n      \"_score\"\n   ]\n}"))
-      .check(status in  (200)))
-
-      .pause(Environment.constantthinkTime)
-
-  val CitizenSearch =
-
-    feed(feedWorkbasketData)
-
-    .exec(http("CCD_SearchCaseEndpoint_CitizenSearch")
-      .get(ccdDataStoreUrl + "/citizens/539560/jurisdictions/${jurisdiction}/case-types/${caseType}/cases") //1f65a0df-b064-4f9b-85ea-3eec5a28ce86
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .check(status in (200)))
-
-      .pause(Environment.constantthinkTime)
-      .pause(Environment.constantthinkTime)
-
-  val CaseworkerSearch = 
-
-    feed(feedWorkbasketData)
-
-    .exec(http("CCD_SearchCaseEndpoint_CaseworkerSearch")
-      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${jurisdiction}/case-types/${caseType}/cases")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .check(status in (200)))
-
-  //   .exec {
-  //     session =>
-  //     println(session("caseType").as[String])
-  //     session
-  // }
-
-    .pause(Environment.constantthinkTime)  
-
-  val XUICaseworkerSearch = 
-
-    feed(feedXUISearchData)
-
-    // .exec(http("XUI_${jurisdiction}_CaseworkerSearch")
-    //   .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${jurisdiction}/case-types/${caseType}/cases")
-    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
-    //   .header("Authorization", "Bearer ${access_token}")
-    //   .header("Content-Type","application/json")
-    //   .queryParam("state", "${state}")
-    //   .queryParam("page", "1")
-    //   .check(status in (200)))
-
-      //.pause(Environment.constantthinkTime) 
-
-    .exec(http("XUI_${jurisdiction}_CaseworkerSearch")
-      .post(ccdDataStoreUrl + "/searchCases")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .queryParam("ctid", "${caseType}")
-      .body(StringBody("{\n\t\"query\": {\n\t\t\"match_all\": {}\n\t\t},\n\t\t\"size\": 25,\n\t\t\"sort\":[ \n      { \n         \"last_modified\":\"desc\"\n      },\n      \"_score\"\n   ]\n}"))
-      .check(status in  (200)))
-
-      .pause(Environment.constantthinkTime)
-      .pause(Environment.constantthinkTime)
-      .pause(Environment.constantthinkTime)
-
-  val ElasticSearchWorkbasketGoR = 
-
-    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
-      .post(ccdDataStoreUrl + "/searchCases")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .queryParam("ctid", "GrantOfRepresentation")
-      .queryParam("use_case", "WORKBASKET")
-      .queryParam("view", "WORKBASKET")
-      .queryParam("page", "1")
-      .queryParam("state", "IntCaseCreated")
-      .body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":25,\"sort\":[{\"created_date\":\"DESC\"}]}"))
-      .check(status in (200)))
-
-      .pause(Environment.constantthinkTime)
-
-  val ElasticSearchWorkbasketGoR1000 = 
-
-    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
-      .post(ccdDataStoreUrl + "/internal/searchCases")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .queryParam("ctid", "GrantOfRepresentation")
-      //.body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":10000,\"}"))
-      .body(StringBody("{\"query\":{\"match_all\":{}},\"size\":10000}"))
-      .check(status in (200)))
-
-      .pause(Environment.constantthinkTime)
-
-  val GatewaySearchWorkbasketGoR1000 = 
-
-    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
-      .post("https://gateway-ccd.perftest.platform.hmcts.net/data/internal/searchCases")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .queryParam("ctid", "GrantOfRepresentation")
-      //.body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":10000,\"}"))
-      .body(StringBody("{\"query\":{\"match_all\":{}},\"size\":10000}"))
-      .check(status in (200)))
-
-      .pause(Environment.constantthinkTime)
-
-  val ElasticSearchWorkbasketSSCS = 
-
-    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
-      .post(ccdDataStoreUrl + "/searchCases")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .queryParam("ctid", "Benefit")
-      .queryParam("use_case", "WORKBASKET")
-      .queryParam("view", "WORKBASKET")
-      .queryParam("page", "1")
-      .queryParam("case.evidenceHandled", "No")
-      .body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":25,\"sort\":[{\"created_date\":\"DESC\"}]}"))
-      .check(status in (200)))
-
-      .pause(Environment.constantthinkTime)
-
-  val ElasticSearchGet25Divorce =
-
-    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
-      .post(ccdDataStoreUrl + "/searchCases")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .queryParam("ctid", "DIVORCE")
-      .body(StringBody("{\n\t\"query\": {\n\t\t\"match_all\": {}\n\t\t},\n\t\t\"size\": 25,\n\t\t\"sort\":[ \n      { \n         \"last_modified\":\"desc\"\n      },\n      \"_score\"\n   ]\n}"))
-      .check(status in  (200)))
-
-      .pause(5)
-
-  val ElasticSearchWorkbasket = 
-
-    feed(feedWorkbasketData)
-
-    .exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
-      .post(ccdDataStoreUrl + "/searchCases")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .queryParam("ctid", "${caseType}")
-      .queryParam("use_case", "WORKBASKET")
-      .queryParam("view", "WORKBASKET")
-      .queryParam("page", "1")
-      .body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":25,\"sort\":[{\"created_date\":\"DESC\"}]}"))
-      .check(status in (200)))
-
-      .pause(5)
-
-  val ElasticSearchGetRef =
-
-    feed(feedCaseSearchData)
-
-    .exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
-      .post(ccdDataStoreUrl + "/searchCases")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .queryParam("ctid", "${caseType}") //${caseType}
-      .body(StringBody("{ \n   \"query\":{ \n      \"bool\":{ \n         \"filter\":{ \n            \"wildcard\":{ \n               \"reference\":\"${caseId}\"\n            }\n         }\n      }\n   }\n}"))
-      .check(status in  (200)))
-
-      .pause(5)
-
-  val ElasticSearchGetByDate =
-
-    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
-      .post(ccdDataStoreUrl + "/searchCases")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .queryParam("ctid", "GrantOfRepresentation")
-      .body(StringBody("{\n   \"query\":{\n      \"bool\":{\n         \"filter\":{\n            \"term\":{\n               \"created_date\":\"2020-07-20\"\n            }\n         }\n      }\n   }\n}"))
-      .check(status in  (200)))
-
-      .pause(5)
-
-  val ElasticSearchEthos =
- 
-    exec(http("CCD_SearchCaseEndpoint_ElasticSearch")
-      .post(ccdDataStoreUrl + "/searchCases")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .queryParam("ctid", "Scotland")
-      //.body(StringBody("{\"size\":10000,\"query\":{\"terms\":{\"data.ethosCaseReference.keyword\":[\"4178987/2020\"],\"boost\":1.0}}}"))
-      .body(StringBody("{\"from\":0,\"query\":{\"bool\":{\"must\":[]}},\"size\":25,\"sort\":[{\"created_date\":\"DESC\"}]}"))
-
-      .check(status in  (200)))
-
-      .pause(5)
-
-
+  
   //Case Sharing Requests - for manage-case-assignment API//
 
   val CreateCaseForCaseSharing =
@@ -752,6 +499,68 @@ val CDSGetRequest =
 
     .pause(Environment.constantthinkTime)
 
+  val CCDLogin_Ethos =
+
+    feed(feedEthosUserData)
+
+    .exec(http("GetS2SToken")
+      .post(s2sUrl + "/testing-support/lease")
+      .header("Content-Type", "application/json")
+      .body(StringBody("{\"microservice\":\"ccd_data\"}"))
+      .check(bodyString.saveAs("bearerToken")))
+      .exitHereIfFailed
+
+    .exec(http("OIDC01_Authenticate")
+      .post(IdamAPI + "/authenticate")
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .formParam("username", "${EthosUserName}") 
+      .formParam("password", "${EthosUserPassword}")
+      .formParam("redirectUri", ccdRedirectUri)
+      .formParam("originIp", "0:0:0:0:0:0:0:1")
+      .check(status is 200)
+      .check(headerRegex("Set-Cookie", "Idam.Session=(.*)").saveAs("authCookie")))
+      .exitHereIfFailed
+
+   .exec(http("OIDC02_Authorize_CCD")
+      .post(IdamAPI + "/o/authorize?response_type=code&client_id=" + ccdClientId + "&redirect_uri=" + ccdRedirectUri + "&scope=" + ccdScope).disableFollowRedirect
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .header("Cookie", "Idam.Session=${authCookie}")
+      .header("Content-Length", "0")
+      .check(status is 302)
+      .check(headerRegex("Location", "code=(.*)&client_id").saveAs("code")))
+      .exitHereIfFailed
+
+   .exec(http("OIDC03_Token_CCD")
+      .post(IdamAPI + "/o/token?grant_type=authorization_code&code=${code}&client_id=" + ccdClientId +"&redirect_uri=" + ccdRedirectUri + "&client_secret=" + ccdGatewayClientSecret)
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .header("Content-Length", "0")
+      .check(status is 200)
+      .check(jsonPath("$.access_token").saveAs("access_token")))
+      .exitHereIfFailed
+
+  val CCDAPI_EthosJourney =
+
+    feed(feedEthosSearchData)
+
+    .exec(http("CCD_EthosSearch")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${EthosJurisdiction}/case-types/${EthosCaseType}/cases?case_reference=${EthosCaseRef}")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(status in (200)))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("CCD_EthosViewCase")
+      .get(ccdDataStoreUrl + "/cases/${EthosCaseRef}")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .header("Experimental","true")
+      .check(status in (200)))
+
+    .pause(Environment.constantthinkTime)
+
   //CreateCaseForCaseSharing
 
     // .exec(http("DIV_GetEventToken")
@@ -872,8 +681,5 @@ val CDSGetRequest =
 //          session
 //      }
 //    }
-
-  //val ETCreateMultipleCase =
-
 
 }

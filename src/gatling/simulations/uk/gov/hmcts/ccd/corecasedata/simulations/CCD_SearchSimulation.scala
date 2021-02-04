@@ -31,38 +31,38 @@ class CCD_SearchSimulation extends Simulation  {
 
   val CCDElasticSearch = scenario("CCDES")
     .repeat(1) {
-      exec(ccddatastore.CDSGetRequest)
+      exec(elasticsearch.CDSGetRequest)
         .repeat(35) {
-          exec(ccddatastore.ElasticSearchGetRef)
-          .exec(ccddatastore.ElasticSearchGetByDate)
-          .exec(ccddatastore.ElasticSearchEthos)
-          .exec(ccddatastore.ElasticSearchWorkbasket)
-          .exec(ccddatastore.ElasticSearchGet25Divorce)
+          exec(elasticsearch.ElasticSearchGetRef)
+          .exec(elasticsearch.ElasticSearchGetByDate)
+          .exec(elasticsearch.ElasticSearchEthos)
+          .exec(elasticsearch.ElasticSearchWorkbasket)
+          .exec(elasticsearch.ElasticSearchGet25Divorce)
           //.exec(WaitforNextIteration.waitforNextIteration)
         }
     }
 
   val CCDElasticSearchGoR = scenario("CCDESGoR")
     .repeat(1) {
-      exec(ccddatastore.CDSGetRequest)
+      exec(elasticsearch.CDSGetRequest)
         .repeat(10) {
-          exec(ccddatastore.ElasticSearchGet25GoR)
+          exec(elasticsearch.ElasticSearchGet25GoR)
         }
     }
 
   val CCDElasticSearchGoRState = scenario("CCDESGoRState")
     .repeat(1) {
-      exec(ccddatastore.CDSGetRequest)
+      exec(elasticsearch.CDSGetRequest)
         .repeat(1) {
-          exec(ccddatastore.ElasticSearchWorkbasketGoR)
+          exec(elasticsearch.ElasticSearchWorkbasketGoR)
         }
     }
 
   val CCDElasticSearchBenefitEvidenceHandled = scenario("CCDESBenefitEvidenceHandled")
     .repeat(1) {
-      exec(ccddatastore.CDSGetRequest)
+      exec(elasticsearch.CDSGetRequest)
         .repeat(10) {
-          exec(ccddatastore.ElasticSearchWorkbasketSSCS)
+          exec(elasticsearch.ElasticSearchWorkbasketSSCS)
         }
     }
 
@@ -81,25 +81,25 @@ class CCD_SearchSimulation extends Simulation  {
 
   val CitizenSearch = scenario("Citizen")
     .repeat(1) {
-      exec(ccddatastore.CitizenLogin)
+      exec(elasticsearch.CitizenLogin)
       .repeat(210) {
-        exec(ccddatastore.CitizenSearch)
+        exec(elasticsearch.CitizenSearch)
       }
     }
 
   val CaseworkerSearch = scenario("Caseworker")
     .repeat(1) {
-      exec(ccddatastore.CDSGetRequest)
+      exec(elasticsearch.CDSGetRequest)
       .repeat(220) {
-        exec(ccddatastore.CaseworkerSearch)
+        exec(elasticsearch.CaseworkerSearch)
       }
     }
 
   val XUICaseWorker = scenario("Caseworker XUI API")
     .repeat(1) {
-      exec(ccddatastore.CDSGetRequest) //CDSGetRequest XUIIdamLogin
+      exec(elasticsearch.CDSGetRequest) //CDSGetRequest XUIIdamLogin
       .repeat(36) { //36
-        exec(ccddatastore.XUICaseworkerSearch)
+        exec(elasticsearch.XUICaseworkerSearch)
         //.exec(WaitforNextIteration.waitforNextIteration)
       }
     }
