@@ -11,11 +11,11 @@ import scala.concurrent.duration._
 class CCDDataStoreSimulation extends Simulation  {
 
   //Repeat volumes
-  val probateIteration = 50
-  val sscsIteration = 50
-  val divorceIteration = 50
-  val caseActivityIteration = 400
-  val elasticSearchIteration = 50
+  val probateIteration = 200
+  val sscsIteration = 300
+  val divorceIteration = 300
+  val caseActivityIteration = 700
+  val elasticSearchIteration = 40
   val caseworkerSearchIteration = 100
   val ethosIteration = 100
 
