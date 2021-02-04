@@ -12,12 +12,17 @@ class CCDDataStoreSimulation extends Simulation  {
 
   //Repeat volumes
   val probateIteration = 200
-  val sscsIteration = 300
-  val divorceIteration = 300
+  val sscsIteration = 220
+  val divorceIteration = 220
   val caseActivityIteration = 1000
   val elasticSearchIteration = 80
   val caseworkerSearchIteration = 100
   val ethosIteration = 200
+
+  val PBiteration = 14 //7
+  val SSCSiteration = 28 //14
+  val CMCiteration = 16 //8
+  val Diviteration = 16 //8
 
   val BaseURL = Environment.baseURL
   val config: Config = ConfigFactory.load()
@@ -81,7 +86,7 @@ class CCDDataStoreSimulation extends Simulation  {
         .repeat(300) { //300
           exec(ccddatastore.RJElasticSearchGetRef)
         }
-    }
+    } 
 
   //CCD API Journeys
 
@@ -125,6 +130,82 @@ class CCDDataStoreSimulation extends Simulation  {
       }
     }
 
+  //CCD UI Journeys
+
+  val CCDProbateScenario = scenario("CCDPB")
+    .repeat(1) {
+      exec(Browse.Homepage)
+      .exec(PBGoR.submitLogin)
+      .repeat(PBiteration) {
+        exec(PBGoR.PBCreateCase)
+        // .exec(PBGoR.PBCaseActivity)
+        .exec(PBGoR.PBPaymentSuccessful)
+        // .exec(PBGoR.PBCaseActivity)
+        .exec(PBGoR.PBDocUpload)
+        // .exec(PBGoR.PBCaseActivity)
+        .exec(PBGoR.PBStopCase)
+        // .exec(PBGoR.PBCaseActivity)
+        .exec(PBGoR.PBSearch)
+        .exec(PBGoR.PBView)
+        // .exec(PBGoR.PBCaseActivity)
+        .exec(WaitforNextIteration.waitforNextIteration)
+      }
+      .exec(Logout.ccdLogout)
+  }
+
+  val CCDSSCSScenario = scenario("CCDSSCS")
+    .repeat(1) {
+     exec(Browse.Homepage)
+      .exec(SSCS.SSCSLogin)
+      .repeat(SSCSiteration) {
+        exec(SSCS.SSCSCreateCase)
+        // .exec(SSCS.SSCSCaseActivity)
+        .exec(SSCS.SSCSDocUpload)
+        // .exec(SSCS.SSCSCaseActivity)
+        .exec(SSCS.SSCSSearchAndView)
+        // .exec(SSCS.SSCSCaseActivity)
+        .exec(WaitforNextIteration.waitforNextIteration)
+      }
+      .exec(Logout.ccdLogout)
+    }
+
+  val CCDCMCScenario = scenario("CCDCMC")
+    .repeat(1) {
+      exec(Browse.Homepage)
+      .exec(CMC.CMCLogin)
+      .repeat(CMCiteration) {
+        exec(CMC.CMCCreateCase)
+        // .exec(CMC.CMCCaseActivity)
+        .exec(CMC.CMCStayCase)
+        // .exec(CMC.CMCCaseActivity)
+        .exec(CMC.CMCWaitingTransfer)
+        // .exec(CMC.CMCCaseActivity)
+        //.exec(CMC.CMCTransfer)
+        .exec(CMC.CMCAttachScannedDocs)
+        // .exec(CMC.CMCCaseActivity)
+        .exec(CMC.CMCSupportUpdate)
+        // .exec(CMC.CMCCaseActivity)
+        .exec(CMC.CMCSearchAndView)
+        // .exec(CMC.CMCCaseActivity)
+        .exec(WaitforNextIteration.waitforNextIteration)
+      }
+      .exec(Logout.ccdLogout)
+  }
+
+  val CCDDivScenario = scenario("CCDDIV")
+    .repeat(1) {
+      exec(Browse.Homepage)
+        .exec(DVExcep.submitLogin)
+        .repeat(Diviteration) {
+          exec(DVExcep.DVCreateCase)
+          .exec(DVExcep.DVDocUpload)
+          .exec(DVExcep.DVSearch)
+          .exec(DVExcep.DVView)
+          .exec(WaitforNextIteration.waitforNextIteration)
+        }
+        .exec(Logout.ccdLogout)
+    }
+
   setUp(
     ProbateCreateCase.inject(rampUsers(250) during(10 minutes)),
     SSCSCreateCase.inject(rampUsers(250) during(10 minutes)),
@@ -132,6 +213,11 @@ class CCDDataStoreSimulation extends Simulation  {
     CaseActivityScn.inject(rampUsers(100) during(10 minutes)),
     CCDElasticSearch.inject(rampUsers(100) during(10 minutes)),
     EthosSearchView.inject(rampUsers(100) during(10 minutes)),
+
+    CCDProbateScenario.inject(rampUsers(10) during (10 minutes)), 
+    CCDSSCSScenario.inject(rampUsers(10) during (10 minutes)), 
+    CCDCMCScenario.inject(rampUsers(10) during (10 minutes)), 
+    CCDDivScenario.inject(rampUsers(10) during (10 minutes)), 
     // RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes)), //100
     // RJSearchCases.inject(rampUsers(200) during (10 minutes))   //200
   )
