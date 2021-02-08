@@ -34,16 +34,16 @@ class CCDUIPTSimulation extends Simulation  {
       .exec(PBGoR.submitLogin)
       .repeat(PBiteration) {
         exec(PBGoR.PBCreateCase)
-        // .exec(PBGoR.PBCaseActivity)
+        .exec(PBGoR.PBCaseActivity)
         .exec(PBGoR.PBPaymentSuccessful)
-        // .exec(PBGoR.PBCaseActivity)
+        .exec(PBGoR.PBCaseActivity)
         .exec(PBGoR.PBDocUpload)
-        // .exec(PBGoR.PBCaseActivity)
+        .exec(PBGoR.PBCaseActivity)
         .exec(PBGoR.PBStopCase)
-        // .exec(PBGoR.PBCaseActivity)
+        .exec(PBGoR.PBCaseActivity)
         .exec(PBGoR.PBSearch)
         .exec(PBGoR.PBView)
-        // .exec(PBGoR.PBCaseActivity)
+        .exec(PBGoR.PBCaseActivity)
         .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
@@ -55,11 +55,11 @@ class CCDUIPTSimulation extends Simulation  {
       .exec(SSCS.SSCSLogin)
       .repeat(SSCSiteration) {
         exec(SSCS.SSCSCreateCase)
-        // .exec(SSCS.SSCSCaseActivity)
+        .exec(SSCS.SSCSCaseActivity)
         .exec(SSCS.SSCSDocUpload)
-        // .exec(SSCS.SSCSCaseActivity)
+        .exec(SSCS.SSCSCaseActivity)
         .exec(SSCS.SSCSSearchAndView)
-        // .exec(SSCS.SSCSCaseActivity)
+        .exec(SSCS.SSCSCaseActivity)
         .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
@@ -71,18 +71,18 @@ class CCDUIPTSimulation extends Simulation  {
       .exec(CMC.CMCLogin)
       .repeat(CMCiteration) {
         exec(CMC.CMCCreateCase)
-        // .exec(CMC.CMCCaseActivity)
+        .exec(CMC.CMCCaseActivity)
         .exec(CMC.CMCStayCase)
-        // .exec(CMC.CMCCaseActivity)
+        .exec(CMC.CMCCaseActivity)
         .exec(CMC.CMCWaitingTransfer)
-        // .exec(CMC.CMCCaseActivity)
+        .exec(CMC.CMCCaseActivity)
         //.exec(CMC.CMCTransfer)
         .exec(CMC.CMCAttachScannedDocs)
-        // .exec(CMC.CMCCaseActivity)
+        .exec(CMC.CMCCaseActivity)
         .exec(CMC.CMCSupportUpdate)
-        // .exec(CMC.CMCCaseActivity)
+        .exec(CMC.CMCCaseActivity)
         .exec(CMC.CMCSearchAndView)
-        // .exec(CMC.CMCCaseActivity)
+        .exec(CMC.CMCCaseActivity)
         .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
@@ -188,7 +188,9 @@ class CCDUIPTSimulation extends Simulation  {
     CCDEthosScenario.inject(rampUsers(50) during (10 minutes)), //400
     CCDCMCScenario.inject(rampUsers(50) during (10 minutes)), //150
     CCDDivScenario.inject(rampUsers(50) during (10 minutes)), //150
-    CaseActivityScn.inject(rampUsers(50) during (10 minutes)) //100
+    // CaseActivityScn.inject(rampUsers(50) during (10 minutes)) //100
+
+    CCDProbateScenario.inject(rampUsers(1) during (1 minutes)), //150
 
     // CaseActivityScn.inject(rampUsers(1) during (1 minutes)),
   )
