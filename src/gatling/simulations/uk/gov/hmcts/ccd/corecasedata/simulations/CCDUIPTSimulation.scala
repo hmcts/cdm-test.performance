@@ -190,7 +190,7 @@ class CCDUIPTSimulation extends Simulation  {
     CCDDivScenario.inject(rampUsers(50) during (10 minutes)), //150
     // CaseActivityScn.inject(rampUsers(50) during (10 minutes)) //100
 
-    CCDProbateScenario.inject(rampUsers(1) during (1 minutes)), //150
+    // CCDProbateScenario.inject(rampUsers(1) during (1 minutes)), //150
 
     // CaseActivityScn.inject(rampUsers(1) during (1 minutes)),
   )
