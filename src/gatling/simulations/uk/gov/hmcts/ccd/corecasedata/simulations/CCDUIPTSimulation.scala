@@ -12,12 +12,12 @@ class CCDUIPTSimulation extends Simulation  {
 
   val config: Config = ConfigFactory.load()
   val BaseURL = Environment.baseURL
-  val PBiteration = 14 //7
-  val SSCSiteration = 28 //14
-  val CMCiteration = 16 //8
-  val Diviteration = 16 //8
+  val PBiteration = 7 //7
+  val SSCSiteration = 14 //14
+  val CMCiteration = 8 //8
+  val Diviteration = 8 //8
   val Fpliteration = 1 //10
-  val Ethositeration = 52 //26
+  val Ethositeration = 26 //26
   val LFUiteration = 10 //8
   val csIterationLarge = 200
   val csIterationSmall = 200
@@ -183,11 +183,11 @@ class CCDUIPTSimulation extends Simulation  {
   //CCD Regression UI Scenario
   setUp(
     //These 5 scenarios required for CCD regression testing (case activity added 28/01/2021)
-    CCDProbateScenario.inject(rampUsers(50) during (10 minutes)), //150
-    CCDSSCSScenario.inject(rampUsers(50) during (10 minutes)), //150
-    CCDEthosScenario.inject(rampUsers(50) during (10 minutes)), //400
-    CCDCMCScenario.inject(rampUsers(50) during (10 minutes)), //150
-    CCDDivScenario.inject(rampUsers(50) during (10 minutes)), //150
+    CCDProbateScenario.inject(rampUsers(150) during (10 minutes)), //150
+    CCDSSCSScenario.inject(rampUsers(150) during (10 minutes)), //150
+    CCDEthosScenario.inject(rampUsers(400) during (10 minutes)), //400
+    CCDCMCScenario.inject(rampUsers(150) during (10 minutes)), //150
+    CCDDivScenario.inject(rampUsers(150) during (10 minutes)), //150
     // CaseActivityScn.inject(rampUsers(50) during (10 minutes)) //100
 
     // CCDProbateScenario.inject(rampUsers(1) during (1 minutes)), //150
