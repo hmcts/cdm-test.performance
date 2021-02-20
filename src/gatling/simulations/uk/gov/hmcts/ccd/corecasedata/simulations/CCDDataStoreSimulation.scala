@@ -94,7 +94,8 @@ class CCDDataStoreSimulation extends Simulation  {
     .repeat(1) {
       exec(ccddatastore.CCDLogin_Probate)
       .repeat(probateIteration) {
-        exec(ccddatastore.CCDAPI_ProbateJourney)
+        exec(ccddatastore.CCDAPI_ProbateCreate)
+        .exec(ccddatastore.CCDAPI_ProbateCaseEvents)
       }
     }
 
@@ -102,7 +103,8 @@ class CCDDataStoreSimulation extends Simulation  {
     .repeat(1) {
       exec(ccddatastore.CCDLogin_SSCS)
       .repeat(sscsIteration) {
-        exec(ccddatastore.CCDAPI_SSCSJourney)
+        exec(ccddatastore.CCDAPI_SSCSCreate)
+        .exec(ccddatastore.CCDAPI_SSCSCaseEvents)
       }
     }
 
@@ -110,9 +112,42 @@ class CCDDataStoreSimulation extends Simulation  {
     .repeat(1) {
       exec(ccddatastore.CCDLogin_Divorce)
       .repeat(divorceIteration) {
-        exec(ccddatastore.CCDAPI_DivorceJourney)
+        exec(ccddatastore.CCDAPI_DivorceCreate)
+        .exec(ccddatastore.CCDAPI_DivorceCaseEvents)
       }
     }
+
+  val IACCreateCase = scenario("IAC Case Create")
+    .repeat(1) {
+      exec(ccddatastore.CCDLogin_IAC)
+      .repeat(1) {
+        exec(ccddatastore.CCDAPI_IACCreate)
+      }
+    }
+
+  val FPLCreateCase = scenario("FPL Case Create")
+    .repeat(1) {
+      exec(ccddatastore.CCDLogin_FPL)
+      .repeat(1) {
+        exec(ccddatastore.CCDAPI_FPLCreate)
+      }
+    }
+
+  val FRCreateCase = scenario("FR Case Create")
+    .repeat(1) {
+      exec(ccddatastore.CCDLogin_FR)
+      .repeat(1) {
+        exec(ccddatastore.CCDAPI_FRCreate)
+      }
+    }
+
+  val CMCCreateCase = scenario("CMC Case Create")
+  .repeat(1) {
+    exec(ccddatastore.CCDLogin_CMC)
+    .repeat(1) {
+      exec(ccddatastore.CCDAPI_CMCCreate)
+    }
+  }
 
   val CaseActivityScn = scenario("CCD Case Activity Requests")
     .repeat(1) {
@@ -207,17 +242,19 @@ class CCDDataStoreSimulation extends Simulation  {
     }
 
   setUp(
-    ProbateCreateCase.inject(rampUsers(250) during(10 minutes)),
-    SSCSCreateCase.inject(rampUsers(250) during(10 minutes)),
-    DivorceCreateCase.inject(rampUsers(250) during(10 minutes)),
-    CaseActivityScn.inject(rampUsers(100) during(10 minutes)),
-    CCDElasticSearch.inject(rampUsers(100) during(10 minutes)),
-    EthosSearchView.inject(rampUsers(100) during(10 minutes)),
+    ProbateCreateCase.inject(rampUsers(1) during(10 minutes)), //250
+    // SSCSCreateCase.inject(rampUsers(250) during(10 minutes)),
+    // DivorceCreateCase.inject(rampUsers(250) during(10 minutes)),
+    // CaseActivityScn.inject(rampUsers(100) during(10 minutes)),
+    // CCDElasticSearch.inject(rampUsers(100) during(10 minutes)),
+    // EthosSearchView.inject(rampUsers(100) during(10 minutes)),
 
-    CCDProbateScenario.inject(rampUsers(10) during (10 minutes)), 
-    CCDSSCSScenario.inject(rampUsers(10) during (10 minutes)), 
-    CCDCMCScenario.inject(rampUsers(10) during (10 minutes)), 
-    CCDDivScenario.inject(rampUsers(10) during (10 minutes)), 
+    // CCDProbateScenario.inject(rampUsers(10) during (10 minutes)), 
+    // CCDSSCSScenario.inject(rampUsers(10) during (10 minutes)), 
+    // CCDCMCScenario.inject(rampUsers(10) during (10 minutes)), 
+    // CCDDivScenario.inject(rampUsers(10) during (10 minutes)), 
+
+
     // RJUpdateSupplementaryCaseData.inject(rampUsers(100) during (10 minutes)), //100
     // RJSearchCases.inject(rampUsers(200) during (10 minutes))   //200
   )

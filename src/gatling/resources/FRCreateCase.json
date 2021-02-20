@@ -1,0 +1,72 @@
+{
+"data": {
+    "isAdmin": "No",
+    "solicitorName": "Joe Bloggs",
+    "ApplicantOrganisationPolicy": {
+      "Organisation": {
+        "OrganisationID": "HMCTS",
+        "OrganisationName": null
+      },
+      "OrgPolicyReference": null
+    },
+    "solicitorFirm": "pforg-ljkcj",
+    "solicitorReference": "4ED5TBN",
+    "solicitorAddress": {
+      "AddressLine1": "4",
+      "AddressLine2": "Hibernia Gardens",
+      "AddressLine3": "Maharaj road",
+      "PostTown": "Hounslow",
+      "County": "middlesex",
+      "PostCode": "TW3 3SD",
+      "Country": "UK"
+    },
+    "solicitorPhone": null,
+    "solicitorEmail": "test@test.com",
+    "solicitorDXnumber": null,
+    "solicitorAgreeToReceiveEmails": "No",
+    "divorceCaseNumber": "EZ11D81265",
+    "divorceStageReached": "Petition Issued",
+    "applicantFMName": "John",
+    "applicantLName": "Smith",
+    "regionList": "southeast",
+    "southEastFRCList": "thamesvalley",
+    "thamesvalleyCourtList": "FR_thamesvalleyList_4",
+    "appRespondentFMName": "Tess",
+    "appRespondentLName": "Smith",
+    "appRespondentRep": "No",
+    "respondentAddress": {
+      "AddressLine1": "Flat 10",
+      "AddressLine2": "Bramber House",
+      "AddressLine3": "Seven Kings Way",
+      "PostTown": "Kingston Upon Thames",
+      "County": "",
+      "Country": "United Kingdom",
+      "PostCode": "KT2 5BU"
+    },
+    "respondentPhone": null,
+    "respondentEmail": null,
+    "natureOfApplication2": [
+      "Lump Sum Order"
+    ],
+    "consentOrder": {
+      "document_url": "http://dm-store-perftest.service.core-compute-perftest.internal/documents/d1d461ea-4701-4543-8ff7-488185d95f76",
+      "document_binary_url": "http://dm-store-perftest.service.core-compute-perftest.internal/documents/d1d461ea-4701-4543-8ff7-488185d95f76/binary",
+      "document_filename": "1MB.pdf"
+    },
+    "d81Question": "Yes",
+    "d81Joint": {
+      "document_url": "http://dm-store-perftest.service.core-compute-perftest.internal/documents/4094e7fd-2cc9-48b0-bb0f-60316365bb9b",
+      "document_binary_url": "http://dm-store-perftest.service.core-compute-perftest.internal/documents/4094e7fd-2cc9-48b0-bb0f-60316365bb9b/binary",
+      "document_filename": "1MB.pdf"
+    },
+    "otherCollection": []
+  },
+  "event": {
+    "id": "FR_solicitorCreate",
+    "summary": "",
+    "description": ""
+  },
+  "event_token": "${eventToken}",
+  "ignore_warning": false,
+  "draft_id": null
+}

@@ -2,6 +2,7 @@ package uk.gov.hmcts.ccd.corecasedata.scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+import java.io.{BufferedWriter, FileWriter}
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
 
 object CreateUser {
@@ -39,17 +40,17 @@ object CreateUser {
       .headers(headers_0)
       .check(jsonPath("$.id").saveAs("userId"))
       .check(status.saveAs("statusvalue")))
-//     .doIf(session=>session("statusvalue").as[String].contains("200")) {
-//       exec {
-//         session =>
-//           val fw = new BufferedWriter(new FileWriter("EmailAndIdamIDs.csv", true))
-//           try {
-//             fw.write(session("email").as[String] + ","+session("userId").as[String] + "\r\n")
-//           }
-//           finally fw.close()
-//           session
-//       }
-//     }
+    .doIf(session=>session("statusvalue").as[String].contains("200")) {
+      exec {
+        session =>
+          val fw = new BufferedWriter(new FileWriter("CMCEmailAndIdamIDs.csv", true))
+          try {
+            fw.write(session("email").as[String] + ","+session("userId").as[String] + "\r\n")
+          }
+          finally fw.close()
+          session
+      }
+    }
 
   val GetAndApplyRole = feed(roleFeeder)
 

@@ -31,7 +31,7 @@ object PBGoR {
     "Sec-Fetch-Site" -> "same-site",
 		"experimental" -> "true")
 
-  val headers_1 = Map(
+  /*val headers_1 = Map(
     "Accept" -> "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-case-trigger.v2+json;charset=UTF-8",
     "Content-Type" -> "application/json",
     "Sec-Fetch-Mode" -> "cors",
@@ -116,7 +116,7 @@ object PBGoR {
 		"Sec-Fetch-Dest" -> "empty",
 		"Sec-Fetch-Mode" -> "cors",
 		"Sec-Fetch-Site" -> "same-site",
-		"experimental" -> "true")
+		"experimental" -> "true")*/
 
   val DocumentOpen = Map(
     "Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
@@ -309,7 +309,7 @@ object PBGoR {
 
     exec(http("PBGoR_060_005_StopCase")
       .get("/data/internal/cases/${New_Case_Id}/event-triggers/boStopCaseForCaseCreated?ignore-warning=false")
-      .headers(headers_9)
+      // .headers(headers_9)
       .headers(probateHeader)
       .header("Accept", "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-start-event-trigger.v2+json;charset=UTF-8")
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
