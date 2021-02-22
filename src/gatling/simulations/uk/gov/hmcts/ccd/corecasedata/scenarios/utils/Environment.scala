@@ -14,8 +14,8 @@ object Environment {
   val xuiMCUrl = "https://manage-case.perftest.platform.hmcts.net/oauth2/callback"
   val xuiBaseURL = "https://manage-case.perftest.platform.hmcts.net"
 
-  val minThinkTime = 1 //10
-  val maxThinkTime = 3 //30
+  val minThinkTime = 10 //10
+  val maxThinkTime = 30 //30
   val constantthinkTime = 7
   val caseActivityPause = 7
 

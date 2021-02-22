@@ -54,10 +54,10 @@ gatling {
     scalaVersion '2.12.8'
     simulations = [ 
                     // 'uk.gov.hmcts.ccd.corecasedata.simulations.CreateUser'
-                    // 'uk.gov.hmcts.ccd.corecasedata.simulations.CCDUIPTSimulation'
+                    'uk.gov.hmcts.ccd.corecasedata.simulations.CCDUIPTSimulation'
                     // 'uk.gov.hmcts.ccd.corecasedata.simulations.CCDDataStoreSimulation'
                     // 'uk.gov.hmcts.ccd.corecasedata.simulations.CaseSharingSimulation'
-                    'uk.gov.hmcts.ccd.corecasedata.simulations.CCD_SearchSimulation'
+                    // 'uk.gov.hmcts.ccd.corecasedata.simulations.CCD_SearchSimulation'
     ]
 }
 

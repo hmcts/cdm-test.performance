@@ -265,7 +265,7 @@ object PBGoR {
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val PBDocUpload =
-    exec(http("PGBoR_050_005_DocumentUploadPage")
+    exec(http("PBGoR_050_005_DocumentUploadPage")
       .get("/data/internal/cases/${New_Case_Id}/event-triggers/boUploadDocumentsForCaseCreated?ignore-warning=false")
       // .headers(headers_0)
       .headers(probateHeader)
@@ -278,7 +278,7 @@ object PBGoR {
         session.set("FileName1", "1MB.pdf")
       })
 
-    .exec(http("PGBoR_050_010_DocumentUploadToDM")
+    .exec(http("PBGoR_050_010_DocumentUploadToDM")
       .post(BaseURL + "/documents")
       .bodyPart(RawFileBodyPart("files", "${FileName1}")
         .fileName("${FileName1}")
@@ -289,7 +289,7 @@ object PBGoR {
       .check(regex("""http://(.+)/""").saveAs("DMURL"))
       .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
 
-    .exec(http("PGBoR_050_015_DocumentUploadProcess")
+    .exec(http("PBGoR_050_015_DocumentUploadProcess")
       .post("/data/case-types/${PBCaseType}/validate?pageId=boUploadDocumentsForCaseCreatedboUploadDocumentPage1")
       // .headers(headers_4)
       .headers(probateHeader)
@@ -298,7 +298,7 @@ object PBGoR {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("PGBoR_050_020_DocumentUploadSubmit")
+    .exec(http("PBGoR_050_020_DocumentUploadSubmit")
       .post("/data/caseworkers/:uid/jurisdictions/${PBJurisdiction}/case-types/${PBCaseType}/cases/${New_Case_Id}/events")
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
