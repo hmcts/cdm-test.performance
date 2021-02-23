@@ -420,18 +420,18 @@ val CDSGetRequest =
     .pause(Environment.constantthinkTime)
 
     .exec(http("API_SSCS_GetEventToken")
-      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases/${caseId}/event-triggers/evidenceReceived/token")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases/${caseId}/event-triggers/dwpActionDirection/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken5")))
 
-    .exec(http("API_SSCS_EvidenceReceived")
+    .exec(http("API_SSCS_ActionDirection")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases/${caseId}/events")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
-      .body(ElFileBody("CCD_SSCS_EvidenceReceived.json")))
+      .body(ElFileBody("CCD_SSCS_ActionDirection.json")))
 
     .pause(Environment.constantthinkTime)
 
