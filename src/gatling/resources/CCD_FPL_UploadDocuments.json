@@ -1,0 +1,25 @@
+{
+  "data": {
+    "applicationDocuments": [
+      {
+        "id": null,
+        "value": {
+          "documentType": "THRESHOLD",
+          "document": {
+            "document_url": "http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}",
+            "document_binary_url": "http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}/binary",
+            "document_filename": "1MB.pdf"
+          }
+        }
+      }
+    ],
+    "applicationDocumentsToFollowReason": "perf testing"
+  },
+  "event": {
+    "id": "uploadDocuments",
+    "summary": "",
+    "description": ""
+  },
+  "event_token": "${eventToken4}",
+  "ignore_warning": false
+}

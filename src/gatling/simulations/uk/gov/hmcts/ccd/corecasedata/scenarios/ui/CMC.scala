@@ -199,7 +199,7 @@ object CMC {
     // ====================================================================
 
     exec(http("CMC_040_005_StayClaim")
-      .get("/data/internal/cases/${New_Case_Id}/event-triggers/StayClaim?ignore-warning=false")
+      .get("/data/internal/cases/${New_Case_Id}/event-triggers/?ignore-warning=false")
       .headers(headers_11)
       .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
 

@@ -13,10 +13,11 @@ object Environment {
   val s2sUrl = "http://rpe-service-auth-provider-perftest.service.core-compute-perftest.internal"
   val xuiMCUrl = "https://manage-case.perftest.platform.hmcts.net/oauth2/callback"
   val xuiBaseURL = "https://manage-case.perftest.platform.hmcts.net"
+  val dmStore = "http://dm-store-perftest.service.core-compute-perftest.internal"
 
-  val minThinkTime = 10 //10
-  val maxThinkTime = 30 //30
-  val constantthinkTime = 7
+  val minThinkTime = 1 //10
+  val maxThinkTime = 3 //30
+  val constantthinkTime = 1 //7
   val caseActivityPause = 7
 
   val minWaitForNextIteration = 60 //120

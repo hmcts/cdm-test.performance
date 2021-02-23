@@ -1,0 +1,22 @@
+{
+  "data": {
+    "submissionConsent": [
+      "agree"
+    ],
+    "draftApplicationDocument": {
+      "document_url": "http://dm-store-perftest.service.core-compute-perftest.internal/documents/${documentId}",
+      "document_filename": "draft${documentName}",
+      "document_binary_url": "http://dm-store-perftest.service.core-compute-perftest.internal/documents/${documentId}/binary"
+    },
+    "submissionConsentLabel": "I, sdsdsdsd hjhjhjhj, believe that the facts stated in this application are true.",
+    "displayAmountToPay": "Yes",
+    "amountToPay": "205500"
+  },
+  "event": {
+    "id": "submitApplication",
+    "summary": "",
+    "description": ""
+  },
+  "event_token": "${eventToken8}",
+  "ignore_warning": false
+}

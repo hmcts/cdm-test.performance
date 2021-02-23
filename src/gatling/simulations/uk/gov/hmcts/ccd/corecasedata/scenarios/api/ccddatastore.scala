@@ -226,14 +226,14 @@ val CDSGetRequest =
 
   val CCDAPI_ProbateCreate = 
 
-    exec(http("PB_GetEventTokenCreateCase")
+    exec(http("API_Probate_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken")))
 
-    .exec(http("PB_CreateCase")
+    .exec(http("API_Probate_CreateCase")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -241,18 +241,18 @@ val CDSGetRequest =
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"applyForGrant\",\n    \"summary\": \"test case\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
-    .pause(4)
+    .pause(Environment.constantthinkTime)
 
   val CCDAPI_ProbateCaseEvents =
 
-    exec(http("PB_GetEventTokenPaymentSuccessful")
+    exec(http("API_Probate_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/paymentSuccessApp/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken2")))
 
-    .exec(http("PB_PaymentSuccessful")
+    .exec(http("API_Probate_PaymentSuccessful")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/events")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -260,9 +260,9 @@ val CDSGetRequest =
       .body(ElFileBody("CCD_PaymentSuccess.json"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
-    .pause(4)
+    .pause(Environment.constantthinkTime)
 
-    .exec(http("PB_GetEventTokenDocUpload")
+    .exec(http("API_Probate_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/boUploadDocumentsForCaseCreated/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -273,7 +273,7 @@ val CDSGetRequest =
       session.set("FileName1", "1MB.pdf")
     })
 
-    .exec(http("PB_DocUploadProcess")
+    .exec(http("API_Probate_DocUploadProcess")
       .post(dmStoreUrl + "/documents")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .bodyPart(RawFileBodyPart("files", "${FileName1}")
@@ -285,23 +285,23 @@ val CDSGetRequest =
       .check(regex("""http://(.+)/""").saveAs("DMURL"))
       .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
 
-    .exec(http("PB_DocUpload")
+    .exec(http("API_Probate_DocUpload")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/events")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken3}\",\n  \"ignore_warning\": false\n}")))
 
-    .pause(4)
+    .pause(Environment.constantthinkTime)
 
-    .exec(http("PB_GetEventTokenStopCase")
+    .exec(http("API_Probate_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/boStopCaseForCaseCreated/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken4")))
 
-    .exec(http("PB_StopCase")
+    .exec(http("API_Probate_StopCase")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/events")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -309,29 +309,11 @@ val CDSGetRequest =
       .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken4}\",\n  \"ignore_warning\": false\n}"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
-      .pause(4)
+    .pause(Environment.constantthinkTime)
 
   val CCDLogin_SSCS = 
 
     feed(feedSSCSUserData)
-
-    // .exec(http("GetIdamUserID")
-    //   .get("https://idam-api.perftest.platform.hmcts.net/users?email=${SSCSUserName}") //1f65a0df-b064-4f9b-85ea-3eec5a28ce86 ${caseSharingUser}
-    //   .headers(headers_0)
-    //   .check(jsonPath("$.id").saveAs("userId"))
-    //   .check(status.saveAs("statusvalue")))
-
-    // .doIf(session=>session("statusvalue").as[String].contains("200")) {
-    //   exec {
-    //     session =>
-    //       val fw = new BufferedWriter(new FileWriter("SSCSEmailAndIdamIDs.csv", true))
-    //       try {
-    //         fw.write(session("SSCSUserName").as[String] + "," + session("userId").as[String] + "\r\n")
-    //       }
-    //       finally fw.close()
-    //       session
-    //   }
-    // }
 
     .exec(http("GetS2SToken")
       .post(s2sUrl + "/testing-support/lease")
@@ -370,14 +352,14 @@ val CDSGetRequest =
 
   val CCDAPI_SSCSCreate =
 
-    exec(http("SSCS_GetEventTokenCreateCase")
+    exec(http("API_SSCS_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/event-triggers/appealCreated/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken")))
 
-    .exec(http("SSCS_CreateCase")
+    .exec(http("API_SSCS_CreateCase")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -389,19 +371,18 @@ val CDSGetRequest =
 
   val CCDAPI_SSCSCaseEvents =
 
-    exec(http("SSCS_GetEventTokenDocUpload")
+    exec(http("API_SSCS_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases/${caseId}/event-triggers/uploadDocument/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken3")))
 
-
     .exec(session => {
       session.set("FileName1", "1MB.pdf")
     })
 
-    .exec(http("SSCS_DocUploadProcess")
+    .exec(http("API_SSCS_DocUploadProcess")
       .post(dmStoreUrl + "/documents")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .bodyPart(RawFileBodyPart("files", "${FileName1}")
@@ -413,12 +394,44 @@ val CDSGetRequest =
       .check(regex("""http://(.+)/""").saveAs("DMURL"))
       .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
 
-    .exec(http("SSCS_DocUpload")
+    .exec(http("API_SSCS_DocUpload")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases/${caseId}/events")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .body(StringBody("{\n  \"data\": {\n    \"sscsDocument\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": \"Other evidence\",\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": \"2019-11-12\",\n          \"documentComment\": \"${FileName1} upload\",\n          \"documentFileName\": null,\n          \"documentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      },\n      {\n        \"id\": null,\n        \"value\": {\n          \"documentType\": null,\n          \"documentEmailContent\": null,\n          \"documentDateAdded\": null,\n          \"documentComment\": null,\n          \"documentFileName\": null\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"${FileName1} upload doc\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken3}\",\n  \"ignore_warning\": false\n}")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_SSCS_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases/${caseId}/event-triggers/addHearing/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken4")))
+
+    .exec(http("API_SSCS_AddHearing")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(ElFileBody("CCD_SSCS_AddHearing.json")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_SSCS_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases/${caseId}/event-triggers/evidenceReceived/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken5")))
+
+    .exec(http("API_SSCS_EvidenceReceived")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${SSCSJurisdiction}/case-types/${SSCSCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(ElFileBody("CCD_SSCS_EvidenceReceived.json")))
 
     .pause(Environment.constantthinkTime)
 
@@ -463,20 +476,70 @@ val CDSGetRequest =
 
   val CCDAPI_CMCCreate =
 
-    exec(http("CMC_GetEventTokenCreateCase")
+    exec(http("API_CMC_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/event-triggers/CreateClaim/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken")))
 
-    .exec(http("CMC_CreateCase")
+    .exec(http("API_CMC_CreateCase")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"CreateClaim\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("caseId")))
+
+    .pause(Environment.constantthinkTime)
+
+  val CCDAPI_CMCCaseEvents =
+
+    exec(http("API_CMC_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/${caseId}/event-triggers/StayClaim/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken1")))
+
+    .exec(http("API_CMC_CaseStayed")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"StayClaim\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken1}\",\n  \"ignore_warning\": false\n}")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_CMC_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/${caseId}/event-triggers/ClaimNotes/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken2")))
+
+    .exec(http("API_CMC_ClaimNotes")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"ClaimNotes\",\n    \"summary\": \"Test Claim Note\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken2}\",\n  \"ignore_warning\": false\n}")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_CMC_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/${caseId}/event-triggers/attachScannedDocs/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken3")))
+
+    .exec(http("API_CMC_AttachScannedDocs")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"attachScannedDocs\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken3}\",\n  \"ignore_warning\": false\n}")))
 
     .pause(Environment.constantthinkTime)
 
@@ -521,14 +584,14 @@ val CDSGetRequest =
 
   val CCDAPI_DivorceCreate =
 
-    exec(http("Divorce_GetEventTokenCreateCase")
+    exec(http("API_Divorce_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/event-triggers/solicitorCreate/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken")))
 
-    .exec(http("Divorce_CreateCase")
+    .exec(http("API_Divorce_CreateCase")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -540,7 +603,7 @@ val CDSGetRequest =
 
   val CCDAPI_DivorceCaseEvents = 
 
-    exec(http("Divorce_GetEventTokenDocUpload")
+    exec(http("API_Divorce_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/uploadDocument/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -551,7 +614,7 @@ val CDSGetRequest =
       session.set("FileName1", "1MB.pdf")
     })
 
-    .exec(http("Divorce_DocUploadProcess")
+    .exec(http("API_Divorce_DocUploadProcess")
       .post(dmStoreUrl + "/documents")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .bodyPart(RawFileBodyPart("files", "${FileName1}")
@@ -563,12 +626,44 @@ val CDSGetRequest =
       .check(regex("""http://(.+)/""").saveAs("DMURL"))
       .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
 
-    .exec(http("Divorce_DocUpload")
+    .exec(http("API_Divorce_DocUpload")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/events")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")      
       .body(StringBody("{\n  \"data\": {\n    \"D8DocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"other\",\n          \"DocumentEmailContent\": null,\n          \"DocumentDateAdded\": null,\n          \"DocumentComment\": null,\n          \"DocumentFileName\": null,\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken3}\",\n  \"ignore_warning\": false\n}")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_Divorce_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/AddNote/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken2")))
+
+    .exec(http("API_Divorce_AddNote")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")      
+      .body(ElFileBody("CCD_Divorce_AddNote.json")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_Divorce_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/generalApplicationReceived/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken1")))
+
+    .exec(http("API_Divorce_GeneralApplicationReceived")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")      
+      .body(ElFileBody("CCD_Divorce_GeneralApplicationReceived.json")))
 
     .pause(Environment.constantthinkTime)
 
@@ -613,18 +708,14 @@ val CDSGetRequest =
 
   val CCDAPI_IACCreate =
 
-    exec(http("IAC_GetEventTokenCreateCase")
+    exec(http("API_IAC_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${IACJurisdiction}/case-types/${IACCaseType}/event-triggers/startAppeal/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken")))
 
-  // val timeStamp = sdfDate.format(now)
-
-  //   .exec(session => session.set("currentDate", timeStamp))
-
-    .exec(http("IAC_CreateCase")
+    .exec(http("API_IAC_CreateCase")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${IACJurisdiction}/case-types/${IACCaseType}/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -673,24 +764,186 @@ val CDSGetRequest =
 
   val CCDAPI_FPLCreate =
 
-    exec(http("FPL_GetEventTokenCreateCase")
+    exec(http("API_FPL_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/event-triggers/openCase/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken")))
 
-  // val timeStamp = sdfDate.format(now)
-
-  //   .exec(session => session.set("currentDate", timeStamp))
-
-    .exec(http("FPL_CreateCase")
+    .exec(http("API_FPL_CreateCase")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .body(ElFileBody("FPLCreateCase.json")).asJson
       .check(jsonPath("$.id").saveAs("caseId")))
+
+    .pause(Environment.constantthinkTime)
+
+  val CCDAPI_FPLCaseEvents = 
+
+    exec(http("API_FPL_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/enterChildren/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken1")))
+
+    .exec(http("API_FPL_AddChildren")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")      
+      .body(ElFileBody("CCD_FPL_EnterChildren.json")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_FPL_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/enterRespondents/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken2")))
+
+    .exec(http("API_FPL_EnterRespondents")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")      
+      .body(ElFileBody("CCD_FPL_EnterRespondents.json")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_FPL_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/enterGrounds/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken3")))
+
+    .exec(http("API_FPL_EnterGrounds")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")      
+      .body(ElFileBody("CCD_FPL_EnterGrounds.json")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_FPL_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/uploadDocuments/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken4")))
+
+     .exec(session => {
+      session.set("FileName1", "1MB.pdf")
+    })
+
+    .exec(http("API_FPL_DocUploadProcess")
+      .post(dmStoreUrl + "/documents")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .bodyPart(RawFileBodyPart("files", "${FileName1}")
+        .fileName("${FileName1}")
+        .transferEncoding("binary"))
+      .asMultipartForm
+      .formParam("classification", "PUBLIC")
+      .check(status.is(200))
+      .check(regex("""http://(.+)/""").saveAs("DMURL"))
+      .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
+
+    .exec(http("API_FPL_DocUpload")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")      
+      .body(ElFileBody("CCD_FPL_UploadDocuments.json")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_FPL_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/ordersNeeded/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken5")))
+
+    .exec(http("API_FPL_OrdersNeeded")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")      
+      .body(ElFileBody("CCD_FPL_OrdersNeeded.json")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_FPL_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/hearingNeeded/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken6")))
+
+    .exec(http("API_FPL_HearingNeeded")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")      
+      .body(ElFileBody("CCD_FPL_HearingNeeded.json")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_FPL_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/enterApplicant/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken7")))
+
+    .exec(http("API_FPL_EnterOrganisationDetails")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")      
+      .body(ElFileBody("CCD_FPL_OrganisationDetails.json")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_FPL_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/otherProposal/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken3")))
+
+    .exec(http("API_FPL_OtherProposal")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")      
+      .body(ElFileBody("CCD_FPL_OtherProposal.json")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_FPL_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/submitApplication/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken8"))
+      .check(regex("""documents/(.*)","document_filename":"draft""").saveAs("documentId"))
+      .check(regex("""document_filename":"draft(.+?)","document_binary_url""").saveAs("documentName")))
+
+    .exec(http("API_FPL_SubmitApplication")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(ElFileBody("CCD_FPL_SubmitApplication.json")))
+
+    .pause(Environment.constantthinkTime)
 
   val CCDLogin_FR =
 
@@ -733,18 +986,14 @@ val CDSGetRequest =
 
   val CCDAPI_FRCreate =
 
-    exec(http("FR_GetEventTokenCreateCase")
+    exec(http("API_FR_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FRJurisdiction}/case-types/${FRCaseType}/event-triggers/FR_solicitorCreate/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken")))
 
-  // val timeStamp = sdfDate.format(now)
-
-  //   .exec(session => session.set("currentDate", timeStamp))
-
-    .exec(http("FR_CreateCase")
+    .exec(http("API_FR_CreateCase")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FRJurisdiction}/case-types/${FRCaseType}/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -752,6 +1001,27 @@ val CDSGetRequest =
       .body(ElFileBody("FRCreateCase.json"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
+    .pause(Environment.constantthinkTime)
+
+  val CCDAPI_FRCaseEvents =
+
+    exec(http("API_FR_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FRJurisdiction}/case-types/${FRCaseType}/cases/${caseId}/event-triggers/FR_amendApplicationDetails/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken2"))
+      .check(regex("""/documents/(.+?)","document_filename""").find(0).saveAs("d81JointDocumentId"))
+      .check(regex(s"""latestConsentOrder":\\{"document_url":"${dmStoreUrl}/documents/([a-z0-9-]+?)"""").saveAs("consentOrderDocumentId")))
+
+    .exec(http("API_FR_AmendApplicationDetails")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FRJurisdiction}/case-types/${FRCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(ElFileBody("CCD_FR_AmendApplicationDetails.json")))
+
+    .pause(Environment.constantthinkTime)
 
   val CCDLogin_Ethos =
 
