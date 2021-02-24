@@ -2,7 +2,7 @@ package uk.gov.hmcts.ccd.corecasedata.scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.{Environment, LoginHeader, ProbateHeader}
+import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 
 object ExuiView {
 
@@ -10,33 +10,41 @@ val baseURL = Environment.xuiBaseURL
 val IdamUrl = Environment.idamURL
 val feedXUIUserData = csv("XUISearchUsers.csv").circular
 val feedXUISearchData = csv("XUISearchData.csv").circular
+val caseActivityFeeder = csv("XUICaseActivityData.csv").random
+val caseActivityListFeeder = csv("CaseActivityListData.csv").random
 
   val manageCasesHomePage =
-    tryMax(2) {
+    // tryMax(2) {
 
       exec(http("XUI_010_005_Homepage")
         .get(baseURL + "/")
         .headers(LoginHeader.headers_0)
         .check(status.in(200,304))).exitHereIfFailed
-
-      .exec(http("XUI_010_010_Homepage")
+    
+      .exec(http("XUI_010_010_HomepageConfigUI")
+        .get(baseURL + "/external/configuration-ui")
+        .headers(LoginHeader.headers_1))
+    
+      .exec(http("XUI_010_015_HomepageConfigJson")
         .get(baseURL + "/assets/config/config.json")
         .headers(LoginHeader.headers_1))
-
-      .exec(http("XUI_010_015_HomepageTCEnabled")
+    
+      .exec(http("XUI_010_020_HomepageTCEnabled")
         .get(baseURL + "/api/configuration?configurationKey=termsAndConditionsEnabled")
         .headers(LoginHeader.headers_1))
-
-      .exec(http("XUI_010_020_HomepageIsAuthenticated")
+    
+      .exec(http("XUI_010_025_HomepageIsAuthenticated")
         .get(baseURL + "/auth/isAuthenticated")
         .headers(LoginHeader.headers_1))
-
-      .exec(http("XUI_010_020_Homepage")
+    
+      .exec(http("XUI_010_030_AuthLogin")
         .get(baseURL + "/auth/login")
         .headers(LoginHeader.headers_4)
         .check(css("input[name='_csrf']", "value").saveAs("csrfToken"))
-        .check(regex("manage-user%20create-user&state=(.*)&client").saveAs("state")))
-    }
+        .check(regex("oauth2/callback&state=(.*)&nonce").saveAs("state"))
+        .check(regex("&nonce=(.*)&response_type").saveAs("nonce")))
+        
+    //}
 
   //==================================================================================
   //Business process : Enter the login details and submit
@@ -54,7 +62,8 @@ val feedXUISearchData = csv("XUISearchData.csv").circular
 
       .exec(http("XUI_020_005_SignIn")
         //.post(IdamUrl + "/login?response_type=code&client_id=xuiwebapp&redirect_uri=" + baseURL + "/oauth2/callback&scope=profile%20openid%20roles%20manage-user%20create-user")
-        .post(IdamUrl + "/login?response_type=code&redirect_uri=" + baseURL + "%2Foauth2%2Fcallback&scope=profile%20openid%20roles%20manage-user%20create-user&state=${state}&client_id=xuiwebapp")
+        // .post(IdamUrl + "/login?response_type=code&redirect_uri=" + baseURL + "%2Foauth2%2Fcallback&scope=profile%20openid%20roles%20manage-user%20create-user&state=${state}&client_id=xuiwebapp")
+        .post(IdamUrl + "/login?client_id=xuiwebapp&redirect_uri=" + baseURL + "/oauth2/callback&state=${state}&nonce=${nonce}&response_type=code&scope=profile%20openid%20roles%20manage-user%20create-user&prompt=")
            .formParam("username", "${email}")
            .formParam("password", "Password12")
            .formParam("save", "Sign in")
@@ -101,7 +110,42 @@ val feedXUISearchData = csv("XUISearchData.csv").circular
 
     }
 
-    val searchCase = 
+  val CaseActivityList =
+
+    feed(caseActivityListFeeder)
+
+    .exec(http("XUI_CaseActivityList")
+      .get(baseURL + "/activity/cases/${caseList}/activity")
+      .header("X-XSRF-TOKEN", "${xsrfToken}")
+      .headers(XuiHeaders.headers_23))
+
+    .pause(Environment.caseActivityPause)
+
+  val CaseActivityOpenCase =
+
+    feed(caseActivityFeeder)
+
+    .exec(http("XUI_ViewCase")
+      .get(baseURL + "/data/internal/cases/${caseRef}")
+      .headers(XuiHeaders.headers_5)
+      .header("X-XSRF-TOKEN", "${xsrfToken}"))
+
+  val CaseActivitySingle = 
+
+    exec(http("XUI_CaseActivity_Post")
+      .post(baseURL + "/activity/cases/${caseRef}/activity")
+      .headers(XuiHeaders.headers_CSPost)
+      .header("X-XSRF-TOKEN", "${xsrfToken}")
+      .body(StringBody("{\n  \"activity\": \"view\"\n}")))
+
+    .exec(http("XUI_CaseActivity_Get")
+      .get(baseURL + "/activity/cases/${caseRef}/activity")
+      .headers(XuiHeaders.headers_CSGet)
+      .header("X-XSRF-TOKEN", "${xsrfToken}"))
+
+    .pause(Environment.caseActivityPause)
+
+  val searchCase = 
 
     feed(feedXUISearchData)
 

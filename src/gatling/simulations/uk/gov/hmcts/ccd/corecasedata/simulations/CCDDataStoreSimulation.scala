@@ -149,13 +149,13 @@ class CCDDataStoreSimulation extends Simulation  {
     }
   }
 
-  val CaseActivityScn = scenario("CCD Case Activity Requests")
-    .repeat(1) {
-      exec(ccdcaseactivity.CDSGetRequest)
-      .repeat(caseActivityIteration) {
-        exec(ccdcaseactivity.CaseActivityRequests)
-      }
-    }
+  // val CaseActivityScn = scenario("CCD Case Activity Requests")
+  //   .repeat(1) {
+  //     exec(ccdcaseactivity.CDSGetRequest)
+  //     .repeat(caseActivityIteration) {
+  //       exec(ccdcaseactivity.CaseActivityRequests)
+  //     }
+  //   }
 
   val EthosSearchView = scenario("Ethos Search and View Cases")
     .repeat(1) {

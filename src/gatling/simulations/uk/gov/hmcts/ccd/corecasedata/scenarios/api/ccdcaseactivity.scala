@@ -21,6 +21,7 @@ val ccdClientId = "ccd_gateway"
 val ccdGatewayClientSecret = config.getString("ccdGatewayCS")
 val ccdScope = "openid profile authorities acr roles openid profile roles"
 val caseActivityFeeder = csv("CaseActivityData.csv").random
+val caseActivityListFeeder = csv("CaseActivityListData.csv").random
 val feedXUIUserData = csv("XUISearchUsers.csv").circular
 
 val CDSGetRequest =
@@ -63,7 +64,7 @@ val CDSGetRequest =
       .check(jsonPath("$.access_token").saveAs("access_token")))
       .exitHereIfFailed
 
-val CaseActivityRequests = 
+val CaseActivityRequest_GET = 
 
   feed(caseActivityFeeder)
 
@@ -73,13 +74,17 @@ val CaseActivityRequests =
     .header("ServiceAuthorization", "Bearer ${bearerToken}")
     .header("Authorization", "Bearer ${access_token}"))
 
-  .exec(http("CaseActivity_OPTIONS")
+val CaseActivityRequest_OPTIONS = 
+
+  exec(http("CaseActivity_OPTIONS")
     .options(ccdCaseActivityUrl + "/cases/${caseRef}/activity")
     .header("Content-Type", "application/json")
     .header("ServiceAuthorization", "Bearer ${bearerToken}")
     .header("Authorization", "Bearer ${access_token}"))
 
-  .exec(http("CaseActivity_POST")
+val CaseActivityRequest_POST = 
+
+  exec(http("CaseActivity_POST")
     .post(ccdCaseActivityUrl + "/cases/${caseRef}/activity")
     .header("Content-Type", "application/json")
     .header("ServiceAuthorization", "Bearer ${bearerToken}")
@@ -88,4 +93,24 @@ val CaseActivityRequests =
 
   .pause(Environment.caseActivityPause)
 
+// Add case list requests
+//GET only every 5 seconds
+
+val CaseActivityList = 
+
+  feed(caseActivityListFeeder)
+
+  .exec(http("CaseActivityList_GET")
+    .get(ccdCaseActivityUrl + "/cases/${caseList}/activity")
+    .header("Content-Type", "application/json")
+    .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    .header("Authorization", "Bearer ${access_token}"))
+
+  .exec(http("CaseActivityList_OPTIONS")
+    .options(ccdCaseActivityUrl + "/cases/${caseList}/activity")
+    .header("Content-Type", "application/json")
+    .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    .header("Authorization", "Bearer ${access_token}"))
+
+  .pause(Environment.caseActivityPause)
 }

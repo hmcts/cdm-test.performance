@@ -21,6 +21,10 @@ class CCDUIPTSimulation extends Simulation  {
   val LFUiteration = 10 //8
   val csIterationLarge = 200
   val csIterationSmall = 200
+  val caseActivityIteration = 120
+  val caseActivityListIteration = 200
+  val xuiCaseListActivityIteration = 12
+  val xuiCaseActivityIteration = 60
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
@@ -166,29 +170,61 @@ class CCDUIPTSimulation extends Simulation  {
         }
       }
 
-
   val XUIAdminScn = scenario("XUI Admin Org Login")
     .repeat(1){
       exec(ExuiView.XUIAdminOrg)
     }
 
+  //CCD Case Activity Requests
   val CaseActivityScn = scenario("CCD Case Activity Requests")
     .repeat(1) {
       exec(ccdcaseactivity.CDSGetRequest)
-      .repeat(1000) {
-        exec(ccdcaseactivity.CaseActivityRequests)
+      .repeat(caseActivityIteration) {
+        exec(ccdcaseactivity.CaseActivityRequest_GET)
+        .exec(ccdcaseactivity.CaseActivityRequest_OPTIONS)
+        .exec(ccdcaseactivity.CaseActivityRequest_GET)
+        .exec(ccdcaseactivity.CaseActivityRequest_OPTIONS)
+        .exec(ccdcaseactivity.CaseActivityRequest_POST)
       }
     }
+
+  val CaseActivityListScn = scenario("CCD Case Activity List Requests")
+    .repeat(1) {
+      exec(ccdcaseactivity.CDSGetRequest)
+      .repeat(caseActivityListIteration) {
+        exec(ccdcaseactivity.CaseActivityList)
+      }
+    }
+
+  val XUICaseActivityScn = scenario("XUI - Case Activity Requests")
+    .repeat(1) {
+      exec(ExuiView.manageCasesHomePage)
+      .exec(ExuiView.manageCaseslogin)
+      .repeat(1) {
+        repeat(xuiCaseListActivityIteration) {
+          exec(ExuiView.CaseActivityList)
+        }
+        .exec(ExuiView.CaseActivityOpenCase)
+        .repeat(xuiCaseActivityIteration) {
+          exec(ExuiView.CaseActivitySingle)
+        }
+      }
+      .exec(ExuiView.XUILogout)
+    }
+
 
   //CCD Regression UI Scenario
   setUp(
     //These 5 scenarios required for CCD regression testing (case activity added 28/01/2021)
-    CCDProbateScenario.inject(rampUsers(150) during (10 minutes)), //150
-    CCDSSCSScenario.inject(rampUsers(150) during (10 minutes)), //150
-    CCDEthosScenario.inject(rampUsers(400) during (10 minutes)), //400
-    CCDCMCScenario.inject(rampUsers(150) during (10 minutes)), //150
-    CCDDivScenario.inject(rampUsers(150) during (10 minutes)), //150
-    CaseActivityScn.inject(rampUsers(50) during (10 minutes)) //100
+    // CCDProbateScenario.inject(rampUsers(150) during (10 minutes)), //150
+    // CCDSSCSScenario.inject(rampUsers(150) during (10 minutes)), //150
+    // CCDEthosScenario.inject(rampUsers(400) during (10 minutes)), //400
+    // CCDCMCScenario.inject(rampUsers(150) during (10 minutes)), //150
+    // CCDDivScenario.inject(rampUsers(150) during (10 minutes)), //150
+
+    // CaseActivityScn.inject(rampUsers(50) during (10 minutes)) //100
+    // CaseActivityListScn.inject(rampUsers(50) during (10 minutes)) //100
+    XUICaseActivityScn.inject(rampUsers(1000) during (20 minutes))
 
     // CCDDivScenario.inject(rampUsers(1) during (1 minutes)), //150
 
