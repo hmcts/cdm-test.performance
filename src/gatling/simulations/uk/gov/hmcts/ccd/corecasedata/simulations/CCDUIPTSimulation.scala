@@ -23,8 +23,8 @@ class CCDUIPTSimulation extends Simulation  {
   val csIterationSmall = 200
   val caseActivityIteration = 120
   val caseActivityListIteration = 200
-  val xuiCaseListActivityIteration = 12
-  val xuiCaseActivityIteration = 60
+  val xuiCaseListActivityIteration = 12 //12
+  val xuiCaseActivityIteration = 120
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
@@ -200,11 +200,11 @@ class CCDUIPTSimulation extends Simulation  {
     .repeat(1) {
       exec(ExuiView.manageCasesHomePage)
       .exec(ExuiView.manageCaseslogin)
-      .repeat(10) {
+      .repeat(5) {
         repeat(xuiCaseListActivityIteration) {
           exec(ExuiView.CaseActivityList)
         }
-        .exec(ExuiView.CaseActivityOpenCase)
+        // .exec(ExuiView.CaseActivityOpenCase)
         .repeat(xuiCaseActivityIteration) {
           exec(ExuiView.CaseActivitySingle)
         }
@@ -227,7 +227,6 @@ class CCDUIPTSimulation extends Simulation  {
     XUICaseActivityScn.inject(rampUsers(1000) during (20 minutes))
 
     // CCDDivScenario.inject(rampUsers(1) during (1 minutes)), //150
-
     // CaseActivityScn.inject(rampUsers(1) during (1 minutes)),
   )
     .protocols(httpProtocol)

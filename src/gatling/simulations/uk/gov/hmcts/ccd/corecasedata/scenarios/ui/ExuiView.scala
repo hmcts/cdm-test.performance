@@ -2,6 +2,7 @@ package uk.gov.hmcts.ccd.corecasedata.scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+import scala.concurrent.duration._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 
 object ExuiView {
@@ -117,33 +118,57 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
     .exec(http("XUI_CaseActivityList")
       .get(baseURL + "/activity/cases/${caseList}/activity")
       .header("X-XSRF-TOKEN", "${xsrfToken}")
-      .headers(XuiHeaders.headers_23))
+      .headers(XuiHeaders.headers_23)
+      .check(responseTimeInMillis.saveAs("listResponseTime")))
 
-    .pause(Environment.caseActivityPause)
+    // .exec {
+    //   session =>
+    //     println(session("listResponseTime").as[String])
+    //     session
+    // }
+
+    .pause(session => session("listResponseTime").validate[Int].map(i => Environment.caseActivityPause * 1000 - i milliseconds))
 
   val CaseActivityOpenCase =
 
-    feed(caseActivityFeeder)
-
-    .exec(http("XUI_ViewCase")
+    exec(http("XUI_ViewCase")
       .get(baseURL + "/data/internal/cases/${caseRef}")
       .headers(XuiHeaders.headers_5)
       .header("X-XSRF-TOKEN", "${xsrfToken}"))
 
   val CaseActivitySingle = 
 
-    exec(http("XUI_CaseActivity_Post")
+    feed(caseActivityFeeder)
+
+    .exec(http("XUI_CaseActivity_Post")
       .post(baseURL + "/activity/cases/${caseRef}/activity")
       .headers(XuiHeaders.headers_CSPost)
       .header("X-XSRF-TOKEN", "${xsrfToken}")
-      .body(StringBody("{\n  \"activity\": \"view\"\n}")))
+      .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+      .check(responseTimeInMillis.saveAs("responseTimePost")))
 
     .exec(http("XUI_CaseActivity_Get")
       .get(baseURL + "/activity/cases/${caseRef}/activity")
       .headers(XuiHeaders.headers_CSGet)
-      .header("X-XSRF-TOKEN", "${xsrfToken}"))
+      .header("X-XSRF-TOKEN", "${xsrfToken}")
+      .check(responseTimeInMillis.saveAs("responseTimeGet")))
 
-    .pause(Environment.caseActivityPause)
+    .exec{ session =>
+      val responseTimePost = session("responseTimePost").as[Int]
+      val responseTimeGet = session("responseTimeGet").as[Int]
+      val totalThinktime = Environment.caseActivityPause * 1000 - responseTimePost - responseTimeGet
+      session.set("thinktime", totalThinktime)
+    }
+
+    // .exec {
+    //   session =>
+    //     println(session("responseTimePost").as[String])
+    //     println(session("responseTimeGet").as[String])
+    //     println(session("thinktime").as[String])
+    //     session
+    // }
+
+    .pause(session => session("thinktime").validate[Int].map(i => i milliseconds))
 
   val searchCase = 
 
