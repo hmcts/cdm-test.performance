@@ -200,7 +200,7 @@ class CCDUIPTSimulation extends Simulation  {
     .repeat(1) {
       exec(ExuiView.manageCasesHomePage)
       .exec(ExuiView.manageCaseslogin)
-      .repeat(1) {
+      .repeat(10) {
         repeat(xuiCaseListActivityIteration) {
           exec(ExuiView.CaseActivityList)
         }
