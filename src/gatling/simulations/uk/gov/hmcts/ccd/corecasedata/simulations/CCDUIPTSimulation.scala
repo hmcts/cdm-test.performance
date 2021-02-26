@@ -180,7 +180,7 @@ class CCDUIPTSimulation extends Simulation  {
     .repeat(1) {
       exec(ccdcaseactivity.CDSGetRequest)
       .repeat(5) {
-        .repeat(caseActivityListIteration) {
+        repeat(caseActivityListIteration) {
           exec(ccdcaseactivity.CaseActivityList)
         }
         .repeat(caseActivityIteration) {
