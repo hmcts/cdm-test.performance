@@ -22,7 +22,7 @@ class CCDUIPTSimulation extends Simulation  {
   val csIterationLarge = 200
   val csIterationSmall = 200
   val caseActivityIteration = 120
-  val caseActivityListIteration = 200
+  val caseActivityListIteration = 12
   val xuiCaseListActivityIteration = 12 //12
   val xuiCaseActivityIteration = 120
 
@@ -179,12 +179,13 @@ class CCDUIPTSimulation extends Simulation  {
   val CaseActivityScn = scenario("CCD Case Activity Requests")
     .repeat(1) {
       exec(ccdcaseactivity.CDSGetRequest)
-      .repeat(caseActivityIteration) {
-        exec(ccdcaseactivity.CaseActivityRequest_GET)
-        .exec(ccdcaseactivity.CaseActivityRequest_OPTIONS)
-        .exec(ccdcaseactivity.CaseActivityRequest_GET)
-        .exec(ccdcaseactivity.CaseActivityRequest_OPTIONS)
-        .exec(ccdcaseactivity.CaseActivityRequest_POST)
+      .repeat(5) {
+        .repeat(caseActivityListIteration) {
+          exec(ccdcaseactivity.CaseActivityList)
+        }
+        .repeat(caseActivityIteration) {
+          exec(ccdcaseactivity.CaseActivityRequest)
+        }
       }
     }
 
@@ -222,9 +223,9 @@ class CCDUIPTSimulation extends Simulation  {
     // CCDCMCScenario.inject(rampUsers(150) during (10 minutes)), //150
     // CCDDivScenario.inject(rampUsers(150) during (10 minutes)), //150
 
-    // CaseActivityScn.inject(rampUsers(50) during (10 minutes)) //100
+    CaseActivityScn.inject(rampUsers(500) during (20 minutes)) //100
     // CaseActivityListScn.inject(rampUsers(50) during (10 minutes)) //100
-    XUICaseActivityScn.inject(rampUsers(250) during (20 minutes))
+    // XUICaseActivityScn.inject(rampUsers(250) during (20 minutes))
 
     // CCDDivScenario.inject(rampUsers(1) during (1 minutes)), //150
     // CaseActivityScn.inject(rampUsers(1) during (1 minutes)),

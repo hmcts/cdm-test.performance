@@ -170,12 +170,11 @@ class CCD_PerformanceRegression extends Simulation  {
   val CaseActivityScn = scenario("CCD Case Activity Requests")
     .repeat(1) {
       exec(ccdcaseactivity.CDSGetRequest)
+      .repeat(caseActivityListIteration) {
+        exec(ccdcaseactivity.CaseActivityList)
+      }
       .repeat(caseActivityIteration) {
-        exec(ccdcaseactivity.CaseActivityRequest_GET)
-        .exec(ccdcaseactivity.CaseActivityRequest_OPTIONS)
-        .exec(ccdcaseactivity.CaseActivityRequest_GET)
-        .exec(ccdcaseactivity.CaseActivityRequest_OPTIONS)
-        .exec(ccdcaseactivity.CaseActivityRequest_POST)
+        exec(ccdcaseactivity.CaseActivityRequest)
       }
     }
 
