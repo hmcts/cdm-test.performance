@@ -213,6 +213,22 @@ class CCDUIPTSimulation extends Simulation  {
       .exec(ExuiView.XUILogout)
     }
 
+  val CCDCaseActivityScn = scenario("CCD - UI Case Activity Requests")
+    .repeat(1)
+    {
+      exec(Browse.Homepage)
+      .exec(CaseActivity.submitLogin)
+      .repeat(5){
+        repeat(xuiCaseListActivityIteration) {
+          exec(CaseActivity.CaseActivityList)
+        }
+        .repeat(xuiCaseActivityIteration) {
+          exec(CaseActivity.CaseActivitySingle)
+        }
+      }
+      .exec(Logout.ccdLogout)
+    }
+
 
   //CCD Regression UI Scenario
   setUp(
@@ -225,7 +241,8 @@ class CCDUIPTSimulation extends Simulation  {
 
     // CaseActivityScn.sinject(rampUsers(1000) during (20 minutes)) //100
     // CaseActivityListScn.inject(rampUsers(50) during (10 minutes)) //100
-    XUICaseActivityScn.inject(rampUsers(1000) during (20 minutes))
+    // XUICaseActivityScn.inject(rampUsers(1) during (20 minutes))
+    CCDCaseActivityScn.inject(rampUsers(1000) during (20 minutes))
 
     // CCDDivScenario.inject(rampUsers(1) during (1 minutes)), //150
     // CaseActivityScn.inject(rampUsers(1) during (1 minutes)),

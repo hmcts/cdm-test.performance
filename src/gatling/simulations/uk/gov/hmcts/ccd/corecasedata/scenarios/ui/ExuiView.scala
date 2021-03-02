@@ -115,11 +115,13 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
 
     feed(caseActivityListFeeder)
 
-    .exec(http("XUI_CaseActivityList")
-      .get(baseURL + "/activity/cases/${caseList}/activity")
-      .header("X-XSRF-TOKEN", "${xsrfToken}")
-      .headers(XuiHeaders.headers_23)
-      .check(responseTimeInMillis.saveAs("listResponseTime")))
+    .group("CaseActivity_LIST") {
+      exec(http("XUI_CaseActivityList")
+        .get(baseURL + "/activity/cases/${caseList}/activity")
+        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        .headers(XuiHeaders.headers_23)
+        .check(responseTimeInMillis.saveAs("listResponseTime")))
+    }
 
     // .exec {
     //   session =>
@@ -140,18 +142,22 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
 
     feed(caseActivityFeeder)
 
-    .exec(http("XUI_CaseActivity_Post")
-      .post(baseURL + "/activity/cases/${caseRef}/activity")
-      .headers(XuiHeaders.headers_CSPost)
-      .header("X-XSRF-TOKEN", "${xsrfToken}")
-      .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-      .check(responseTimeInMillis.saveAs("responseTimePost")))
+    .group("CaseActivity_POST") {
+      exec(http("XUI_CaseActivity_Post")
+        .post(baseURL + "/activity/cases/${caseRef}/activity")
+        .headers(XuiHeaders.headers_CSPost)
+        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .check(responseTimeInMillis.saveAs("responseTimePost")))
+    }
 
-    .exec(http("XUI_CaseActivity_Get")
-      .get(baseURL + "/activity/cases/${caseRef}/activity")
-      .headers(XuiHeaders.headers_CSGet)
-      .header("X-XSRF-TOKEN", "${xsrfToken}")
-      .check(responseTimeInMillis.saveAs("responseTimeGet")))
+    .group("CaseActivity_GET") {
+      exec(http("XUI_CaseActivity_Get")
+        .get(baseURL + "/activity/cases/${caseRef}/activity")
+        .headers(XuiHeaders.headers_CSGet)
+        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        .check(responseTimeInMillis.saveAs("responseTimeGet")))
+    }
 
     .exec{ session =>
       val responseTimePost = session("responseTimePost").as[Int]
