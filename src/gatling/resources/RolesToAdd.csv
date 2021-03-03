@@ -1,4 +1,6 @@
 role
+cwd-system-user
+cwd-read-only
 caseworker-cmc
 caseworker-divorce
 caseworker-divorce-courtadmin
