@@ -25,7 +25,7 @@ class CCD_PerformanceRegression extends Simulation  {
   val ui_Diviteration = 60
 
   val caseActivityIteration = 120
-  val caseActivityListIteration = 200
+  val caseActivityListIteration = 12
   val ccdSearchIteration = 35
   val elasticSearchIteration = 90
 
@@ -35,7 +35,7 @@ class CCD_PerformanceRegression extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
+    // .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
   /*================================================================================================
@@ -170,19 +170,13 @@ class CCD_PerformanceRegression extends Simulation  {
   val CaseActivityScn = scenario("CCD Case Activity Requests")
     .repeat(1) {
       exec(ccdcaseactivity.CDSGetRequest)
-      .repeat(caseActivityListIteration) {
-        exec(ccdcaseactivity.CaseActivityList)
-      }
-      .repeat(caseActivityIteration) {
-        exec(ccdcaseactivity.CaseActivityRequest)
-      }
-    }
-
-  val CaseActivityListScn = scenario("CCD Case Activity List Requests")
-    .repeat(1) {
-      exec(ccdcaseactivity.CDSGetRequest)
-      .repeat(caseActivityListIteration) {
-        exec(ccdcaseactivity.CaseActivityList)
+      .repeat(5) {
+        repeat(caseActivityListIteration) {
+          exec(ccdcaseactivity.CaseActivityList)
+        }
+        .repeat(caseActivityIteration) {
+          exec(ccdcaseactivity.CaseActivityRequest)
+        }
       }
     }
 
@@ -206,27 +200,26 @@ class CCD_PerformanceRegression extends Simulation  {
 
   setUp(
     //CCD API scenarios
-    // API_ProbateCreateCase.inject(rampUsers(18) during (10 minutes)),
-    // API_SSCSCreateCase.inject(rampUsers(18) during (10 minutes)),
-    // API_DivorceCreateCase.inject(rampUsers(18) during (10 minutes)),
-    // API_IACCreateCase.inject(rampUsers(18) during (10 minutes)),
-    // API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
-    // API_FRCreateCase.inject(rampUsers(18) during (10 minutes)),
-    // API_CMCCreateCase.inject(rampUsers(18) during (10 minutes)),
-/*
+    API_ProbateCreateCase.inject(rampUsers(18) during (10 minutes)),
+    API_SSCSCreateCase.inject(rampUsers(18) during (10 minutes)),
+    API_DivorceCreateCase.inject(rampUsers(18) during (10 minutes)),
+    API_IACCreateCase.inject(rampUsers(18) during (10 minutes)),
+    API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
+    API_FRCreateCase.inject(rampUsers(18) during (10 minutes)),
+    API_CMCCreateCase.inject(rampUsers(18) during (10 minutes)),
+
     //CCD UI scenarios
     UI_CCDProbateScenario.inject(rampUsers(5) during (10 minutes)),
     UI_CCDSSCSScenario.inject(rampUsers(5) during (10 minutes)),
     UI_CCDCMCScenario.inject(rampUsers(5) during (10 minutes)),
     UI_CCDDivScenario.inject(rampUsers(5) during (10 minutes)),
-*/
+
     //Case Activity Requests
-    CaseActivityScn.inject(rampUsers(50) during (10 minutes)),
-    CaseActivityListScn.inject(rampUsers(50) during (10 minutes)), //50
+    CaseActivityScn.inject(rampUsers(1000) during (10 minutes)),
 
     //CCD Searches
-    // CCDSearchView.inject(rampUsers(20) during (20 minutes)),
-    // CCDElasticSearch.inject(rampUsers(150) during (10 minutes))
+    CCDSearchView.inject(rampUsers(20) during (20 minutes)),
+    CCDElasticSearch.inject(rampUsers(150) during (10 minutes))
     
     //Debugging requests (leave commented out for test runs please)
     // API_ProbateCreateCase.inject(rampUsers(18) during (10 minutes)),
