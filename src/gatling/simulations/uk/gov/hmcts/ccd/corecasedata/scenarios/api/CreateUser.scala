@@ -43,18 +43,19 @@ object CreateUser {
       .headers(headers_0)
       .check(jsonPath("$.id").saveAs("userId"))
       .check(status.saveAs("statusvalue")))
+
     //Outputs the user email and idam id to a CSV, can be commented out if not needed  
-    .doIf(session=>session("statusvalue").as[String].contains("200")) {
-      exec {
-        session =>
-          val fw = new BufferedWriter(new FileWriter("EmailAndIdamIDs.csv", true))
-          try {
-            fw.write(session("email").as[String] + ","+session("userId").as[String] + "\r\n")
-          }
-          finally fw.close()
-          session
-      }
-    }
+    // .doIf(session=>session("statusvalue").as[String].contains("200")) {
+    //   exec {
+    //     session =>
+    //       val fw = new BufferedWriter(new FileWriter("EmailAndIdamIDs.csv", true))
+    //       try {
+    //         fw.write(session("email").as[String] + ","+session("userId").as[String] + "\r\n")
+    //       }
+    //       finally fw.close()
+    //       session
+    //   }
+    // }
 
   val GetAndApplyRole = feed(roleFeeder)
 
@@ -83,7 +84,7 @@ object CreateUser {
       .headers(headers_0)
       .check(jsonPath("$.id").saveAs("roleId")))
 
-    .exec(http("ApplyRole_${role}")
+    .exec(http("DenyRole_${role}")
       .delete(Environment.idamAPI + "/users/${userId}/roles/${roleId}")
       .headers(headers_0))
 
