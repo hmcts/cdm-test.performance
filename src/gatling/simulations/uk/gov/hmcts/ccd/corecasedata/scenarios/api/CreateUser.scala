@@ -76,6 +76,27 @@ object CreateUser {
 
     .pause(1)
 
+  val GetAndRemoveRole = feed(roleFeeder)
+
+    .exec(http("GetRole_${role}")
+      .get(Environment.idamAPI + "/roles/name/${role}")
+      .headers(headers_0)
+      .check(jsonPath("$.id").saveAs("roleId")))
+
+    .exec(http("ApplyRole_${role}")
+      .delete(Environment.idamAPI + "/users/${userId}/roles/${roleId}")
+      .headers(headers_0))
+
+    .exec {
+      session =>
+        println(session("email").as[String])
+        println(session("role").as[String])
+        session
+    }
+
+    .pause(1)
+
+
 //   val DeleteUser = feed(feedDeleteData)
 
 // //    exec(http("DeleteIdamUser")
