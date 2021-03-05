@@ -19,10 +19,10 @@ class CCD_PerformanceRegression extends Simulation  {
   val api_frIteration = 40
   val api_cmcIteration = 40
 
-  val ui_PBiteration = 60
-  val ui_SSCSiteration = 60
-  val ui_CMCiteration = 60
-  val ui_Diviteration = 60
+  val ui_PBiteration = 15
+  val ui_SSCSiteration = 15
+  val ui_CMCiteration = 15
+  val ui_Diviteration = 15
 
   val caseActivityIteration = 120
   val caseActivityListIteration = 12
@@ -209,10 +209,10 @@ class CCD_PerformanceRegression extends Simulation  {
     API_CMCCreateCase.inject(rampUsers(18) during (10 minutes)),
 
     //CCD UI scenarios
-    UI_CCDProbateScenario.inject(rampUsers(5) during (10 minutes)),
-    UI_CCDSSCSScenario.inject(rampUsers(5) during (10 minutes)),
-    UI_CCDCMCScenario.inject(rampUsers(5) during (10 minutes)),
-    UI_CCDDivScenario.inject(rampUsers(5) during (10 minutes)),
+    UI_CCDProbateScenario.inject(rampUsers(15) during (10 minutes)),
+    UI_CCDSSCSScenario.inject(rampUsers(15) during (10 minutes)),
+    UI_CCDCMCScenario.inject(rampUsers(15) during (10 minutes)),
+    UI_CCDDivScenario.inject(rampUsers(15) during (10 minutes)),
 
     //Case Activity Requests
     CaseActivityScn.inject(rampUsers(1000) during (10 minutes)),

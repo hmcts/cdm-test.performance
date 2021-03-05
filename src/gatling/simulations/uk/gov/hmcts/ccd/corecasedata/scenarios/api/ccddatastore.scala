@@ -543,6 +543,38 @@ val CDSGetRequest =
 
     .pause(Environment.constantthinkTime)
 
+    .exec(http("API_CMC_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/${caseId}/event-triggers/LinkLetterHolder/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken4")))
+
+    .exec(http("API_CMC_LinkLetterHolder")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"LinkLetterHolder\",\n    \"summary\": \"perf test\",\n    \"description\": \"link letter holder perf test description\"\n  },\n  \"event_token\": \"${eventToken4}\",\n  \"ignore_warning\": false\n}")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_CMC_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/${caseId}/event-triggers/LiftStay/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken5")))
+
+    .exec(http("API_CMC_LiftStay")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${CMCJurisdiction}/case-types/${CMCCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(StringBody("{\n  \"data\": {},\n  \"event\": {\n    \"id\": \"LinkLetterHLiftStayolder\",\n    \"summary\": \"perf test\",\n    \"description\": \"lift stay perf testing description\"\n  },\n  \"event_token\": \"${eventToken5}\",\n  \"ignore_warning\": false\n}")))
+
+    .pause(Environment.constantthinkTime)
+
   val CCDLogin_Divorce =
 
     feed(feedDivorceUserData)
@@ -927,23 +959,23 @@ val CDSGetRequest =
 
     .pause(Environment.constantthinkTime)
 
-    .exec(http("API_FPL_GetEventToken")
-      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/submitApplication/token")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .check(jsonPath("$.token").saveAs("eventToken8"))
-      .check(regex("""documents/(.*)","document_filename":"draft""").saveAs("documentId"))
-      .check(regex("""document_filename":"draft(.+?)","document_binary_url""").saveAs("documentName")))
+    // .exec(http("API_FPL_GetEventToken")
+    //   .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/submitApplication/token")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .header("Authorization", "Bearer ${access_token}")
+    //   .header("Content-Type","application/json")
+    //   .check(jsonPath("$.token").saveAs("eventToken8"))
+    //   .check(regex("""documents/(.*)","document_filename":"draft""").saveAs("documentId"))
+    //   .check(regex("""document_filename":"draft(.+?)","document_binary_url""").saveAs("documentName")))
 
-    .exec(http("API_FPL_SubmitApplication")
-      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .body(ElFileBody("CCD_FPL_SubmitApplication.json")))
+    // .exec(http("API_FPL_SubmitApplication")
+    //   .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .header("Authorization", "Bearer ${access_token}")
+    //   .header("Content-Type","application/json")
+    //   .body(ElFileBody("CCD_FPL_SubmitApplication.json")))
 
-    .pause(Environment.constantthinkTime)
+    // .pause(Environment.constantthinkTime)
 
   val CCDLogin_FR =
 
