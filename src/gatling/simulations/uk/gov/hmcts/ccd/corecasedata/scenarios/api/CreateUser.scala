@@ -14,7 +14,7 @@ object CreateUser {
 //  val feedUserData = csv("CaseSharingUsers_Small.csv")
   val idamAdminFeeder = csv("IdamAdmin.csv")
   val feedUserData = csv("RolesForUsers.csv")
-  val roleFeeder = csv("RolesToAdd.csv").circular
+  val roleFeeder = csv("RolesToAdd.csv")//.circular
 
   val headers_1 = Map( //ServiceAuthorization token can be called from http://rpe-service-auth-provider-perftest.service.core-compute-perftest.internal/testing-support/lease
     "Content-Type" -> "application/json",
@@ -79,12 +79,12 @@ object CreateUser {
 
   val GetAndRemoveRole = feed(roleFeeder)
 
-    .exec(http("GetRole_${role}")
-      .get(Environment.idamAPI + "/roles/name/${role}")
+    .exec(http("GetRole_${role}") //${role}
+      .get(Environment.idamAPI + "/roles/name/${role}") //${role}
       .headers(headers_0)
       .check(jsonPath("$.id").saveAs("roleId")))
 
-    .exec(http("DenyRole_${role}")
+    .exec(http("DenyRole_${role}") //${role}
       .delete(Environment.idamAPI + "/users/${userId}/roles/${roleId}")
       .headers(headers_0))
 

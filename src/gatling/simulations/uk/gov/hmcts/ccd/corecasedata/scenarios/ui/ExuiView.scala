@@ -65,32 +65,32 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
         //.post(IdamUrl + "/login?response_type=code&client_id=xuiwebapp&redirect_uri=" + baseURL + "/oauth2/callback&scope=profile%20openid%20roles%20manage-user%20create-user")
         // .post(IdamUrl + "/login?response_type=code&redirect_uri=" + baseURL + "%2Foauth2%2Fcallback&scope=profile%20openid%20roles%20manage-user%20create-user&state=${state}&client_id=xuiwebapp")
         .post(IdamUrl + "/login?client_id=xuiwebapp&redirect_uri=" + baseURL + "/oauth2/callback&state=${state}&nonce=${nonce}&response_type=code&scope=profile%20openid%20roles%20manage-user%20create-user&prompt=")
-           .formParam("username", "${email}")
-           .formParam("password", "Password12")
-           .formParam("save", "Sign in")
-           .formParam("selfRegistrationEnabled", "false")
-           .formParam("_csrf", "${csrfToken}")
-           .headers(LoginHeader.headers_login_submit)
-           .check(status.in(200, 304, 302))).exitHereIfFailed
+        .formParam("username", "${email}")
+        .formParam("password", "Password12")
+        .formParam("save", "Sign in")
+        .formParam("selfRegistrationEnabled", "false")
+        .formParam("_csrf", "${csrfToken}")
+        .headers(LoginHeader.headers_login_submit)
+        .check(status.in(200, 304, 302))).exitHereIfFailed
 
       // .exec(getCookieValue(
       //   CookieKey("__userid__").withDomain("manage-case.perftest.platform.hmcts.net").saveAs("myUserId")))
 
       .exec(http("XUI_020_010_Homepage")
-            .get(baseURL + "/external/config/ui")
-            .headers(LoginHeader.headers_0)
-            .check(status.in(200,304)))
+        .get(baseURL + "/external/config/ui")
+        .headers(LoginHeader.headers_0)
+        .check(status.in(200,304)))
 
       .exec(http("XUI_020_015_SignInTCEnabled")
-            .get(baseURL + "/api/configuration?configurationKey=termsAndConditionsEnabled")
-            .headers(LoginHeader.headers_38)
-            .check(status.in(200, 304)))
+        .get(baseURL + "/api/configuration?configurationKey=termsAndConditionsEnabled")
+        .headers(LoginHeader.headers_38)
+        .check(status.in(200, 304)))
 
       .repeat(1, "count") {
         exec(http("XUI_020_020_AcceptT&CAccessJurisdictions${count}")
-             .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=read")
-             .headers(LoginHeader.headers_access_read)
-             .check(status.in(200, 304, 302)))
+          .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=read")
+          .headers(LoginHeader.headers_access_read)
+          .check(status.in(200, 304, 302)))
       }
 
         // .exec(http("XUI_020_025_GetWorkBasketInputs")
@@ -185,17 +185,17 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
     ==========================================*/
 
     .exec(http("XUI_${jurisdiction}SearchResults_WorkbasketMetadata")
-        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases/pagination_metadata?state=${state}")
-        .headers(ProbateHeader.headers_search)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
-        .check(status.in(200,304)))
+      .get(baseURL + "/data/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases/pagination_metadata?state=${state}")
+      .headers(ProbateHeader.headers_search)
+      .header("X-XSRF-TOKEN", "${xsrfToken}")
+      .check(status.in(200,304)))
 
     .exec(http("XUI_${jurisdiction}SearchResults_WorkbasketUseCase")
-        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases?view=WORKBASKET&state=c&page=1")
-        //.post(baseURL + "/data/internal/searchCases?ctid=${caseType}&use_case=WORKBASKET&view=WORKBASKET&page=1")
-        .headers(ProbateHeader.headers_search)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
-        .check(status.in(200,304)))
+      .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases?view=WORKBASKET&state=c&page=1")
+      //.post(baseURL + "/data/internal/searchCases?ctid=${caseType}&use_case=WORKBASKET&view=WORKBASKET&page=1")
+      .headers(ProbateHeader.headers_search)
+      .header("X-XSRF-TOKEN", "${xsrfToken}")
+      .check(status.in(200,304)))
 
     .pause(Environment.constantthinkTime)
 
@@ -204,30 +204,30 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
     ==========================================*/
 
     .exec(http("XUI_FindCase_HealthCheck")
-        .get(baseURL + "/api/healthCheck?path=%2Fcases%2Fcase-search")
-        .headers(ProbateHeader.headers_0))
+      .get(baseURL + "/api/healthCheck?path=%2Fcases%2Fcase-search")
+      .headers(ProbateHeader.headers_0))
 
     .exec(http("XUI_${jurisdiction}SearchResults_SearchMetadata")
-        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases/pagination_metadata?state=${caseType}")
-        .headers(ProbateHeader.headers_1)
-        .header("X-XSRF-TOKEN", "${xsrfToken}"))
+      .get(baseURL + "/data/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases/pagination_metadata?state=${caseType}")
+      .headers(ProbateHeader.headers_1)
+      .header("X-XSRF-TOKEN", "${xsrfToken}"))
 
     .exec(http("XUI_${jurisdiction}SearchResults_SearchUseCase")
-        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases?view=SEARCH&page=1&state=v")
-        .headers(ProbateHeader.headers_1)
-        .header("X-XSRF-TOKEN", "${xsrfToken}"))
+      .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases?view=SEARCH&page=1&state=v")
+      .headers(ProbateHeader.headers_1)
+      .header("X-XSRF-TOKEN", "${xsrfToken}"))
 
     .exec(http("XUI_FindCase_JurisdictionsRead")
-        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=read")
-        .headers(ProbateHeader.headers_1)
-        .header("X-XSRF-TOKEN", "${xsrfToken}"))
+      .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=read")
+      .headers(ProbateHeader.headers_1)
+      .header("X-XSRF-TOKEN", "${xsrfToken}"))
 
     .exec(http("XUI_FindCase_SearchInputs")
-        .get(baseURL + "/data/internal/case-types/${caseType}/search-inputs")
-        .headers(ProbateHeader.headers_1)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
-        .header("experimental", "true")
-        .header("Accept", "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-search-input-details.v2+json;charset=UTF-8"))
+      .get(baseURL + "/data/internal/case-types/${caseType}/search-inputs")
+      .headers(ProbateHeader.headers_1)
+      .header("X-XSRF-TOKEN", "${xsrfToken}")
+      .header("experimental", "true")
+      .header("Accept", "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-search-input-details.v2+json;charset=UTF-8"))
 
     .pause(Environment.constantthinkTime)
 
@@ -236,17 +236,17 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
     ==========================================*/
 
     .exec(http("XUI_${jurisdiction}SearchResults_SearchMetadata")
-        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases/pagination_metadata?state=${state}")
-        .headers(ProbateHeader.headers_search)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
-        .check(status.in(200,304)))
+      .get(baseURL + "/data/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases/pagination_metadata?state=${state}")
+      .headers(ProbateHeader.headers_search)
+      .header("X-XSRF-TOKEN", "${xsrfToken}")
+      .check(status.in(200,304)))
 
     .exec(http("XUI_${jurisdiction}SearchResults_SearchUseCase")
-        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases?view=SEARCH&state=${state}&page=1")
-        //.post(baseURL + "/data/internal/searchCases?ctid=${caseType}&use_case=SEARCH&view=SEARCH&page=1")
-        .headers(ProbateHeader.headers_search)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
-        .check(status.in(200,304)))
+      .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases?view=SEARCH&state=${state}&page=1")
+      //.post(baseURL + "/data/internal/searchCases?ctid=${caseType}&use_case=SEARCH&view=SEARCH&page=1")
+      .headers(ProbateHeader.headers_search)
+      .header("X-XSRF-TOKEN", "${xsrfToken}")
+      .check(status.in(200,304)))
 
     .pause(Environment.constantthinkTime)
 
@@ -255,30 +255,30 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
     ==========================================*/
 
     .exec(http("XUI_CaseList_HealthCheck")
-        .get(baseURL + "/api/healthCheck?path=%2Fcases")
-        .headers(ProbateHeader.headers_0))
+      .get(baseURL + "/api/healthCheck?path=%2Fcases")
+      .headers(ProbateHeader.headers_0))
 
     .exec(http("XUI_CaseList_JurisdictionsRead")
-        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=read")
-        .headers(ProbateHeader.headers_1)
-        .header("X-XSRF-TOKEN", "${xsrfToken}"))
+      .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=read")
+      .headers(ProbateHeader.headers_1)
+      .header("X-XSRF-TOKEN", "${xsrfToken}"))
 
     .exec(http("XUI_${jurisdiction}SearchResults_WorkbasketMetadata")
-        .get(baseURL + "/data/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases/pagination_metadata?state=${state}")
-        .headers(ProbateHeader.headers_1)
-        .header("X-XSRF-TOKEN", "${xsrfToken}"))
+      .get(baseURL + "/data/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases/pagination_metadata?state=${state}")
+      .headers(ProbateHeader.headers_1)
+      .header("X-XSRF-TOKEN", "${xsrfToken}"))
 
     .exec(http("XUI_CaseList_WorkBasketInputs")
-        .get(baseURL + "/data/internal/case-types/${caseType}/work-basket-inputs")
-        .headers(ProbateHeader.headers_1)
-        .header("experimental", "true")
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
-        .header("Accept", "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-workbasket-input-details.v2+json;charset=UTF-8"))
+      .get(baseURL + "/data/internal/case-types/${caseType}/work-basket-inputs")
+      .headers(ProbateHeader.headers_1)
+      .header("experimental", "true")
+      .header("X-XSRF-TOKEN", "${xsrfToken}")
+      .header("Accept", "application/vnd.uk.gov.hmcts.ccd-data-store-api.ui-workbasket-input-details.v2+json;charset=UTF-8"))
 
     .exec(http("XUI_${jurisdiction}SearchResults_WorkbasketUseCase")
-        .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases?view=WORKBASKET&state=${state}s&page=1")
-        .headers(ProbateHeader.headers_1)
-        .header("X-XSRF-TOKEN", "${xsrfToken}"))
+      .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/${jurisdiction}/case-types/${caseType}/cases?view=WORKBASKET&state=${state}s&page=1")
+      .headers(ProbateHeader.headers_1)
+      .header("X-XSRF-TOKEN", "${xsrfToken}"))
 
     .pause(Environment.constantthinkTime)
 

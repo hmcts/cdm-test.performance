@@ -32,14 +32,14 @@ class CreateUser extends Simulation  {
       exec(CreateUser.IdamAdminLogin)
       .repeat(1) { //Set this value to the number of users you need to update (RolesForUsers.csv)
         exec(CreateUser.IdamUser)
+        .repeat(1) { //Set this value to the number of roles you need to remove per user (RolesToAdd.csv)
+          exec(CreateUser.GetAndRemoveRole)
       }
-      .repeat(1) { //Set this value to the number of roles you need to remove per user (RolesToAdd.csv)
-        exec(CreateUser.GetAndRemoveRole)
       }
     }
 
   setUp(
-    // GrantRole.inject(rampUsers(1) during (1 minutes)))
-    DeleteRole.inject(rampUsers(1) during (1 minutes)))
+    GrantRole.inject(rampUsers(1) during (1 minutes)))
+    // DeleteRole.inject(rampUsers(1) during (1 minutes)))
     .protocols(httpProtocol)
 }

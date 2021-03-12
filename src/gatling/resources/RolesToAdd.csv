@@ -1,4 +1,9 @@
 role
+cwd-admin
+caseworker
+caseworker-ia
+caseworker-ia-caseofficer
+caseworker-cmc
 citizen
 cwd-system-user
 cwd-read-only
