@@ -55,7 +55,7 @@ val submitLogin = group("Login") {
       .formParam("_csrf", "${csrf}")
       .check(headerRegex("Location", "(?<=code=)(.*)&client").saveAs("authCode"))
       .check(status.in(200, 302)))
-      //.exitHereIfFailed
+      .exitHereIfFailed
 
     .exec(http("CCD_020_010_Login")
       .get(CCDEnvurl + "/config")
