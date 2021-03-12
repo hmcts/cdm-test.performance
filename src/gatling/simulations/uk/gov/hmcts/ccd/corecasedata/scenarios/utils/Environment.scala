@@ -15,8 +15,8 @@ object Environment {
   val xuiBaseURL = "https://manage-case.perftest.platform.hmcts.net"
   val dmStore = "http://dm-store-perftest.service.core-compute-perftest.internal"
 
-  val minThinkTime = 10 //10
-  val maxThinkTime = 30 //30
+  val minThinkTime = 7 //10
+  val maxThinkTime = 7 //30
   val constantthinkTime = 7 //7
   val caseActivityPause = 5
 
