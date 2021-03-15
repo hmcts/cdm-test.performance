@@ -141,7 +141,7 @@ val submitLogin = group("Login") {
     .exec{ session =>
       val responseListTimeOptions = session("listResponseTimeOptions").as[Int]
       val responseListTimeGet = session("listResponseTimeGet").as[Int]
-      val totalListThinktime = Environment.caseActivityPause * 1000 - responseListTimeOptions - responseListTimeGet
+      val totalListThinktime = Environment.ccdCaseActivityPause * 1000 - responseListTimeOptions - responseListTimeGet
       session.set("listthinktime", totalListThinktime)
     }
 
@@ -166,7 +166,7 @@ val submitLogin = group("Login") {
     .exec{ session =>
       val responseTimePost = session("responseTimePost").as[Int]
       val responseTimeOptions = session("responseTimeOptions").as[Int]
-      val totalThinktime = Environment.caseActivityPause * 1000 - responseTimePost - responseTimeOptions
+      val totalThinktime = Environment.ccdCaseActivityPause * 1000 - responseTimePost - responseTimeOptions
       session.set("thinktime1", totalThinktime)
     }
 
@@ -185,7 +185,7 @@ val submitLogin = group("Login") {
     .exec{ session =>
       val responseTimeGet = session("responseTimeGet").as[Int]
       val responseTimeOptions = session("responseTimeOptions").as[Int]
-      val totalThinktime = Environment.caseActivityPause * 1000 - responseTimeGet - responseTimeOptions
+      val totalThinktime = Environment.ccdCaseActivityPause * 1000 - responseTimeGet - responseTimeOptions
       session.set("thinktime2", totalThinktime)
     }
 

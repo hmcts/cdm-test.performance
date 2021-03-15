@@ -129,7 +129,7 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
     //     session
     // }
 
-    .pause(session => session("listResponseTime").validate[Int].map(i => Environment.caseActivityPause * 1000 - i milliseconds))
+    .pause(session => session("listResponseTime").validate[Int].map(i => Environment.xuiCaseActivityPause * 1000 - i milliseconds))
 
   val CaseActivityOpenCase =
 
@@ -162,7 +162,7 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
     .exec{ session =>
       val responseTimePost = session("responseTimePost").as[Int]
       val responseTimeGet = session("responseTimeGet").as[Int]
-      val totalThinktime = Environment.caseActivityPause * 1000 - responseTimePost - responseTimeGet
+      val totalThinktime = Environment.xuiCaseActivityPause * 1000 - responseTimePost - responseTimeGet
       session.set("thinktime", totalThinktime)
     }
 
