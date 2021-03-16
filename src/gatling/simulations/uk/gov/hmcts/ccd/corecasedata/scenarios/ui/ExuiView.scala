@@ -17,34 +17,35 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
   val manageCasesHomePage =
     // tryMax(2) {
 
-      exec(http("XUI_010_005_Homepage")
-        .get(baseURL + "/")
-        .headers(LoginHeader.headers_0)
-        .check(status.in(200,304))).exitHereIfFailed
-    
-      .exec(http("XUI_010_010_HomepageConfigUI")
-        .get(baseURL + "/external/configuration-ui")
-        .headers(LoginHeader.headers_1))
-    
-      .exec(http("XUI_010_015_HomepageConfigJson")
-        .get(baseURL + "/assets/config/config.json")
-        .headers(LoginHeader.headers_1))
-    
-      .exec(http("XUI_010_020_HomepageTCEnabled")
-        .get(baseURL + "/api/configuration?configurationKey=termsAndConditionsEnabled")
-        .headers(LoginHeader.headers_1))
-    
-      .exec(http("XUI_010_025_HomepageIsAuthenticated")
-        .get(baseURL + "/auth/isAuthenticated")
-        .headers(LoginHeader.headers_1))
-    
-      .exec(http("XUI_010_030_AuthLogin")
-        .get(baseURL + "/auth/login")
-        .headers(LoginHeader.headers_4)
-        .check(css("input[name='_csrf']", "value").saveAs("csrfToken"))
-        .check(regex("oauth2/callback&state=(.*)&nonce").saveAs("state"))
-        .check(regex("&nonce=(.*)&response_type").saveAs("nonce")))
-        
+      group("XUI_Homepage"){
+        exec(http("XUI_010_005_Homepage")
+          .get(baseURL + "/")
+          .headers(LoginHeader.headers_0)
+          .check(status.in(200,304))).exitHereIfFailed
+      
+        .exec(http("XUI_010_010_HomepageConfigUI")
+          .get(baseURL + "/external/configuration-ui")
+          .headers(LoginHeader.headers_1))
+      
+        .exec(http("XUI_010_015_HomepageConfigJson")
+          .get(baseURL + "/assets/config/config.json")
+          .headers(LoginHeader.headers_1))
+      
+        .exec(http("XUI_010_020_HomepageTCEnabled")
+          .get(baseURL + "/api/configuration?configurationKey=termsAndConditionsEnabled")
+          .headers(LoginHeader.headers_1))
+      
+        .exec(http("XUI_010_025_HomepageIsAuthenticated")
+          .get(baseURL + "/auth/isAuthenticated")
+          .headers(LoginHeader.headers_1))
+      
+        .exec(http("XUI_010_030_AuthLogin")
+          .get(baseURL + "/auth/login")
+          .headers(LoginHeader.headers_4)
+          .check(css("input[name='_csrf']", "value").saveAs("csrfToken"))
+          .check(regex("oauth2/callback&state=(.*)&nonce").saveAs("state"))
+          .check(regex("&nonce=(.*)&response_type").saveAs("nonce")))
+      }
     //}
 
   //==================================================================================
@@ -61,51 +62,53 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
       User Login Steps
       ==========================================*/
 
-      .exec(http("XUI_020_005_SignIn")
-        //.post(IdamUrl + "/login?response_type=code&client_id=xuiwebapp&redirect_uri=" + baseURL + "/oauth2/callback&scope=profile%20openid%20roles%20manage-user%20create-user")
-        // .post(IdamUrl + "/login?response_type=code&redirect_uri=" + baseURL + "%2Foauth2%2Fcallback&scope=profile%20openid%20roles%20manage-user%20create-user&state=${state}&client_id=xuiwebapp")
-        .post(IdamUrl + "/login?client_id=xuiwebapp&redirect_uri=" + baseURL + "/oauth2/callback&state=${state}&nonce=${nonce}&response_type=code&scope=profile%20openid%20roles%20manage-user%20create-user&prompt=")
-        .formParam("username", "${email}")
-        .formParam("password", "Password12")
-        .formParam("save", "Sign in")
-        .formParam("selfRegistrationEnabled", "false")
-        .formParam("_csrf", "${csrfToken}")
-        .headers(LoginHeader.headers_login_submit)
-        .check(status.in(200, 304, 302))).exitHereIfFailed
+      .group("XUI_Login") {
+        exec(http("XUI_020_005_SignIn")
+          //.post(IdamUrl + "/login?response_type=code&client_id=xuiwebapp&redirect_uri=" + baseURL + "/oauth2/callback&scope=profile%20openid%20roles%20manage-user%20create-user")
+          // .post(IdamUrl + "/login?response_type=code&redirect_uri=" + baseURL + "%2Foauth2%2Fcallback&scope=profile%20openid%20roles%20manage-user%20create-user&state=${state}&client_id=xuiwebapp")
+          .post(IdamUrl + "/login?client_id=xuiwebapp&redirect_uri=" + baseURL + "/oauth2/callback&state=${state}&nonce=${nonce}&response_type=code&scope=profile%20openid%20roles%20manage-user%20create-user&prompt=")
+          .formParam("username", "${email}")
+          .formParam("password", "Password12")
+          .formParam("save", "Sign in")
+          .formParam("selfRegistrationEnabled", "false")
+          .formParam("_csrf", "${csrfToken}")
+          .headers(LoginHeader.headers_login_submit)
+          .check(status.in(200, 304, 302))).exitHereIfFailed
 
-      // .exec(getCookieValue(
-      //   CookieKey("__userid__").withDomain("manage-case.perftest.platform.hmcts.net").saveAs("myUserId")))
+        // .exec(getCookieValue(
+        //   CookieKey("__userid__").withDomain("manage-case.perftest.platform.hmcts.net").saveAs("myUserId")))
 
-      .exec(http("XUI_020_010_Homepage")
-        .get(baseURL + "/external/config/ui")
-        .headers(LoginHeader.headers_0)
-        .check(status.in(200,304)))
+        .exec(http("XUI_020_010_Homepage")
+          .get(baseURL + "/external/config/ui")
+          .headers(LoginHeader.headers_0)
+          .check(status.in(200,304)))
 
-      .exec(http("XUI_020_015_SignInTCEnabled")
-        .get(baseURL + "/api/configuration?configurationKey=termsAndConditionsEnabled")
-        .headers(LoginHeader.headers_38)
-        .check(status.in(200, 304)))
+        .exec(http("XUI_020_015_SignInTCEnabled")
+          .get(baseURL + "/api/configuration?configurationKey=termsAndConditionsEnabled")
+          .headers(LoginHeader.headers_38)
+          .check(status.in(200, 304)))
 
-      .repeat(1, "count") {
-        exec(http("XUI_020_020_AcceptT&CAccessJurisdictions${count}")
-          .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=read")
-          .headers(LoginHeader.headers_access_read)
-          .check(status.in(200, 304, 302)))
+        .repeat(1, "count") {
+          exec(http("XUI_020_020_AcceptT&CAccessJurisdictions${count}")
+            .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions?access=read")
+            .headers(LoginHeader.headers_access_read)
+            .check(status.in(200, 304, 302)))
+        }
+
+          // .exec(http("XUI_020_025_GetWorkBasketInputs")
+          //       .get(baseURL + "/data/internal/case-types/DIVORCE/work-basket-inputs")
+          //       .headers(LoginHeader.headers_17))
+
+          // .exec(http("XUI_020_030_GetPaginationMetaData")
+          //       .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata?state=SOTAgreementPayAndSubmitRequired")
+          //       .headers(LoginHeader.headers_0))
+
+          // .exec(http("XUI_020_035_GetDefaultWorkBasketView")
+          //       .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&state=SOTAgreementPayAndSubmitRequired&page=1")
+          //       .headers(LoginHeader.headers_0))
+
+        .exec(getCookieValue(CookieKey("XSRF-TOKEN").withDomain("manage-case.perftest.platform.hmcts.net").saveAs("xsrfToken")))
       }
-
-        // .exec(http("XUI_020_025_GetWorkBasketInputs")
-        //       .get(baseURL + "/data/internal/case-types/DIVORCE/work-basket-inputs")
-        //       .headers(LoginHeader.headers_17))
-
-        // .exec(http("XUI_020_030_GetPaginationMetaData")
-        //       .get(baseURL + "/data/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases/pagination_metadata?state=SOTAgreementPayAndSubmitRequired")
-        //       .headers(LoginHeader.headers_0))
-
-        // .exec(http("XUI_020_035_GetDefaultWorkBasketView")
-        //       .get(baseURL + "/aggregated/caseworkers/:uid/jurisdictions/DIVORCE/case-types/DIVORCE/cases?view=WORKBASKET&state=SOTAgreementPayAndSubmitRequired&page=1")
-        //       .headers(LoginHeader.headers_0))
-
-      .exec(getCookieValue(CookieKey("XSRF-TOKEN").withDomain("manage-case.perftest.platform.hmcts.net").saveAs("xsrfToken")))
 
       .pause(Environment.constantthinkTime)
 
@@ -115,7 +118,7 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
 
     feed(caseActivityListFeeder)
 
-    .group("CaseActivity_LIST") {
+    .group("XUI_001_CaseActivity_LIST") {
       exec(http("XUI_CaseActivityList")
         .get(baseURL + "/activity/cases/${caseList}/activity")
         .header("X-XSRF-TOKEN", "${xsrfToken}")
@@ -142,7 +145,7 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
 
     feed(caseActivityFeeder)
 
-    .group("CaseActivity_POST") {
+    .group("XUI_002_CaseActivity_POST") {
       exec(http("XUI_CaseActivity_Post")
         .post(baseURL + "/activity/cases/${caseRef}/activity")
         .headers(XuiHeaders.headers_CSPost)
@@ -151,7 +154,7 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
         .check(responseTimeInMillis.saveAs("responseTimePost")))
     }
 
-    .group("CaseActivity_GET") {
+    .group("XUI_003_CaseActivity_GET") {
       exec(http("XUI_CaseActivity_Get")
         .get(baseURL + "/activity/cases/${caseRef}/activity")
         .headers(XuiHeaders.headers_CSGet)

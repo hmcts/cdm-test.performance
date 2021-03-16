@@ -40,7 +40,7 @@ val headers_0 = Map(
 		"sec-ch-ua" -> """Chromium";v="88", "Google Chrome";v="88", ";Not A Brand";v="99""",
 		"sec-ch-ua-mobile" -> "?0")
 
-val submitLogin = group("Login") {
+val submitLogin = group("CCD_Login") {
 
     feed(feedXUIUserData)
 
@@ -128,15 +128,19 @@ val submitLogin = group("Login") {
 
     feed(caseActivityListFeeder)
 
-    .exec(http("CCD_CaseActivityListOptions")
-      .options(BaseURL + "/activity/cases/${caseList}/activity")
-      .headers(headers_0)
-      .check(responseTimeInMillis.saveAs("listResponseTimeOptions")))
+    .group("CCD_001_CaseActivityListOptions") {
+      exec(http("CCD_CaseActivityListOptions")
+        .options(BaseURL + "/activity/cases/${caseList}/activity")
+        .headers(headers_0)
+        .check(responseTimeInMillis.saveAs("listResponseTimeOptions")))
+    }
 
-    .exec(http("CCD_CaseActivityListGet")
-      .get(BaseURL + "/activity/cases/${caseList}/activity")
-      .headers(headers_1)
-      .check(responseTimeInMillis.saveAs("listResponseTimeGet")))
+    .group("CCD_002_CaseActivityListGet") {
+      exec(http("CCD_CaseActivityListGet")
+        .get(BaseURL + "/activity/cases/${caseList}/activity")
+        .headers(headers_1)
+        .check(responseTimeInMillis.saveAs("listResponseTimeGet")))
+    }
 
     .exec{ session =>
       val responseListTimeOptions = session("listResponseTimeOptions").as[Int]
@@ -152,16 +156,20 @@ val submitLogin = group("Login") {
 
     feed(caseActivityFeeder)
 
-    .exec(http("CCD_CaseActivity_Options")
-      .options(BaseURL + "/activity/cases/${caseRef}/activity")
-      .headers(headers_0)
-      .check(responseTimeInMillis.saveAs("responseTimeOptions")))
+    .group("CCD_003_CaseActivityOptions") {
+      exec(http("CCD_CaseActivityOptions")
+        .options(BaseURL + "/activity/cases/${caseRef}/activity")
+        .headers(headers_0)
+        .check(responseTimeInMillis.saveAs("responseTimeOptions")))
+    }
 
-    .exec(http("CCD_CaseActivity_Post")
-      .post(BaseURL + "/activity/cases/${caseRef}/activity")
-      .headers(headers_1)
-      .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-      .check(responseTimeInMillis.saveAs("responseTimePost")))
+    .group("CCD_004_CaseActivityPost") {
+      exec(http("CCD_CaseActivityPost")
+        .post(BaseURL + "/activity/cases/${caseRef}/activity")
+        .headers(headers_1)
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .check(responseTimeInMillis.saveAs("responseTimePost")))
+    }
 
     .exec{ session =>
       val responseTimePost = session("responseTimePost").as[Int]
@@ -172,15 +180,19 @@ val submitLogin = group("Login") {
 
     .pause(session => session("thinktime1").validate[Int].map(i => i milliseconds))
 
-    .exec(http("CCD_CaseActivity_Options")
-      .options(BaseURL + "/activity/cases/${caseRef}/activity")
-      .headers(headers_0)
-      .check(responseTimeInMillis.saveAs("responseTimeOptions")))
+    .group("CCD_005_CaseActivityOptions") {
+      exec(http("CCD_CaseActivityOptions")
+        .options(BaseURL + "/activity/cases/${caseRef}/activity")
+        .headers(headers_0)
+        .check(responseTimeInMillis.saveAs("responseTimeOptions")))
+    }
 
-    .exec(http("CCD_CaseActivity_Get")
-      .get(BaseURL + "/activity/cases/${caseRef}/activity")
-      .headers(headers_1)
-      .check(responseTimeInMillis.saveAs("responseTimeGet")))
+    .group("CCD_006_CaseActivityGet") {
+      exec(http("CCD_CaseActivityGet")
+        .get(BaseURL + "/activity/cases/${caseRef}/activity")
+        .headers(headers_1)
+        .check(responseTimeInMillis.saveAs("responseTimeGet")))
+    }
 
     .exec{ session =>
       val responseTimeGet = session("responseTimeGet").as[Int]
