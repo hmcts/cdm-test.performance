@@ -13,17 +13,17 @@ class CreateUser extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
+    // .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     .doNotTrackHeader("1")
 
   val GrantRole = scenario("Grant idam role")
     .repeat(1) {
       exec(CreateUser.IdamAdminLogin)
-      .repeat(1) { //Set this value to the number of users you need to update (RolesForUsers.csv)
+      .repeat(50) { //Set this value to the number of users you need to update (RolesForUsers.csv)
         exec(CreateUser.IdamUser)
-      }
-      .repeat(1) { //Set this value to the number of roles you need to add per user (RolesToAdd.csv)
-        exec(CreateUser.GetAndApplyRole)
+        .repeat(1) { //Set this value to the number of roles you need to add per user (RolesToAdd.csv)
+          exec(CreateUser.GetAndApplyRole)
+        }
       }
     }
 
@@ -38,8 +38,29 @@ class CreateUser extends Simulation  {
       }
     }
 
+  val GetUserID = scenario ("Get idam ID for user by email")
+  .repeat(1) {
+      exec(CreateUser.IdamAdminLogin)
+      .repeat(50) { //Set this value to the number of users you need to update (RolesForUsers.csv)
+        exec(CreateUser.IdamUser)
+      }
+  }
+
+  val CreateUserTestingSupport = scenario("Create User in Idam")
+    .repeat(50) {
+      exec(CreateUser.CreateUserInIdam)
+    }
+
+  val DeleteUserTestingSupport = scenario("Delete User in Idam")
+    .repeat(50) {
+      exec(CreateUser.DeleteUserInIdam)
+    }
+
   setUp(
-    GrantRole.inject(rampUsers(1) during (1 minutes)))
+    // GrantRole.inject(rampUsers(1) during (1 minutes)))
     // DeleteRole.inject(rampUsers(1) during (1 minutes)))
+    // CreateUserTestingSupport.inject(rampUsers(1) during (1 minutes)))
+    // DeleteUserTestingSupport.inject(rampUsers(1) during (1 minutes)))
+    GetUserID.inject(rampUsers(1) during (1 minutes)))
     .protocols(httpProtocol)
 }

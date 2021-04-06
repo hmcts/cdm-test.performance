@@ -14,7 +14,8 @@ object CreateUser {
 //  val feedUserData = csv("CaseSharingUsers_Small.csv")
   val idamAdminFeeder = csv("IdamAdmin.csv")
   val feedUserData = csv("RolesForUsers.csv")
-  val roleFeeder = csv("RolesToAdd.csv")//.circular
+  val roleFeeder = csv("RolesToAdd.csv").circular
+  val numberFeeder = csv("NumberList.csv").circular
 
   val headers_1 = Map( //ServiceAuthorization token can be called from http://rpe-service-auth-provider-perftest.service.core-compute-perftest.internal/testing-support/lease
     "Content-Type" -> "application/json",
@@ -45,17 +46,17 @@ object CreateUser {
       .check(status.saveAs("statusvalue")))
 
     //Outputs the user email and idam id to a CSV, can be commented out if not needed  
-    // .doIf(session=>session("statusvalue").as[String].contains("200")) {
-    //   exec {
-    //     session =>
-    //       val fw = new BufferedWriter(new FileWriter("EmailAndIdamIDs.csv", true))
-    //       try {
-    //         fw.write(session("email").as[String] + ","+session("userId").as[String] + "\r\n")
-    //       }
-    //       finally fw.close()
-    //       session
-    //   }
-    // }
+    .doIf(session=>session("statusvalue").as[String].contains("200")) {
+      exec {
+        session =>
+          val fw = new BufferedWriter(new FileWriter("EmailAndIdamIDs.csv", true))
+          try {
+            fw.write(session("email").as[String] + ","+session("userId").as[String] + "\r\n")
+          }
+          finally fw.close()
+          session
+      }
+    }
 
   val GetAndApplyRole = feed(roleFeeder)
 
@@ -128,5 +129,34 @@ object CreateUser {
     // }
 
     .pause(1)
+
+  val CreateUserInIdam =
+
+    feed(numberFeeder)
+
+    .exec(http("CreateUser")
+      .post(Environment.idamAPI + "/testing-support/accounts")
+      .header("Content-Type", "application/json")
+      .body(ElFileBody("Idam_CreateUserBody.json")))
+
+    //Outputs the user email and idam id to a CSV, can be commented out if not needed  
+    .exec {
+      session =>
+        val fw = new BufferedWriter(new FileWriter("CreatedIdamUsers.csv", true))
+        try {
+          fw.write("PerfTest_SeniorTribunal_" + session("userNumber").as[String] + "@justice.gov.uk" + "\r\n")
+        }
+        finally fw.close()
+        session
+    }
+
+  val DeleteUserInIdam =
+
+    feed(feedUserData)
+
+    .exec(http("DeleteUser")
+      .delete(Environment.idamAPI + "/testing-support/accounts/${email}")
+      .header("Content-Type", "application/json")
+      .header("Accept", "application/json"))
 
 }

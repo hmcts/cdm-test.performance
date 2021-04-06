@@ -1,0 +1,17 @@
+{
+  "email": "PerfTest_SeniorTribunal_${userNumber}@justice.gov.uk",
+  "forename": "PerfTest",
+  "surname": "Caseworker",
+  "password": "Password12",
+  "roles": [
+    {
+      "code": "caseworker"
+    }, 
+    {
+      "code": "caseworker-ia"
+    }, 
+    {
+      "code": "caseworker-ia-caseofficer"
+    }
+]
+}

@@ -12,7 +12,7 @@ class CCDUIPTSimulation extends Simulation  {
 
   val config: Config = ConfigFactory.load()
   val BaseURL = Environment.baseURL
-  val PBiteration = 7 //7
+  val PBiteration = 8 //7
   val SSCSiteration = 14 //14
   val CMCiteration = 8 //8
   val Diviteration = 10 //10
@@ -43,8 +43,8 @@ class CCDUIPTSimulation extends Simulation  {
         .exec(PBGoR.PBCaseActivity)
         .exec(PBGoR.PBDocUpload)
         .exec(PBGoR.PBCaseActivity)
-        .exec(PBGoR.PBStopCase)
-        .exec(PBGoR.PBCaseActivity)
+        // .exec(PBGoR.PBStopCase)
+        // .exec(PBGoR.PBCaseActivity)
         .exec(PBGoR.PBSearch)
         .exec(PBGoR.PBView)
         .exec(PBGoR.PBCaseActivity)
@@ -233,16 +233,16 @@ class CCDUIPTSimulation extends Simulation  {
   //CCD Regression UI Scenario
   setUp(
     //These 5 scenarios required for CCD regression testing (case activity added 28/01/2021)
-    // CCDProbateScenario.inject(rampUsers(150) during (10 minutes)), //150
-    // CCDSSCSScenario.inject(rampUsers(150) during (10 minutes)), //150
-    // CCDEthosScenario.inject(rampUsers(400) during (10 minutes)), //400
-    // CCDCMCScenario.inject(rampUsers(150) during (10 minutes)), //150
-    // CCDDivScenario.inject(rampUsers(150) during (10 minutes)), //150
+    CCDProbateScenario.inject(rampUsers(150) during (10 minutes)), //150
+    CCDSSCSScenario.inject(rampUsers(150) during (10 minutes)), //150
+    CCDEthosScenario.inject(rampUsers(400) during (10 minutes)), //400
+    CCDCMCScenario.inject(rampUsers(150) during (10 minutes)), //150
+    CCDDivScenario.inject(rampUsers(150) during (10 minutes)), //150
 
     // CaseActivityScn.sinject(rampUsers(1000) during (20 minutes)) //100
     // CaseActivityListScn.inject(rampUsers(50) during (10 minutes)) //100
-    XUICaseActivityScn.inject(rampUsers(500) during (20 minutes)), //600
-    CCDCaseActivityScn.inject(rampUsers(1000) during (20 minutes)) //400
+    // XUICaseActivityScn.inject(rampUsers(500) during (20 minutes)), //600
+    // CCDCaseActivityScn.inject(rampUsers(1000) during (20 minutes)) //400
 
     // CCDDivScenario.inject(rampUsers(1) during (1 minutes)), //150
     // CaseActivityScn.inject(rampUsers(1) during (1 minutes)),
