@@ -8,7 +8,7 @@ import uk.gov.hmcts.ccd.corecasedata.scenarios._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 import scala.concurrent.duration._
 
-class CCD_PerformanceRegression extends Simulation  {
+class CCD_StressTest extends Simulation  {
 
   //Iteration Settings
   val api_probateIteration = 40
@@ -35,12 +35,11 @@ class CCD_PerformanceRegression extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    // .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
   /*================================================================================================
 
-  The below scenarios are required for CCD Regression Performance Testing
+  The below scenarios are required for CCD Stress Performance Testing
 
   ================================================================================================*/
 
@@ -202,19 +201,19 @@ class CCD_PerformanceRegression extends Simulation  {
 
   setUp(
     //CCD API scenarios
-    API_ProbateCreateCase.inject(rampUsers(18) during (10 minutes)),
+    API_ProbateCreateCase.inject(rampUsers(36) during (10 minutes)),
     API_SSCSCreateCase.inject(rampUsers(18) during (10 minutes)),
-    API_DivorceCreateCase.inject(rampUsers(18) during (10 minutes)),
+    // API_DivorceCreateCase.inject(rampUsers(18) during (10 minutes)),
     API_IACCreateCase.inject(rampUsers(18) during (10 minutes)),
     API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
     API_FRCreateCase.inject(rampUsers(18) during (10 minutes)),
     API_CMCCreateCase.inject(rampUsers(18) during (10 minutes)),
 
     //CCD UI scenarios
-    UI_CCDProbateScenario.inject(rampUsers(20) during (10 minutes)),
-    UI_CCDSSCSScenario.inject(rampUsers(20) during (10 minutes)),
-    UI_CCDCMCScenario.inject(rampUsers(20) during (10 minutes)),
-    // UI_CCDDivScenario.inject(rampUsers(15) during (10 minutes)),
+    UI_CCDProbateScenario.inject(rampUsers(15) during (10 minutes)),
+    UI_CCDSSCSScenario.inject(rampUsers(15) during (10 minutes)),
+    UI_CCDCMCScenario.inject(rampUsers(15) during (10 minutes)),
+    UI_CCDDivScenario.inject(rampUsers(15) during (10 minutes)),
 
     //Case Activity Requests
     CaseActivityScn.inject(rampUsers(1000) during (10 minutes)),
@@ -230,7 +229,7 @@ class CCD_PerformanceRegression extends Simulation  {
     // API_IACCreateCase.inject(rampUsers(18) during (10 minutes)),
     // API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
     // API_FRCreateCase.inject(rampUsers(18) during (10 minutes)),
-    // API_DivorceCreateCase.inject(rampUsers(1) during (10 minutes))  
+    // CCDElasticSearch.inject(rampUsers(1) during (10 minutes))  
     )
   .protocols(httpProtocol)
 }
