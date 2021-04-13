@@ -15,7 +15,7 @@ class CCD_PerformanceRegression extends Simulation  {
   val api_sscsIteration = 40
   val api_divorceIteration = 40
   val api_iacIteration = 40
-  val api_fplIteration = 1
+  val api_fplIteration = 40
   val api_frIteration = 40
   val api_cmcIteration = 40
 
@@ -51,6 +51,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_probateIteration) { //api_probateIteration
         exec(ccddatastore.CCDAPI_ProbateCreate)
         .exec(ccddatastore.CCDAPI_ProbateCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -60,6 +61,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_sscsIteration) { //api_sscsIteration
         exec(ccddatastore.CCDAPI_SSCSCreate)
         .exec(ccddatastore.CCDAPI_SSCSCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -69,6 +71,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_divorceIteration) { //api_divorceIteration
         exec(ccddatastore.CCDAPI_DivorceCreate)
         .exec(ccddatastore.CCDAPI_DivorceCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -87,6 +90,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_fplIteration) { //api_fplIteration
         exec(ccddatastore.CCDAPI_FPLCreate)
         .exec(ccddatastore.CCDAPI_FPLCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -96,6 +100,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_frIteration) { //api_frIteration
         exec(ccddatastore.CCDAPI_FRCreate)
         .exec(ccddatastore.CCDAPI_FRCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -105,6 +110,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_cmcIteration) { //api_cmcIteration
         exec(ccddatastore.CCDAPI_CMCCreate)
         .exec(ccddatastore.CCDAPI_CMCCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
