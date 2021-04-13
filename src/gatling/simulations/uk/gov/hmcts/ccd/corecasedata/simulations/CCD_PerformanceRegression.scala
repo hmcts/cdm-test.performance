@@ -226,7 +226,7 @@ class CCD_PerformanceRegression extends Simulation  {
     CaseActivityScn.inject(rampUsers(1000) during (10 minutes)),
 
     //CCD Searches
-    CCDSearchView.inject(rampUsers(20) during (20 minutes)),
+    CCDSearchView.inject(rampUsers(20) during (10 minutes)),
     CCDElasticSearch.inject(rampUsers(150) during (10 minutes))
     
     //Debugging requests (leave commented out for test runs please)
