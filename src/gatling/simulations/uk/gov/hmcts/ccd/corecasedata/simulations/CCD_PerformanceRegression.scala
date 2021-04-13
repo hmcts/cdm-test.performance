@@ -35,7 +35,7 @@ class CCD_PerformanceRegression extends Simulation  {
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
-    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
+    // .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080)) //Comment out for VM runs
     .doNotTrackHeader("1")
 
   /*================================================================================================
@@ -202,9 +202,9 @@ class CCD_PerformanceRegression extends Simulation  {
 
   setUp(
     //CCD API scenarios
-   /* API_ProbateCreateCase.inject(rampUsers(18) during (10 minutes)),
+    API_ProbateCreateCase.inject(rampUsers(36) during (10 minutes)),
     API_SSCSCreateCase.inject(rampUsers(18) during (10 minutes)),
-    API_DivorceCreateCase.inject(rampUsers(18) during (10 minutes)),
+    // API_DivorceCreateCase.inject(rampUsers(18) during (10 minutes)),
     API_IACCreateCase.inject(rampUsers(18) during (10 minutes)),
     API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
     API_FRCreateCase.inject(rampUsers(18) during (10 minutes)),
@@ -221,7 +221,7 @@ class CCD_PerformanceRegression extends Simulation  {
 
     //CCD Searches
     CCDSearchView.inject(rampUsers(20) during (20 minutes)),
-    CCDElasticSearch.inject(rampUsers(150) during (10 minutes))*/
+    CCDElasticSearch.inject(rampUsers(150) during (10 minutes))
     
     //Debugging requests (leave commented out for test runs please)
     // API_ProbateCreateCase.inject(rampUsers(18) during (10 minutes)),
@@ -230,7 +230,7 @@ class CCD_PerformanceRegression extends Simulation  {
     // API_IACCreateCase.inject(rampUsers(18) during (10 minutes)),
     // API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
     // API_FRCreateCase.inject(rampUsers(18) during (10 minutes)),
-    API_IACCreateCase.inject(rampUsers(1) during (10 minutes))  
+    CCDElasticSearch.inject(rampUsers(1) during (10 minutes))  
     )
   .protocols(httpProtocol)
 }
