@@ -230,7 +230,7 @@ class CCD_PerformanceRegression extends Simulation  {
     // API_IACCreateCase.inject(rampUsers(18) during (10 minutes)),
     // API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
     // API_FRCreateCase.inject(rampUsers(18) during (10 minutes)),
-    CCDElasticSearch.inject(rampUsers(1) during (10 minutes))  
+    // CCDElasticSearch.inject(rampUsers(1) during (10 minutes))  
     )
   .protocols(httpProtocol)
 }
