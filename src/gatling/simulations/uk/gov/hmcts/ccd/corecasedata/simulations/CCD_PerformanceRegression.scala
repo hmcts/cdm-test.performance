@@ -126,7 +126,7 @@ class CCD_PerformanceRegression extends Simulation  {
         .exec(PBGoR.PBStopCase)
         .exec(PBGoR.PBSearch)
         .exec(PBGoR.PBView)
-        // .exec(WaitforNextIteration.waitforNextIteration)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
@@ -168,7 +168,7 @@ class CCD_PerformanceRegression extends Simulation  {
           .exec(DVExcep.DVDocUpload)
           .exec(DVExcep.DVSearch)
           .exec(DVExcep.DVView)
-          // .exec(WaitforNextIteration.waitforNextIteration)
+          .exec(WaitforNextIteration.waitforNextIteration)
         }
         .exec(Logout.ccdLogout)
     }
