@@ -208,13 +208,13 @@ class CCD_PerformanceRegression extends Simulation  {
 
   setUp(
     //CCD API scenarios
-    API_ProbateCreateCase.inject(rampUsers(18) during (10 minutes)),
-    API_SSCSCreateCase.inject(rampUsers(18) during (10 minutes)),
-    API_DivorceCreateCase.inject(rampUsers(18) during (10 minutes)),
-    API_IACCreateCase.inject(rampUsers(18) during (10 minutes)),
-    API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
-    API_FRCreateCase.inject(rampUsers(18) during (10 minutes)),
-    API_CMCCreateCase.inject(rampUsers(18) during (10 minutes)),
+    API_ProbateCreateCase.inject(rampUsers(20) during (10 minutes)),
+    API_SSCSCreateCase.inject(rampUsers(20) during (10 minutes)),
+    API_DivorceCreateCase.inject(rampUsers(20) during (10 minutes)),
+    API_IACCreateCase.inject(rampUsers(20) during (10 minutes)),
+    // API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
+    API_FRCreateCase.inject(rampUsers(20) during (10 minutes)),
+    API_CMCCreateCase.inject(rampUsers(20) during (10 minutes)),
 
     //CCD UI scenarios
     UI_CCDProbateScenario.inject(rampUsers(20) during (10 minutes)),
@@ -236,7 +236,6 @@ class CCD_PerformanceRegression extends Simulation  {
     // API_IACCreateCase.inject(rampUsers(18) during (10 minutes)),
     // API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
     // API_FRCreateCase.inject(rampUsers(18) during (10 minutes)),
-    // API_DivorceCreateCase.inject(rampUsers(1) during (10 minutes))  
     )
   .protocols(httpProtocol)
 }
