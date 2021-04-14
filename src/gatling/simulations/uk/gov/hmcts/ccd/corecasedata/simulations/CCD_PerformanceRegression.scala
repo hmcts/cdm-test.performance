@@ -27,7 +27,7 @@ class CCD_PerformanceRegression extends Simulation  {
   val caseActivityIteration = 120
   val caseActivityListIteration = 12
   val ccdSearchIteration = 35
-  val elasticSearchIteration = 90
+  val elasticSearchIteration = 300
 
   //Gatling specific configs, required for perf testing
   val BaseURL = Environment.baseURL
@@ -126,7 +126,7 @@ class CCD_PerformanceRegression extends Simulation  {
         .exec(PBGoR.PBStopCase)
         .exec(PBGoR.PBSearch)
         .exec(PBGoR.PBView)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        // .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
