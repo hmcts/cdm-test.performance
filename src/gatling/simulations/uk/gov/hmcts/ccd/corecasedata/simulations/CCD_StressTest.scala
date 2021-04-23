@@ -11,22 +11,24 @@ import scala.concurrent.duration._
 class CCD_StressTest extends Simulation  {
 
   //Iteration Settings
-  val api_probateIteration = 40 //40
-  val api_sscsIteration = 40 //40
-  val api_divorceIteration = 40 //40
-  val api_iacIteration = 40 //40
-  val api_fplIteration = 40 //40
-  val api_frIteration = 40 //40
-  val api_cmcIteration = 40 //40
+  val api_probateIteration = 1600 //40
+  val api_sscsIteration = 1600 //40
+  val api_divorceIteration = 1600 //40
+  val api_iacIteration = 1600 //40
+  val api_fplIteration = 1600 //40
+  val api_frIteration = 1600 //40
+  val api_cmcIteration = 1600 //40
 
-  val ui_PBiteration = 15
-  val ui_SSCSiteration = 15
-  val ui_CMCiteration = 15
+  val ui_PBiteration = 600 //15
+  val ui_SSCSiteration = 600 //15
+  val ui_CMCiteration = 600 //15
 
+  val caseActivityTotalRepeat = 200 //5
   val caseActivityIteration = 120
   val caseActivityListIteration = 12
-  val ccdSearchIteration = 35
-  val elasticSearchIteration = 90
+
+  val ccdSearchIteration = 1400 //35
+  val elasticSearchIteration = 3600 //90
 
   //Gatling specific configs, required for perf testing
   val BaseURL = Environment.baseURL
@@ -155,7 +157,7 @@ class CCD_StressTest extends Simulation  {
   val CaseActivityScn = scenario("CCD Case Activity Requests")
     .repeat(1) {
       exec(ccdcaseactivity.CDSGetRequest)
-      .repeat(5) {
+      .repeat(caseActivityTotalRepeat) {
         repeat(caseActivityListIteration) {
           exec(ccdcaseactivity.CaseActivityList)
         }
