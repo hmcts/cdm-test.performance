@@ -143,7 +143,7 @@ class CCD_StressTest extends Simulation  {
       .repeat(ui_CMCiteration) {
         exec(CMC.CMCCreateCase)
         .exec(CMC.CMCStayCase)
-        .exec(CMC.CMCAttachScannedDocs)
+        // .exec(CMC.CMCAttachScannedDocs)
         .exec(CMC.CMCSupportUpdate)
         .exec(CMC.CMCSearchAndView)
         .exec(WaitforNextIteration.waitforNextIteration)
@@ -188,43 +188,43 @@ class CCD_StressTest extends Simulation  {
     API_CMCCreateCase.inject(
       incrementConcurrentUsers(100)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     API_DivorceCreateCase.inject(
       incrementConcurrentUsers(50)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     API_ProbateCreateCase.inject(
       incrementConcurrentUsers(50)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     API_SSCSCreateCase.inject(
       incrementConcurrentUsers(50)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     API_IACCreateCase.inject(
       incrementConcurrentUsers(50)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     API_FRCreateCase.inject(
       incrementConcurrentUsers(50)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     API_FPLCreateCase.inject(
       incrementConcurrentUsers(50)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     
@@ -232,39 +232,39 @@ class CCD_StressTest extends Simulation  {
     UI_CCDProbateScenario.inject(
       incrementConcurrentUsers(50)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     UI_CCDSSCSScenario.inject(
       incrementConcurrentUsers(50)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     UI_CCDCMCScenario.inject(
       incrementConcurrentUsers(50)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     
     CaseActivityScn.inject(
       incrementConcurrentUsers(50)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
 
     CCDSearchView.inject(
       incrementConcurrentUsers(50)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(20)),
     CCDElasticSearch.inject(
       incrementConcurrentUsers(50)
         .times(40)
-        .eachLevelLasting(15.minutes)
+        .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(20)))
     
