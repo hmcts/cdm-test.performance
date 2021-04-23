@@ -2,7 +2,7 @@ package uk.gov.hmcts.ccd.corecasedata.scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.ccd.corecasedata.scenarios.utils.Environment
+import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 import scala.concurrent.duration._
 
 object DVExcep {
@@ -170,96 +170,38 @@ object DVExcep {
       .get("/aggregated/caseworkers/:uid/jurisdictions?access=create")
       .headers(CommonHeader))
 
-    .pause(MinThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("DIV_030_010_CreateCaseUsingSolicitor")
-      .get("/data/internal/case-types/${DVCaseType}/event-triggers/solicitorCreate?ignore-warning=false")
-      .headers(headers_1)
+    // .exec(http("DIV_030_010_CreateCasePage1")
+		// 	.options("/data/internal/case-types/${DVCaseType}/event-triggers/hwfCreate?ignore-warning=false")
+		// 	.headers(DivorceHeader.headers_0))
+
+    .exec(http("DIV_030_010_CreateCasePage1")
+			.get("/data/internal/case-types/${DVCaseType}/event-triggers/hwfCreate?ignore-warning=false")
+			.headers(DivorceHeader.headers_1)
       .check(jsonPath("$.event_token").saveAs("New_Case_event_token")))
 
-    .pause(MinThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("DIV_030_015_CreateCaseAboutTheSolicitor")
-      .post("/data/case-types/${DVCaseType}/validate?pageId=solicitorCreateSolAboutTheSolicitor")
-      .headers(headers_8)
-      .body(StringBody("{\n  \"data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\"\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\"\n  }\n}")))
+		// .exec(http("DIV_030_020_CreateCasePage2")
+		// 	.options("/data/case-types/${DVCaseType}/validate?pageId=hwfCreate1")
+		// 	.headers(DivorceHeader.headers_2))
 
-    .pause(MinThinkTime seconds)
+    .exec(http("DIV_030_015_CreateCasePage2")
+			.post("/data/case-types/${DVCaseType}/validate?pageId=hwfCreate1")
+			.headers(DivorceHeader.headers_3)
+			.body(StringBody("{\n  \"data\": {\n    \"LanguagePreferenceWelsh\": \"No\"\n  },\n  \"event\": {\n    \"id\": \"hwfCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"LanguagePreferenceWelsh\": \"No\"\n  }\n}")))
 
-    .exec(http("DIV_030_020_CreateCaseAboutThePetitioner")
-      .post("/data/case-types/${DVCaseType}/validate?pageId=solicitorCreateSolAboutThePetitioner")
-      .headers(headers_8)
-      .body(StringBody("{\n  \"data\": {\n    \"D8PetitionerFirstName\": \"jane\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\"\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"jane\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\"\n  }\n}")))
+		.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .pause(MinThinkTime seconds)
+		// .exec(http("request_4")
+		// 	.options("/data/case-types/${DVCaseType}/cases?ignore-warning=false")
+		// 	.headers(DivorceHeader.headers_2))
 
-    .exec(http("DIV_030_025_CreateCaseAboutTheRespondent")
-      .post("/data/case-types/${DVCaseType}/validate?pageId=solicitorCreateSolAboutTheRespondent")
-      .headers(headers_8)
-      .body(StringBody("{\n  \"data\": {\n    \"D8RespondentFirstName\": \"James\",\n    \"D8RespondentLastName\": \"Stevens\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\"\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"jane\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"James\",\n    \"D8RespondentLastName\": \"Stevens\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\"\n  }\n}")))
-
-    .pause(MinThinkTime seconds)
-
-    .exec(http("DIV_030_030_CreateCaseMarriageCertificate")
-      .post("/data/case-types/${DVCaseType}/validate?pageId=solicitorCreateSolMarriageCertificate")
-      .headers(headers_8)
-      .body(StringBody("{\n  \"data\": {\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"jane Smith\",\n    \"D8MarriageRespondentName\": \"James Stevens\",\n    \"D8MarriedInUk\": \"Yes\"\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"jane\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"James\",\n    \"D8RespondentLastName\": \"Stevens\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"jane Smith\",\n    \"D8MarriageRespondentName\": \"James Stevens\",\n    \"D8MarriedInUk\": \"Yes\"\n  }\n}")))
-
-    .pause(MinThinkTime seconds)
-
-    .exec(http("DIV_030_035_CreateCaseSolicitorJurisdiction")
-      .post("/data/case-types/${DVCaseType}/validate?pageId=solicitorCreateSolJurisdiction")
-      .headers(headers_8)
-      .body(StringBody("{\n  \"data\": {\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ]\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"jane\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"James\",\n    \"D8RespondentLastName\": \"Stevens\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"jane Smith\",\n    \"D8MarriageRespondentName\": \"James Stevens\",\n    \"D8MarriedInUk\": \"Yes\",\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ]\n  }\n}")))
-
-    .pause(MinThinkTime seconds)
-
-    .exec(http("DIV_030_040_CreateCaseDivorceReason")
-      .post("/data/case-types/${DVCaseType}/validate?pageId=solicitorCreateSolReasonForDivorce")
-      .headers(headers_8)
-      .body(StringBody("{\n  \"data\": {\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\"\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"jane\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"James\",\n    \"D8RespondentLastName\": \"Stevens\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"jane Smith\",\n    \"D8MarriageRespondentName\": \"James Stevens\",\n    \"D8MarriedInUk\": \"Yes\",\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ],\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\"\n  }\n}")))
-
-    .pause(MinThinkTime seconds)
-
-    .exec(http("DIV_030_045_CreateCaseBehaviourDetails")
-      .post("/data/case-types/${DVCaseType}/validate?pageId=solicitorCreateSolSOCBehaviour1")
-      .headers(headers_8)
-      .body(StringBody("{\n  \"data\": {\n    \"D8ReasonForDivorceBehaviourDetails\": \"bad behaviour\"\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"jane\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"James\",\n    \"D8RespondentLastName\": \"Stevens\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"jane Smith\",\n    \"D8MarriageRespondentName\": \"James Stevens\",\n    \"D8MarriedInUk\": \"Yes\",\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ],\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\",\n    \"D8ReasonForDivorceBehaviourDetails\": \"bad behaviour\"\n  }\n}")))
-
-    .pause(MinThinkTime seconds)
-
-    .exec(http("DIV_030_050_CreateCaseExistingCourtCase")
-      .post("/data/case-types/${DVCaseType}/validate?pageId=solicitorCreateSolExistingCourtCases")
-      .headers(headers_8)
-      .body(StringBody("{\n  \"data\": {\n    \"D8LegalProceedings\": \"No\"\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"jane\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"James\",\n    \"D8RespondentLastName\": \"Stevens\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"jane Smith\",\n    \"D8MarriageRespondentName\": \"James Stevens\",\n    \"D8MarriedInUk\": \"Yes\",\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ],\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\",\n    \"D8ReasonForDivorceBehaviourDetails\": \"bad behaviour\",\n    \"D8LegalProceedings\": \"No\"\n  }\n}")))
-
-    .pause(MinThinkTime seconds)
-
-    .exec(http("DIV_030_055_CreateCaseDividingAssets")
-      .post("/data/case-types/${DVCaseType}/validate?pageId=solicitorCreateSolDividingMoneyAndProperty")
-      .headers(headers_8)
-      .body(StringBody("{\n  \"data\": {\n    \"D8FinancialOrder\": \"No\"\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"jane\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"James\",\n    \"D8RespondentLastName\": \"Stevens\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"jane Smith\",\n    \"D8MarriageRespondentName\": \"James Stevens\",\n    \"D8MarriedInUk\": \"Yes\",\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ],\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\",\n    \"D8ReasonForDivorceBehaviourDetails\": \"bad behaviour\",\n    \"D8LegalProceedings\": \"No\",\n    \"D8FinancialOrder\": \"No\"\n  }\n}")))
-
-    .pause(MinThinkTime seconds)
-
-    .exec(http("DIV_030_060_CreateCaseClaimCosts")
-      .post("/data/case-types/${DVCaseType}/validate?pageId=solicitorCreateSolApplyToClaimCosts")
-      .headers(headers_8)
-      .body(StringBody("{\n  \"data\": {\n    \"D8DivorceCostsClaim\": \"No\"\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"jane\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"James\",\n    \"D8RespondentLastName\": \"Stevens\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"jane Smith\",\n    \"D8MarriageRespondentName\": \"James Stevens\",\n    \"D8MarriedInUk\": \"Yes\",\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ],\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\",\n    \"D8ReasonForDivorceBehaviourDetails\": \"bad behaviour\",\n    \"D8LegalProceedings\": \"No\",\n    \"D8FinancialOrder\": \"No\",\n    \"D8DivorceCostsClaim\": \"No\"\n  }\n}")))
-
-    .pause(MinThinkTime seconds)
-
-    .exec(http("DIV_030_065_CreateCaseDocUploadNo")
-      .post("/data/case-types/${DVCaseType}/validate?pageId=solicitorCreateSolUploadDocs")
-      .headers(headers_8)
-      .body(StringBody("{\n  \"data\": {\n    \"D8DocumentsUploaded\": []\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"jane\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"James\",\n    \"D8RespondentLastName\": \"Stevens\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"jane Smith\",\n    \"D8MarriageRespondentName\": \"James Stevens\",\n    \"D8MarriedInUk\": \"Yes\",\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ],\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\",\n    \"D8ReasonForDivorceBehaviourDetails\": \"bad behaviour\",\n    \"D8LegalProceedings\": \"No\",\n    \"D8FinancialOrder\": \"No\",\n    \"D8DivorceCostsClaim\": \"No\",\n    \"D8DocumentsUploaded\": []\n  }\n}")))
-
-    .pause(MinThinkTime seconds)
-
-    .exec(http("DIV_030_070_CreateCaseSubmit")
-      .post("/data/caseworkers/:uid/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases?ignore-warning=false")
-      .headers(CommonHeader)
-      .body(StringBody("{\n  \"data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"jane\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"James\",\n    \"D8RespondentLastName\": \"Stevens\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"jane Smith\",\n    \"D8MarriageRespondentName\": \"James Stevens\",\n    \"D8MarriedInUk\": \"Yes\",\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ],\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\",\n    \"D8ReasonForDivorceBehaviourDetails\": \"bad behaviour\",\n    \"D8LegalProceedings\": \"No\",\n    \"D8FinancialOrder\": \"No\",\n    \"D8DivorceCostsClaim\": \"No\",\n    \"D8DocumentsUploaded\": []\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
+    .exec(http("DIV_030_020_CreateCaseSubmit")
+			.post("/data/case-types/${DVCaseType}/cases?ignore-warning=false")
+			.headers(DivorceHeader.headers_5)
+			.body(StringBody("{\n  \"data\": {\n    \"LanguagePreferenceWelsh\": \"No\"\n  },\n  \"event\": {\n    \"id\": \"hwfCreate\",\n    \"summary\": \"Perf Testing Case 2021\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${New_Case_event_token}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       .check(jsonPath("$.id").saveAs("New_Case_Id")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
@@ -293,21 +235,44 @@ object DVExcep {
       .headers(CommonHeader)
       .body(StringBody("{\n  \"data\": {\n    \"D8DocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"other\",\n          \"DocumentEmailContent\": null,\n          \"DocumentDateAdded\": null,\n          \"DocumentComment\": null,\n          \"DocumentFileName\": null,\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds) 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+  val DVUpdateContactDetails =
+
+    exec(http("DIV_050_005_UpdateContactDetailsPage")
+			.get("/data/internal/cases/${New_Case_Id}/event-triggers/updateContactDetails?ignore-warning=false")
+			.headers(DivorceHeader.headers_10)
+      .check(jsonPath("$.event_token").saveAs("existing_case_event_token")))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .exec(http("DIV_050_010_EnterDetails")
+			.post("/data/case-types/DIVORCE_XUI/validate?pageId=updateContactDetailsupdateContactDetails")
+			.headers(DivorceHeader.headers_51)
+			.body(StringBody("{\n  \"data\": {\n    \"D8PetitionerFirstName\": \"John\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8InferredPetitionerGender\": \"male\",\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8DerivedPetitionerHomeAddress\": \"12 Divorce Street, London, KT25BU\",\n    \"D8DerivedPetitionerCorrespondenceAddr\": null,\n    \"D8PetitionerEmail\": \"john@smith.com\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8RespondentFirstName\": \"Jane\",\n    \"D8RespondentLastName\": \"Smith\",\n    \"D8InferredRespondentGender\": \"female\",\n    \"RespondentContactDetailsConfidential\": \"keep\",\n    \"D8DerivedRespondentHomeAddress\": \"12 Divorce Street, London, KT25BU\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"\",\n    \"RespEmailAddress\": \"jane@smith.com\",\n    \"RespPhoneNumber\": null,\n    \"D8MarriagePetitionerName\": null,\n    \"D8MarriageRespondentName\": null,\n    \"D8PetitionerConsent\": \"Yes\",\n    \"D8SolicitorReference\": \"11222333\",\n    \"PetitionerSolicitorName\": null,\n    \"PetitionerSolicitorFirm\": null,\n    \"PetitionerSolicitorAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"PetitionerSolicitorPhone\": null,\n    \"PetitionerSolicitorEmail\": null,\n    \"SolicitorAgreeToReceiveEmails\": null,\n    \"respondentSolicitorReference\": null,\n    \"RespSolLinkedEmail\": null,\n    \"respondentSolicitorRepresented\": null,\n    \"D8RespondentSolicitorName\": null,\n    \"D8RespondentSolicitorCompany\": null,\n    \"D8RespondentSolicitorAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8RespondentSolicitorPhone\": null,\n    \"D8RespondentSolicitorEmail\": null,\n    \"D8DerivedRespondentSolicitorAddr\": null,\n    \"D8ReasonForDivorce\": null\n  },\n  \"event\": {\n    \"id\": \"updateContactDetails\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false,\n  \"event_data\": {\n    \"D8PetitionerFirstName\": \"John\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8InferredPetitionerGender\": \"male\",\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8DerivedPetitionerHomeAddress\": \"12 Divorce Street, London, KT25BU\",\n    \"D8DerivedPetitionerCorrespondenceAddr\": null,\n    \"D8PetitionerEmail\": \"john@smith.com\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8RespondentFirstName\": \"Jane\",\n    \"D8RespondentLastName\": \"Smith\",\n    \"D8InferredRespondentGender\": \"female\",\n    \"RespondentContactDetailsConfidential\": \"keep\",\n    \"D8DerivedRespondentHomeAddress\": \"12 Divorce Street, London, KT25BU\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"\",\n    \"RespEmailAddress\": \"jane@smith.com\",\n    \"RespPhoneNumber\": null,\n    \"D8MarriagePetitionerName\": null,\n    \"D8MarriageRespondentName\": null,\n    \"D8PetitionerConsent\": \"Yes\",\n    \"D8SolicitorReference\": \"11222333\",\n    \"PetitionerSolicitorName\": null,\n    \"PetitionerSolicitorFirm\": null,\n    \"PetitionerSolicitorAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"PetitionerSolicitorPhone\": null,\n    \"PetitionerSolicitorEmail\": null,\n    \"SolicitorAgreeToReceiveEmails\": null,\n    \"respondentSolicitorReference\": null,\n    \"RespSolLinkedEmail\": null,\n    \"respondentSolicitorRepresented\": null,\n    \"D8RespondentSolicitorName\": null,\n    \"D8RespondentSolicitorCompany\": null,\n    \"D8RespondentSolicitorAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8RespondentSolicitorPhone\": null,\n    \"D8RespondentSolicitorEmail\": null,\n    \"D8DerivedRespondentSolicitorAddr\": null,\n    \"D8ReasonForDivorce\": null\n  },\n  \"case_reference\": \"${New_Case_Id}\"\n}")))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+  .exec(http("DIV_050_015_UpdateContactDetailsSubmit")
+			.post("/data/cases/${New_Case_Id}/events")
+			.headers(DivorceHeader.headers_57)
+			.body(StringBody("{\n  \"data\": {\n    \"D8PetitionerFirstName\": \"John\",\n    \"D8PetitionerLastName\": \"Smith\",\n    \"D8InferredPetitionerGender\": \"male\",\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8DerivedPetitionerHomeAddress\": \"12 Divorce Street, London, KT25BU\",\n    \"D8DerivedPetitionerCorrespondenceAddr\": null,\n    \"D8PetitionerEmail\": \"john@smith.com\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8RespondentFirstName\": \"Jane\",\n    \"D8RespondentLastName\": \"Smith\",\n    \"D8InferredRespondentGender\": \"female\",\n    \"RespondentContactDetailsConfidential\": \"keep\",\n    \"D8DerivedRespondentHomeAddress\": \"12 Divorce Street, London, KT25BU\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"\",\n    \"RespEmailAddress\": \"jane@smith.com\",\n    \"RespPhoneNumber\": null,\n    \"D8MarriagePetitionerName\": null,\n    \"D8MarriageRespondentName\": null,\n    \"D8PetitionerConsent\": \"Yes\",\n    \"D8SolicitorReference\": \"11222333\",\n    \"PetitionerSolicitorName\": null,\n    \"PetitionerSolicitorFirm\": null,\n    \"PetitionerSolicitorAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"PetitionerSolicitorPhone\": null,\n    \"PetitionerSolicitorEmail\": null,\n    \"SolicitorAgreeToReceiveEmails\": null,\n    \"respondentSolicitorReference\": null,\n    \"RespSolLinkedEmail\": null,\n    \"respondentSolicitorRepresented\": null,\n    \"D8RespondentSolicitorName\": null,\n    \"D8RespondentSolicitorCompany\": null,\n    \"D8RespondentSolicitorAddress\": {\n      \"AddressLine1\": null,\n      \"AddressLine2\": null,\n      \"AddressLine3\": null,\n      \"PostCode\": null,\n      \"PostTown\": null,\n      \"County\": null,\n      \"Country\": null\n    },\n    \"D8RespondentSolicitorPhone\": null,\n    \"D8RespondentSolicitorEmail\": null,\n    \"D8DerivedRespondentSolicitorAddr\": null,\n    \"D8ReasonForDivorce\": null\n  },\n  \"event\": {\n    \"id\": \"updateContactDetails\",\n    \"summary\": \"Update Contact Details\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${existing_case_event_token}\",\n  \"ignore_warning\": false\n}")))
+
+  .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   val DVSearch =
 
-    exec(http("DIV_050_005_SearchPage")
+    exec(http("DIV_060_005_SearchPage")
       .get("/data/internal/case-types/${DVCaseType}/work-basket-inputs")
       .headers(headers_0))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("DIV_050_010_SearchForCase")
+    .exec(http("DIV_060_010_SearchForCase")
       .get("/aggregated/caseworkers/:uid/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases?view=WORKBASKET&page=1")
       .headers(headers_4))
 
-    .exec(http("DIV_050_015_SearchForCase")
+    .exec(http("DIV_060_015_SearchForCase")
       .get("/data/caseworkers/:uid/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/pagination_metadata")
       .headers(CommonHeader))
 
@@ -315,13 +280,13 @@ object DVExcep {
 
     val DVView =
 
-    exec(http("DIV_060_005_OpenCase")
+    exec(http("DIV_070_005_OpenCase")
       .get("/data/internal/cases/${New_Case_Id}")
       .headers(headers_6))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)  
 
-    .exec(http("DIV_060_010_OpenDocument")
+    .exec(http("DIV_070_010_OpenDocument")
       .get("/documents/${Document_ID}/binary")
       .headers(headers_7))
 

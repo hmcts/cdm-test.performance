@@ -14,6 +14,7 @@ object CreateUser {
 //  val feedUserData = csv("CaseSharingUsers_Small.csv")
   val idamAdminFeeder = csv("IdamAdmin.csv")
   val feedUserData = csv("RolesForUsers.csv")
+  val divUserData = csv("DivorceSolUserData.csv")
   val roleFeeder = csv("RolesToAdd.csv").circular
   val numberFeeder = csv("NumberList.csv").circular
 
@@ -37,10 +38,10 @@ object CreateUser {
     "Authorization" -> "AdminApiAuthToken ${authToken}",
     "Content-Type" -> "application/json")
 
-  val IdamUser = feed(feedUserData)
+  val IdamUser = feed(divUserData)
 
     .exec(http("GetUserID")
-      .get(Environment.idamAPI + "/users?email=${email}")
+      .get(Environment.idamAPI + "/users?email=${DivorceUserName}")
       .headers(headers_0)
       .check(jsonPath("$.id").saveAs("userId"))
       .check(status.saveAs("statusvalue")))
@@ -51,7 +52,7 @@ object CreateUser {
         session =>
           val fw = new BufferedWriter(new FileWriter("EmailAndIdamIDs.csv", true))
           try {
-            fw.write(session("email").as[String] + ","+session("userId").as[String] + "\r\n")
+            fw.write(session("DivorceUserName").as[String] + ","+session("userId").as[String] + "\r\n")
           }
           finally fw.close()
           session

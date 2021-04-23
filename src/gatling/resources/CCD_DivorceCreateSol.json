@@ -1,0 +1,76 @@
+{
+  "data":{
+     "PetitionerSolicitorName":"perf test",
+     "D8SolicitorReference":"1212131314141",
+     "PetitionerSolicitorPhone":"07123456789",
+     "PetitionerSolicitorEmail":"${DivorceUserName}",
+     "SolicitorAgreeToReceiveEmails":"Yes",
+     "DerivedPetitionerSolicitorAddr":"12 div street, london, kt25bu",
+     "PetitionerOrganisationPolicy":{
+        "OrgPolicyCaseAssignedRole":"[PETSOLICITOR]",
+        "OrgPolicyReference":null,
+        "PrepopulateToUsersOrganisation":null,
+        "Organisation":{
+           "OrganisationID":"${orgId}",
+           "OrganisationName":"${orgName}"
+        },
+        "PreviousOrganisations":[
+           
+        ]
+     },
+     "D8PetitionerFirstName":"Jane",
+     "D8PetitionerLastName":"Smith",
+     "D8PetitionerNameDifferentToMarriageCert":"No",
+     "D8DivorceWho":"husband",
+     "D8InferredPetitionerGender":"female",
+     "D8MarriageIsSameSexCouple":"No",
+     "D8DerivedPetitionerHomeAddress":"12 divorce street, london, kt25bu",
+     "D8PetitionerPhoneNumber":null,
+     "D8PetitionerEmail":null,
+     "D8PetitionerContactDetailsConfidential":"keep",
+     "D8RespondentFirstName":"Steve",
+     "D8RespondentLastName":"Smith",
+     "D8RespondentNameAsOnMarriageCertificate":"No",
+     "D8InferredRespondentGender":"male",
+     "respondentSolicitorRepresented":"No",
+     "RespondentOrganisationPolicy":{
+        "OrgPolicyCaseAssignedRole":"[RESPSOLICITOR]",
+        "OrgPolicyReference":null,
+        "PrepopulateToUsersOrganisation":null,
+        "Organisation":{
+           "OrganisationID":null,
+           "OrganisationName":null
+        },
+        "PreviousOrganisations":[
+           
+        ]
+     },
+     "D8DerivedRespondentHomeAddress":null,
+     "D8DerivedRespondentCorrespondenceAddr":"12 divorce street, london, kt25bu",
+     "D8MarriageDate":"2000-03-03",
+     "D8MarriagePetitionerName":"Jane Smith",
+     "D8MarriageRespondentName":"Steve Smith",
+     "D8MarriedInUk":"Yes",
+     "D8JurisdictionConnectionNewPolicy":[
+        "I"
+     ],
+     "NewLegalConnectionPolicy":null,
+     "D8ReasonForDivorce":"unreasonable-behaviour",
+     "D8ReasonForDivorceBehaviourDetails":"Bad behaviour",
+     "D8LegalProceedings":"No",
+     "D8FinancialOrder":"No",
+     "D8DivorceCostsClaim":"No",
+     "D8DocumentsUploaded":[
+        
+     ],
+     "LanguagePreferenceWelsh":"No"
+  },
+  "event":{
+     "id":"solicitorCreate",
+     "summary":"",
+     "description":""
+  },
+  "event_token":"${eventToken}",
+  "ignore_warning":false,
+  "draft_id":null
+}

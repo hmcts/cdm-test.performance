@@ -15,15 +15,17 @@ object Environment {
   val xuiBaseURL = "https://manage-case.perftest.platform.hmcts.net"
   val dmStore = "http://dm-store-perftest.service.core-compute-perftest.internal"
 
-  val minThinkTime = 10 //10
-  val maxThinkTime = 30 //30
+  val minThinkTime = 1 //10
+  val maxThinkTime = 3 //30
+
   val constantthinkTime = 7 //7
+
   val xuiCaseActivityPause = 30
   val ccdCaseActivityPause = 5
   val caseActivityPause = 5
 
-  val minWaitForNextIteration = 60 //120
-  val maxWaitForNextIteration = 120 //240
+  val minWaitForNextIteration = 5 //60
+  val maxWaitForNextIteration = 10 //120
   val HttpProtocol = http
 
   val commonHeader = Map(

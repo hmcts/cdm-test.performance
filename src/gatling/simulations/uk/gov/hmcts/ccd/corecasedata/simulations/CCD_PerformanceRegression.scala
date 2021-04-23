@@ -11,13 +11,13 @@ import scala.concurrent.duration._
 class CCD_PerformanceRegression extends Simulation  {
 
   //Iteration Settings
-  val api_probateIteration = 40
-  val api_sscsIteration = 40
-  val api_divorceIteration = 40
-  val api_iacIteration = 40
-  val api_fplIteration = 40
-  val api_frIteration = 40
-  val api_cmcIteration = 40
+  val api_probateIteration = 1 //40
+  val api_sscsIteration = 1 //40
+  val api_divorceIteration = 10 //40
+  val api_iacIteration = 1 //40
+  val api_fplIteration = 10 //40
+  val api_frIteration = 1 //40
+  val api_cmcIteration = 1 //40
 
   val ui_PBiteration = 15
   val ui_SSCSiteration = 15
@@ -51,6 +51,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_probateIteration) { //api_probateIteration
         exec(ccddatastore.CCDAPI_ProbateCreate)
         .exec(ccddatastore.CCDAPI_ProbateCaseEvents)
+        // .exec(ccddatastore.CCDAPI_ProbateDocUpload)
         .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
@@ -89,8 +90,8 @@ class CCD_PerformanceRegression extends Simulation  {
       exec(ccddatastore.CCDLogin_FPL)
       .repeat(api_fplIteration) { //api_fplIteration
         exec(ccddatastore.CCDAPI_FPLCreate)
-        .exec(ccddatastore.CCDAPI_FPLCaseEvents)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        // .exec(ccddatastore.CCDAPI_FPLCaseEvents)
+        // .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -208,7 +209,7 @@ class CCD_PerformanceRegression extends Simulation  {
 
   setUp(
     //CCD API scenarios
-    API_ProbateCreateCase.inject(rampUsers(20) during (10 minutes)),
+    /*API_ProbateCreateCase.inject(rampUsers(20) during (10 minutes)),
     API_SSCSCreateCase.inject(rampUsers(20) during (10 minutes)),
     API_DivorceCreateCase.inject(rampUsers(20) during (10 minutes)),
     API_IACCreateCase.inject(rampUsers(20) during (10 minutes)),
@@ -227,15 +228,15 @@ class CCD_PerformanceRegression extends Simulation  {
 
     //CCD Searches
     CCDSearchView.inject(rampUsers(20) during (10 minutes)),
-    CCDElasticSearch.inject(rampUsers(150) during (10 minutes))
+    CCDElasticSearch.inject(rampUsers(150) during (10 minutes))*/
     
     //Debugging requests (leave commented out for test runs please)
-    // API_ProbateCreateCase.inject(rampUsers(18) during (10 minutes)),
-    // API_SSCSCreateCase.inject(rampUsers(18) during (10 minutes)),
-    // API_DivorceCreateCase.inject(rampUsers(18) during (10 minutes)),
-    // API_IACCreateCase.inject(rampUsers(18) during (10 minutes)),
-    // API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
-    // API_FRCreateCase.inject(rampUsers(18) during (10 minutes)),
+    // API_IACCreateCase.inject(rampUsers(1) during (10 minutes)),
+    // API_SSCSCreateCase.inject(rampUsers(1) during (10 minutes)),
+    // API_CMCCreateCase.inject(rampUsers(1) during (10 minutes)),
+    // API_ProbateCreateCase.inject(rampUsers(1) during (10 seconds)),
+    API_FPLCreateCase.inject(rampUsers(10) during (10 seconds)),
+    // API_FRCreateCase.inject(rampUsers(1) during (10 minutes)),
     )
   .protocols(httpProtocol)
 }

@@ -41,7 +41,7 @@ class CreateUser extends Simulation  {
   val GetUserID = scenario ("Get idam ID for user by email")
   .repeat(1) {
       exec(CreateUser.IdamAdminLogin)
-      .repeat(50) { //Set this value to the number of users you need to update (RolesForUsers.csv)
+      .repeat(258) { //Set this value to the number of users you need to update (RolesForUsers.csv)
         exec(CreateUser.IdamUser)
       }
   }

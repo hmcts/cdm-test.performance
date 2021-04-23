@@ -12,11 +12,13 @@ class CCDUIPTSimulation extends Simulation  {
 
   val config: Config = ConfigFactory.load()
   val BaseURL = Environment.baseURL
-  val PBiteration = 7 //7
-  val SSCSiteration = 14 //14
-  val CMCiteration = 8 //8
-  val Diviteration = 10 //10
+
+  val PBiteration = 1 //7
+  val SSCSiteration = 1 //14
+  val CMCiteration = 1 //8
+  val Diviteration = 1 //15
   val Fpliteration = 1 //10
+
   val Ethositeration = 26 //26
   val LFUiteration = 10 //8
   val csIterationLarge = 200
@@ -99,6 +101,7 @@ class CCDUIPTSimulation extends Simulation  {
         .repeat(Diviteration) {
           exec(DVExcep.DVCreateCase)
           .exec(DVExcep.DVDocUpload)
+          .exec(DVExcep.DVUpdateContactDetails)
           .exec(DVExcep.DVSearch)
           .exec(DVExcep.DVView)
           .exec(WaitforNextIteration.waitforNextIteration)
@@ -246,7 +249,7 @@ class CCDUIPTSimulation extends Simulation  {
     // CCDCaseActivityScn.inject(rampUsers(1000) during (20 minutes)) //400
 
     // CCDCMCScenario.inject(rampUsers(1) during (1 minutes)), //150
-    CCDProbateScenario.inject(rampUsers(1) during (1 minutes)),
+    CaseActivityScn.inject(rampUsers(1) during (1 minutes)),
   )
     .protocols(httpProtocol)
     .maxDuration(80 minutes)

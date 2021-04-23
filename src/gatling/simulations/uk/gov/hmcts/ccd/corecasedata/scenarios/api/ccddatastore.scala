@@ -35,7 +35,7 @@ val feedXUISearchData = csv("XUISearchData.csv").circular
 val feedXUIUserData = csv("XUISearchUsers.csv").circular
 val feedProbateUserData = csv("ProbateUserData.csv").circular
 val feedSSCSUserData = csv("SSCSUserData.csv").circular
-val feedDivorceUserData = csv("DivorceUserData.csv").circular
+val feedDivorceUserData = csv("DivorceSolUserData.csv").circular
 val feedCMCUserData = csv("CMCUserData.csv").circular
 val feedIACUserData = csv("IACUserData.csv").circular
 val feedFPLUserData = csv("FPLUserData.csv").circular
@@ -263,6 +263,25 @@ val CDSGetRequest =
     .pause(Environment.constantthinkTime)
 
     .exec(http("API_Probate_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/boStopCaseForCaseCreated/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken4")))
+
+    .exec(http("API_Probate_StopCase")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken4}\",\n  \"ignore_warning\": false\n}"))
+      .check(jsonPath("$.id").saveAs("caseId")))
+
+    .pause(Environment.constantthinkTime)
+
+  val CCDAPI_ProbateDocUpload = 
+
+    exec(http("API_Probate_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/boUploadDocumentsForCaseCreated/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -291,23 +310,6 @@ val CDSGetRequest =
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken3}\",\n  \"ignore_warning\": false\n}")))
-
-    .pause(Environment.constantthinkTime)
-
-    .exec(http("API_Probate_GetEventToken")
-      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/boStopCaseForCaseCreated/token")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .check(jsonPath("$.token").saveAs("eventToken4")))
-
-    .exec(http("API_Probate_StopCase")
-      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/events")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .body(StringBody("{\n  \"data\": {\n    \"boCaseStopReasonList\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"caseStopReason\": \"Other\"\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boStopCaseForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken4}\",\n  \"ignore_warning\": false\n}"))
-      .check(jsonPath("$.id").saveAs("caseId")))
 
     .pause(Environment.constantthinkTime)
 
@@ -617,7 +619,7 @@ val CDSGetRequest =
   val CCDAPI_DivorceCreate =
 
     exec(http("API_Divorce_GetEventToken")
-      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/event-triggers/hwfCreate/token")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/event-triggers/solicitorCreate/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
@@ -629,74 +631,107 @@ val CDSGetRequest =
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       // .body(StringBody("{\n  \"data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"Jane\",\n    \"D8PetitionerLastName\": \"Deer\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"Steve\",\n    \"D8RespondentLastName\": \"Smith\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"Jane Deer\",\n    \"D8MarriageRespondentName\": \"Steve Smith\",\n    \"D8MarriedInUk\": \"Yes\",\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ],\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\",\n    \"D8ReasonForDivorceBehaviourDetails\": \"bad behaviour\",\n    \"D8LegalProceedings\": \"No\",\n    \"D8FinancialOrder\": \"No\",\n    \"D8DivorceCostsClaim\": \"No\",\n    \"D8DocumentsUploaded\": []\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
-      .body(StringBody("{\n  \"data\": {\n    \"LanguagePreferenceWelsh\": \"No\"\n  },\n  \"event\": {\n    \"id\": \"hwfCreate\",\n    \"summary\": \"perf test case\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
+      // .body(StringBody("{\n  \"data\": {\n    \"LanguagePreferenceWelsh\": \"No\"\n  },\n  \"event\": {\n    \"id\": \"hwfCreate\",\n    \"summary\": \"perf test case\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
+      .body(ElFileBody("CCD_DivorceCreateSol.json"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
     .pause(Environment.constantthinkTime)
 
   val CCDAPI_DivorceCaseEvents = 
 
+    // exec(http("API_Divorce_GetEventToken")
+    //   .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/uploadDocument/token")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .header("Authorization", "Bearer ${access_token}")
+    //   .header("Content-Type","application/json")
+    //   .check(jsonPath("$.token").saveAs("eventToken3")))
+
+    //  .exec(session => {
+    //   session.set("FileName1", "1MB.pdf")
+    // })
+
+    // .exec(http("API_Divorce_DocUploadProcess")
+    //   .post(dmStoreUrl + "/documents")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .bodyPart(RawFileBodyPart("files", "${FileName1}")
+    //     .fileName("${FileName1}")
+    //     .transferEncoding("binary"))
+    //   .asMultipartForm
+    //   .formParam("classification", "PUBLIC")
+    //   .check(status.is(200))
+    //   .check(regex("""http://(.+)/""").saveAs("DMURL"))
+    //   .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
+
+    // .exec(http("API_Divorce_DocUpload")
+    //   .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/events")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .header("Authorization", "Bearer ${access_token}")
+    //   .header("Content-Type","application/json")      
+    //   .body(StringBody("{\n  \"data\": {\n    \"D8DocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"other\",\n          \"DocumentEmailContent\": null,\n          \"DocumentDateAdded\": null,\n          \"DocumentComment\": null,\n          \"DocumentFileName\": null,\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken3}\",\n  \"ignore_warning\": false\n}")))
+
+    // .pause(Environment.constantthinkTime)
+
+    // .exec(http("API_Divorce_GetEventToken")
+    //   .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/AddNote/token")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .header("Authorization", "Bearer ${access_token}")
+    //   .header("Content-Type","application/json")
+    //   .check(jsonPath("$.token").saveAs("eventToken2")))
+
+    // .exec(http("API_Divorce_AddNote")
+    //   .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/events")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .header("Authorization", "Bearer ${access_token}")
+    //   .header("Content-Type","application/json")      
+    //   .body(ElFileBody("CCD_Divorce_AddNote.json")))
+
+    // .pause(Environment.constantthinkTime)
+
+    // .exec(http("API_Divorce_GetEventToken")
+    //   .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/generalApplicationReceived/token")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .header("Authorization", "Bearer ${access_token}")
+    //   .header("Content-Type","application/json")
+    //   .check(jsonPath("$.token").saveAs("eventToken1")))
+
+    // .exec(http("API_Divorce_GeneralApplicationReceived")
+    //   .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/events")
+    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
+    //   .header("Authorization", "Bearer ${access_token}")
+    //   .header("Content-Type","application/json")      
+    //   .body(ElFileBody("CCD_Divorce_GeneralApplicationReceived.json")))
+
+    // .pause(Environment.constantthinkTime)
+
     exec(http("API_Divorce_GetEventToken")
-      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/uploadDocument/token")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")
-      .check(jsonPath("$.token").saveAs("eventToken3")))
-
-     .exec(session => {
-      session.set("FileName1", "1MB.pdf")
-    })
-
-    .exec(http("API_Divorce_DocUploadProcess")
-      .post(dmStoreUrl + "/documents")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .bodyPart(RawFileBodyPart("files", "${FileName1}")
-        .fileName("${FileName1}")
-        .transferEncoding("binary"))
-      .asMultipartForm
-      .formParam("classification", "PUBLIC")
-      .check(status.is(200))
-      .check(regex("""http://(.+)/""").saveAs("DMURL"))
-      .check(regex("""documents/(.+?)/binary""").saveAs("Document_ID")))
-
-    .exec(http("API_Divorce_DocUpload")
-      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/events")
-      .header("ServiceAuthorization", "Bearer ${bearerToken}")
-      .header("Authorization", "Bearer ${access_token}")
-      .header("Content-Type","application/json")      
-      .body(StringBody("{\n  \"data\": {\n    \"D8DocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"other\",\n          \"DocumentEmailContent\": null,\n          \"DocumentDateAdded\": null,\n          \"DocumentComment\": null,\n          \"DocumentFileName\": null,\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"uploadDocument\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken3}\",\n  \"ignore_warning\": false\n}")))
-
-    .pause(Environment.constantthinkTime)
-
-    .exec(http("API_Divorce_GetEventToken")
-      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/AddNote/token")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/UpdateLanguage/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken2")))
 
-    .exec(http("API_Divorce_AddNote")
+    .exec(http("API_Divorce_UpdateLanguage")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/events")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")      
-      .body(ElFileBody("CCD_Divorce_AddNote.json")))
+      .body(StringBody("{\"data\":{\"LanguagePreferenceWelsh\":\"No\"},\"event\":{\"id\":\"UpdateLanguage\",\"summary\":\"\",\"description\":\"\"},\"event_token\":\"${eventToken2}\",\"ignore_warning\":false}")))
 
     .pause(Environment.constantthinkTime)
 
     .exec(http("API_Divorce_GetEventToken")
-      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/generalApplicationReceived/token")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/solicitorStatementOfTruthPaySubmit/token")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
-      .check(jsonPath("$.token").saveAs("eventToken1")))
+      .check(jsonPath("$.token").saveAs("eventToken3")))
 
-    .exec(http("API_Divorce_GeneralApplicationReceived")
+    .exec(http("API_Divorce_CaseSubmit")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/events")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")      
-      .body(ElFileBody("CCD_Divorce_GeneralApplicationReceived.json")))
+      .body(StringBody("{\n   \"data\":{\n      \"SolUrgentCase\":\"No\",\n      \"SolServiceMethod\":\"courtService\",\n      \"SolStatementOfReconciliationCertify\":\"Yes\",\n      \"SolStatementOfReconciliationDiscussed\":\"Yes\",\n      \"D8StatementOfTruth\":\"Yes\",\n      \"solSignStatementofTruth\":\"Yes\",\n      \"SolStatementOfReconciliationName\":\"Vuser\",\n      \"SolStatementOfReconciliationFirm\":\"Perf\",\n      \"StatementOfReconciliationComments\":null,\n      \"solApplicationFeeInPounds\":\"550\",\n      \"SolPaymentHowToPay\":\"feesHelpWith\",\n      \"D8HelpWithFeesReferenceNumber\":\"perfte\",\n      \"solApplicationFeeOrderSummary\":{\n         \"PaymentReference\":null,\n         \"PaymentTotal\":\"55000\",\n         \"Fees\":[\n            {\n               \"value\":{\n                  \"FeeCode\":\"FEE0002\",\n                  \"FeeAmount\":\"55000\",\n                  \"FeeDescription\":\"Filing an application for a divorce, nullity or civil partnership dissolution\",\n                  \"FeeVersion\":\"5\"\n               }\n            }\n         ]\n      }\n   },\n   \"event\":{\n      \"id\":\"solicitorStatementOfTruthPaySubmit\",\n      \"summary\":\"\",\n      \"description\":\"\"\n   },\n   \"event_token\":\"${eventToken3}\",\n   \"ignore_warning\":false\n}")))
 
     .pause(Environment.constantthinkTime)
 
