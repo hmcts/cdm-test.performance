@@ -266,7 +266,7 @@ class CCD_StressTest extends Simulation  {
         .times(4)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(200))
+        .startingFrom(200)))
     
   .protocols(httpProtocol)
 }
