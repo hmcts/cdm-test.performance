@@ -187,86 +187,86 @@ class CCD_StressTest extends Simulation  {
   setUp(
     API_CMCCreateCase.inject(
       incrementConcurrentUsers(100)
-        .times(4)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(100)),
+        .startingFrom(10)),
     API_DivorceCreateCase.inject(
-      incrementConcurrentUsers(100)
-        .times(4)
+      incrementConcurrentUsers(50)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(100)),
+        .startingFrom(10)),
     API_ProbateCreateCase.inject(
-      incrementConcurrentUsers(100)
-        .times(4)
+      incrementConcurrentUsers(50)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(100)),
+        .startingFrom(10)),
     API_SSCSCreateCase.inject(
-      incrementConcurrentUsers(100)
-        .times(4)
+      incrementConcurrentUsers(50)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(100)),
+        .startingFrom(10)),
     API_IACCreateCase.inject(
-      incrementConcurrentUsers(100)
-        .times(4)
+      incrementConcurrentUsers(50)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(100)),
+        .startingFrom(10)),
     API_FRCreateCase.inject(
-      incrementConcurrentUsers(100)
-        .times(4)
+      incrementConcurrentUsers(50)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(100)),
+        .startingFrom(10)),
     API_FPLCreateCase.inject(
-      incrementConcurrentUsers(100)
-        .times(4)
+      incrementConcurrentUsers(50)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(100)),
+        .startingFrom(10)),
     
 
     UI_CCDProbateScenario.inject(
-      incrementConcurrentUsers(100)
-        .times(4)
+      incrementConcurrentUsers(50)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(100)),
+        .startingFrom(10)),
     UI_CCDSSCSScenario.inject(
-      incrementConcurrentUsers(100)
-        .times(4)
+      incrementConcurrentUsers(50)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(100)),
+        .startingFrom(10)),
     UI_CCDCMCScenario.inject(
-      incrementConcurrentUsers(100)
-        .times(4)
+      incrementConcurrentUsers(50)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(100)),
+        .startingFrom(10)),
     
     CaseActivityScn.inject(
-      incrementConcurrentUsers(100)
-        .times(4)
+      incrementConcurrentUsers(50)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(100)),
+        .startingFrom(10)),
 
     CCDSearchView.inject(
-      incrementConcurrentUsers(100)
-        .times(4)
+      incrementConcurrentUsers(50)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(200)),
+        .startingFrom(20)),
     CCDElasticSearch.inject(
-      incrementConcurrentUsers(100)
-        .times(4)
+      incrementConcurrentUsers(50)
+        .times(40)
         .eachLevelLasting(15.minutes)
         .separatedByRampsLasting(5.minutes)
-        .startingFrom(200)))
+        .startingFrom(20)))
     
   .protocols(httpProtocol)
 }
