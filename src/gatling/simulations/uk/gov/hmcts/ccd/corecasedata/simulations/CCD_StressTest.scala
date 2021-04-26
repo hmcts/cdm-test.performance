@@ -287,16 +287,16 @@ class CCD_StressTest extends Simulation  {
     //     .separatedByRampsLasting(5.minutes)
     //     .startingFrom(10)),
     API_ProbateCreateCase.inject(
-      incrementConcurrentUsers(1)
+      incrementConcurrentUsers(10)
         .times(40)
         .eachLevelLasting(5.minutes)
-        .separatedByRampsLasting(1.minutes)
+        .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     API_SSCSCreateCase.inject(
-      incrementConcurrentUsers(1)
+      incrementConcurrentUsers(10)
         .times(40)
         .eachLevelLasting(5.minutes)
-        .separatedByRampsLasting(1.minutes)
+        .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     // API_IACCreateCase.inject(
     //   incrementConcurrentUsers(1)
@@ -345,18 +345,18 @@ class CCD_StressTest extends Simulation  {
     //     .startingFrom(10)),
 
     CCDSearchView.inject(
-      incrementConcurrentUsers(1)
+      incrementConcurrentUsers(10)
         .times(40)
         .eachLevelLasting(5.minutes)
-        .separatedByRampsLasting(1.minutes)
+        .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     CCDElasticSearch.inject(
-      incrementConcurrentUsers(1)
+      incrementConcurrentUsers(10)
         .times(40)
         .eachLevelLasting(5.minutes)
-        .separatedByRampsLasting(1.minutes)
+        .separatedByRampsLasting(5.minutes)
         .startingFrom(10)))
     
   .protocols(httpProtocol)
-  .maxDuration(80 minutes)
+  .maxDuration(120 minutes)
 }
