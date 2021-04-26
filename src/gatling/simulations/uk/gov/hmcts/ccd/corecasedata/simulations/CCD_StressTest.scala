@@ -289,15 +289,15 @@ class CCD_StressTest extends Simulation  {
     API_ProbateCreateCase.inject(
       incrementConcurrentUsers(1)
         .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
+        .eachLevelLasting(5.minutes)
+        .separatedByRampsLasting(1.minutes)
         .startingFrom(10)),
-    // API_SSCSCreateCase.inject(
-    //   incrementConcurrentUsers(1)
-    //     .times(40)
-    //     .eachLevelLasting(10.minutes)
-    //     .separatedByRampsLasting(5.minutes)
-    //     .startingFrom(10)),
+    API_SSCSCreateCase.inject(
+      incrementConcurrentUsers(1)
+        .times(40)
+        .eachLevelLasting(5.minutes)
+        .separatedByRampsLasting(1.minutes)
+        .startingFrom(10)),
     // API_IACCreateCase.inject(
     //   incrementConcurrentUsers(1)
     //     .times(40)
@@ -347,14 +347,14 @@ class CCD_StressTest extends Simulation  {
     CCDSearchView.inject(
       incrementConcurrentUsers(1)
         .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
+        .eachLevelLasting(5.minutes)
+        .separatedByRampsLasting(1.minutes)
         .startingFrom(10)),
     CCDElasticSearch.inject(
       incrementConcurrentUsers(1)
         .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
+        .eachLevelLasting(5.minutes)
+        .separatedByRampsLasting(1.minutes)
         .startingFrom(10)))
     
   .protocols(httpProtocol)
