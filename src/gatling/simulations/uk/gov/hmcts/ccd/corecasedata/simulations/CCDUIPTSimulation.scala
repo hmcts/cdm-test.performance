@@ -245,11 +245,11 @@ class CCDUIPTSimulation extends Simulation  {
 
     // CaseActivityScn.inject(rampUsers(1000) during (20 minutes)) //100
     // CaseActivityListScn.inject(rampUsers(50) during (10 minutes)) //100
-    // XUICaseActivityScn.inject(rampUsers(500) during (20 minutes)), //600
+    XUICaseActivityScn.inject(rampUsers(1000) during (20 minutes)), //600
     // CCDCaseActivityScn.inject(rampUsers(1000) during (20 minutes)) //400
 
     // CCDCMCScenario.inject(rampUsers(1) during (1 minutes)), //150
-    CaseActivityScn.inject(rampUsers(1) during (1 minutes)),
+    // CaseActivityScn.inject(rampUsers(1) during (1 minutes)),
   )
     .protocols(httpProtocol)
     .maxDuration(80 minutes)

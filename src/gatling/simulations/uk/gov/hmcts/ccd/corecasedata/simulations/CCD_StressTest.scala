@@ -274,75 +274,75 @@ class CCD_StressTest extends Simulation  {
 
   //debugging test
   setUp(
-    API_CMCCreateCase.inject(
-      incrementConcurrentUsers(1)
-        .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
-        .startingFrom(10)),
-    API_DivorceCreateCase.inject(
-      incrementConcurrentUsers(1)
-        .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
-        .startingFrom(10)),
+    // API_CMCCreateCase.inject(
+    //   incrementConcurrentUsers(1)
+    //     .times(40)
+    //     .eachLevelLasting(10.minutes)
+    //     .separatedByRampsLasting(5.minutes)
+    //     .startingFrom(10)),
+    // API_DivorceCreateCase.inject(
+    //   incrementConcurrentUsers(1)
+    //     .times(40)
+    //     .eachLevelLasting(10.minutes)
+    //     .separatedByRampsLasting(5.minutes)
+    //     .startingFrom(10)),
     API_ProbateCreateCase.inject(
       incrementConcurrentUsers(1)
         .times(40)
         .eachLevelLasting(10.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
-    API_SSCSCreateCase.inject(
-      incrementConcurrentUsers(1)
-        .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
-        .startingFrom(10)),
-    API_IACCreateCase.inject(
-      incrementConcurrentUsers(1)
-        .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
-        .startingFrom(10)),
-    API_FRCreateCase.inject(
-      incrementConcurrentUsers(1)
-        .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
-        .startingFrom(10)),
-    API_FPLCreateCase.inject(
-      incrementConcurrentUsers(1)
-        .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
-        .startingFrom(10)),
+    // API_SSCSCreateCase.inject(
+    //   incrementConcurrentUsers(1)
+    //     .times(40)
+    //     .eachLevelLasting(10.minutes)
+    //     .separatedByRampsLasting(5.minutes)
+    //     .startingFrom(10)),
+    // API_IACCreateCase.inject(
+    //   incrementConcurrentUsers(1)
+    //     .times(40)
+    //     .eachLevelLasting(10.minutes)
+    //     .separatedByRampsLasting(5.minutes)
+    //     .startingFrom(10)),
+    // API_FRCreateCase.inject(
+    //   incrementConcurrentUsers(1)
+    //     .times(40)
+    //     .eachLevelLasting(10.minutes)
+    //     .separatedByRampsLasting(5.minutes)
+    //     .startingFrom(10)),
+    // API_FPLCreateCase.inject(
+    //   incrementConcurrentUsers(1)
+    //     .times(40)
+    //     .eachLevelLasting(10.minutes)
+    //     .separatedByRampsLasting(5.minutes)
+    //     .startingFrom(10)),
     
 
-    UI_CCDProbateScenario.inject(
-      incrementConcurrentUsers(1)
-        .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
-        .startingFrom(10)),
-    UI_CCDSSCSScenario.inject(
-      incrementConcurrentUsers(1)
-        .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
-        .startingFrom(10)),
-    UI_CCDCMCScenario.inject(
-      incrementConcurrentUsers(1)
-        .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
-        .startingFrom(10)),
+    // UI_CCDProbateScenario.inject(
+    //   incrementConcurrentUsers(1)
+    //     .times(40)
+    //     .eachLevelLasting(10.minutes)
+    //     .separatedByRampsLasting(5.minutes)
+    //     .startingFrom(10)),
+    // UI_CCDSSCSScenario.inject(
+    //   incrementConcurrentUsers(1)
+    //     .times(40)
+    //     .eachLevelLasting(10.minutes)
+    //     .separatedByRampsLasting(5.minutes)
+    //     .startingFrom(10)),
+    // UI_CCDCMCScenario.inject(
+    //   incrementConcurrentUsers(1)
+    //     .times(40)
+    //     .eachLevelLasting(10.minutes)
+    //     .separatedByRampsLasting(5.minutes)
+    //     .startingFrom(10)),
     
-    CaseActivityScn.inject(
-      incrementConcurrentUsers(1)
-        .times(40)
-        .eachLevelLasting(10.minutes)
-        .separatedByRampsLasting(5.minutes)
-        .startingFrom(10)),
+    // CaseActivityScn.inject(
+    //   incrementConcurrentUsers(1)
+    //     .times(40)
+    //     .eachLevelLasting(10.minutes)
+    //     .separatedByRampsLasting(5.minutes)
+    //     .startingFrom(10)),
 
     CCDSearchView.inject(
       incrementConcurrentUsers(1)

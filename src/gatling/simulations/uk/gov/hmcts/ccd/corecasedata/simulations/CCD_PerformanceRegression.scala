@@ -235,7 +235,7 @@ class CCD_PerformanceRegression extends Simulation  {
     // API_SSCSCreateCase.inject(rampUsers(1) during (10 minutes)),
     // API_CMCCreateCase.inject(rampUsers(1) during (10 minutes)),
     // API_ProbateCreateCase.inject(rampUsers(1) during (10 seconds)),
-    API_FPLCreateCase.inject(rampUsers(10) during (10 seconds)),
+    API_FRCreateCase.inject(rampUsers(1) during (10 seconds)),
     // API_FRCreateCase.inject(rampUsers(1) during (10 minutes)),
     )
   .protocols(httpProtocol)

@@ -1080,7 +1080,7 @@ val CDSGetRequest =
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken2"))
       .check(regex("""/documents/(.+?)","document_filename""").find(0).saveAs("d81JointDocumentId"))
-      .check(regex(s"""latestConsentOrder":\\{"document_url":"${dmStoreUrl}/documents/([a-z0-9-]+?)"""").saveAs("consentOrderDocumentId")))
+      .check(regex("""latestConsentOrder":\\{"document_url":"${dmStoreUrl}/documents/([a-z0-9-]+?)"""").saveAs("consentOrderDocumentId")))
 
     .exec(http("API_FR_AmendApplicationDetails")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FRJurisdiction}/case-types/${FRCaseType}/cases/${caseId}/events")
