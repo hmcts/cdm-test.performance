@@ -26,7 +26,7 @@ class CCDUIPTSimulation extends Simulation  {
   val caseActivityIteration = 120
   val caseActivityListIteration = 12
   val xuiCaseListActivityIteration = 12 //12
-  val xuiCaseActivityIteration = 2 //120
+  val xuiCaseActivityIteration = 120 //120
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
