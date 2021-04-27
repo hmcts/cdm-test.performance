@@ -286,12 +286,12 @@ class CCD_StressTest extends Simulation  {
     //     .eachLevelLasting(10.minutes)
     //     .separatedByRampsLasting(5.minutes)
     //     .startingFrom(10)),
-    // API_DivorceCreateCase.inject(
-    //   incrementConcurrentUsers(1)
-    //     .times(40)
-    //     .eachLevelLasting(10.minutes)
-    //     .separatedByRampsLasting(5.minutes)
-    //     .startingFrom(10)),
+    API_DivorceCreateCase.inject(
+      incrementConcurrentUsers(50)
+        .times(40)
+        .eachLevelLasting(5.minutes)
+        .separatedByRampsLasting(5.minutes)
+        .startingFrom(10)),
     API_ProbateCreateCase.inject(
       incrementConcurrentUsers(50)
         .times(40)

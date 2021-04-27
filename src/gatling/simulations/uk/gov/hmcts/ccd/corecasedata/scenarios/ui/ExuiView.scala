@@ -118,7 +118,7 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
 
     feed(caseActivityListFeeder)
 
-    .group("XUI_001_CaseActivity_LIST") {
+    .group("XUI_001_CaseActivityList_GET") {
       exec(http("XUI_CaseActivityList")
         .get(baseURL + "/activity/cases/${caseList}/activity")
         .header("X-XSRF-TOKEN", "${xsrfToken}")
@@ -132,7 +132,7 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
     //     session
     // }
 
-    .pause(session => session("listResponseTime").validate[Int].map(i => Environment.xuiCaseActivityPause * 1000 - i milliseconds))
+    .pause(session => session("listResponseTime").validate[Int].map(i => Environment.xuiCaseActivityListPause * 1000 - i milliseconds))
 
   val CaseActivityOpenCase =
 
@@ -145,21 +145,22 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
 
     feed(caseActivityFeeder)
 
-    .group("XUI_002_CaseActivity_POST") {
-      exec(http("XUI_CaseActivity_Post")
-        .post(baseURL + "/activity/cases/${caseRef}/activity")
-        .headers(XuiHeaders.headers_CSPost)
-        .header("X-XSRF-TOKEN", "${xsrfToken}")
-        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
-        .check(responseTimeInMillis.saveAs("responseTimePost")))
-    }
-
     .group("XUI_003_CaseActivity_GET") {
       exec(http("XUI_CaseActivity_Get")
         .get(baseURL + "/activity/cases/${caseRef}/activity")
         .headers(XuiHeaders.headers_CSGet)
         .header("X-XSRF-TOKEN", "${xsrfToken}")
         .check(responseTimeInMillis.saveAs("responseTimeGet")))
+    }
+
+    .repeat(6) {
+    group("XUI_002_CaseActivity_POST") {
+      exec(http("XUI_CaseActivity_Post")
+        .post(baseURL + "/activity/cases/${caseRef}/activity")
+        .headers(XuiHeaders.headers_CSPost)
+        .header("X-XSRF-TOKEN", "${xsrfToken}")
+        .body(StringBody("{\n  \"activity\": \"view\"\n}"))
+        .check(responseTimeInMillis.saveAs("responseTimePost")))
     }
 
     .exec{ session =>
@@ -178,6 +179,8 @@ val caseActivityListFeeder = csv("CaseActivityListData.csv").random
     // }
 
     .pause(session => session("thinktime").validate[Int].map(i => i milliseconds))
+
+    }
 
   val searchCase = 
 
