@@ -51,6 +51,7 @@ class CCD_StressTest extends Simulation  {
       .repeat(api_probateIteration) { //api_probateIteration
         exec(ccddatastore.CCDAPI_ProbateCreate)
         .exec(ccddatastore.CCDAPI_ProbateCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -60,6 +61,7 @@ class CCD_StressTest extends Simulation  {
       .repeat(api_sscsIteration) { //api_sscsIteration
         exec(ccddatastore.CCDAPI_SSCSCreate)
         .exec(ccddatastore.CCDAPI_SSCSCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -69,6 +71,7 @@ class CCD_StressTest extends Simulation  {
       .repeat(api_divorceIteration) { //api_divorceIteration
         exec(ccddatastore.CCDAPI_DivorceCreate)
         .exec(ccddatastore.CCDAPI_DivorceCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -87,6 +90,7 @@ class CCD_StressTest extends Simulation  {
       .repeat(api_fplIteration) { //api_fplIteration
         exec(ccddatastore.CCDAPI_FPLCreate)
         .exec(ccddatastore.CCDAPI_FPLCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -96,6 +100,7 @@ class CCD_StressTest extends Simulation  {
       .repeat(api_frIteration) { //api_frIteration
         exec(ccddatastore.CCDAPI_FRCreate)
         .exec(ccddatastore.CCDAPI_FRCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -105,6 +110,7 @@ class CCD_StressTest extends Simulation  {
       .repeat(api_cmcIteration) { //api_cmcIteration
         exec(ccddatastore.CCDAPI_CMCCreate)
         .exec(ccddatastore.CCDAPI_CMCCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -120,7 +126,7 @@ class CCD_StressTest extends Simulation  {
         .exec(PBGoR.PBStopCase)
         .exec(PBGoR.PBSearch)
         .exec(PBGoR.PBView)
-        // .exec(WaitforNextIteration.waitforNextIteration)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
@@ -287,13 +293,13 @@ class CCD_StressTest extends Simulation  {
     //     .separatedByRampsLasting(5.minutes)
     //     .startingFrom(10)),
     API_ProbateCreateCase.inject(
-      incrementConcurrentUsers(10)
+      incrementConcurrentUsers(50)
         .times(40)
         .eachLevelLasting(5.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     API_SSCSCreateCase.inject(
-      incrementConcurrentUsers(10)
+      incrementConcurrentUsers(50)
         .times(40)
         .eachLevelLasting(5.minutes)
         .separatedByRampsLasting(5.minutes)
@@ -318,12 +324,12 @@ class CCD_StressTest extends Simulation  {
     //     .startingFrom(10)),
     
 
-    // UI_CCDProbateScenario.inject(
-    //   incrementConcurrentUsers(1)
-    //     .times(40)
-    //     .eachLevelLasting(10.minutes)
-    //     .separatedByRampsLasting(5.minutes)
-    //     .startingFrom(10)),
+    UI_CCDProbateScenario.inject(
+      incrementConcurrentUsers(50)
+        .times(40)
+        .eachLevelLasting(5.minutes)
+        .separatedByRampsLasting(5.minutes)
+        .startingFrom(10)),
     // UI_CCDSSCSScenario.inject(
     //   incrementConcurrentUsers(1)
     //     .times(40)
@@ -345,13 +351,13 @@ class CCD_StressTest extends Simulation  {
     //     .startingFrom(10)),
 
     CCDSearchView.inject(
-      incrementConcurrentUsers(10)
+      incrementConcurrentUsers(50)
         .times(40)
         .eachLevelLasting(5.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
     CCDElasticSearch.inject(
-      incrementConcurrentUsers(10)
+      incrementConcurrentUsers(50)
         .times(40)
         .eachLevelLasting(5.minutes)
         .separatedByRampsLasting(5.minutes)
