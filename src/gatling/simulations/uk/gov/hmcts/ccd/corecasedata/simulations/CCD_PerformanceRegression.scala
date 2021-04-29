@@ -80,8 +80,8 @@ class CCD_PerformanceRegression extends Simulation  {
     .repeat(1) {
       exec(ccddatastore.CCDLogin_Divorce)
       .repeat(api_divorceIteration) { //api_divorceIteration
-        exec(ccddatastore.CCDAPI_DivorceCreate)
-        .exec(ccddatastore.CCDAPI_DivorceCaseEvents)
+        exec(ccddatastore.CCDAPI_DivorceSolicitorCreate)
+        .exec(ccddatastore.CCDAPI_DivorceSolicitorCaseEvents)
         .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
