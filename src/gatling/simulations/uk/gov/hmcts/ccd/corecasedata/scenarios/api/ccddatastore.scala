@@ -34,6 +34,7 @@ val feedWorkbasketData = csv("workbasketCaseTypes.csv").circular
 val feedXUISearchData = csv("XUISearchData.csv").circular
 val feedXUIUserData = csv("XUISearchUsers.csv").circular
 val feedProbateUserData = csv("ProbateUserData.csv").circular
+val feedProbateSolicitorUserData = csv("ProbateSolicitorUserData.csv").circular
 val feedSSCSUserData = csv("SSCSUserData.csv").circular
 val feedDivorceUserData = csv("DivorceSolUserData.csv").circular
 val feedCMCUserData = csv("CMCUserData.csv").circular
@@ -310,6 +311,135 @@ val CDSGetRequest =
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
       .body(StringBody("{\n  \"data\": {\n    \"boDocumentsUploaded\": [\n      {\n        \"id\": null,\n        \"value\": {\n          \"DocumentType\": \"deathCertificate\",\n          \"Comment\": \"test 1mb file\",\n          \"DocumentLink\": {\n            \"document_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}\",\n            \"document_binary_url\": \"http://dm-store-perftest.service.core-compute-perftest.internal:443/documents/${Document_ID}/binary\",\n            \"document_filename\": \"${FileName1}\"\n          }\n        }\n      }\n    ]\n  },\n  \"event\": {\n    \"id\": \"boUploadDocumentsForCaseCreated\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken3}\",\n  \"ignore_warning\": false\n}")))
+
+    .pause(Environment.constantthinkTime)
+
+  val CCDLogin_ProbateSolicitor = 
+
+    feed(feedProbateSolicitorUserData)
+
+    // .exec(http("GetIdamUserID")
+    //   .get("https://idam-api.perftest.platform.hmcts.net/users?email=${ProbateUserName}") //1f65a0df-b064-4f9b-85ea-3eec5a28ce86 ${caseSharingUser}
+    //   .headers(headers_0)
+    //   .check(jsonPath("$.id").saveAs("userId"))
+    //   .check(status.saveAs("statusvalue")))
+
+    // .doIf(session=>session("statusvalue").as[String].contains("200")) {
+    //   exec {
+    //     session =>
+    //       val fw = new BufferedWriter(new FileWriter("ProbateEmailAndIdamIDs.csv", true))
+    //       try {
+    //         fw.write(session("ProbateUserName").as[String] + "," + session("userId").as[String] + "\r\n")
+    //       }
+    //       finally fw.close()
+    //       session
+    //   }
+    // }
+
+    .exec(http("GetS2SToken")
+      .post(s2sUrl + "/testing-support/lease")
+      .header("Content-Type", "application/json")
+      .body(StringBody("{\"microservice\":\"ccd_data\"}"))
+      .check(bodyString.saveAs("bearerToken")))
+      .exitHereIfFailed
+
+    .exec(http("OIDC01_Authenticate")
+      .post(IdamAPI + "/authenticate")
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .formParam("username", "${ProbateUserName}") //${email}
+      .formParam("password", "${ProbateUserPassword}")
+      .formParam("redirectUri", ccdRedirectUri)
+      .formParam("originIp", "0:0:0:0:0:0:0:1")
+      .check(status is 200)
+      .check(headerRegex("Set-Cookie", "Idam.Session=(.*)").saveAs("authCookie")))
+      .exitHereIfFailed
+
+   .exec(http("OIDC02_Authorize_CCD")
+      .post(IdamAPI + "/o/authorize?response_type=code&client_id=" + ccdClientId + "&redirect_uri=" + ccdRedirectUri + "&scope=" + ccdScope).disableFollowRedirect
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .header("Cookie", "Idam.Session=${authCookie}")
+      .header("Content-Length", "0")
+      .check(status is 302)
+      .check(headerRegex("Location", "code=(.*)&client_id").saveAs("code")))
+      .exitHereIfFailed
+
+   .exec(http("OIDC03_Token_CCD")
+      .post(IdamAPI + "/o/token?grant_type=authorization_code&code=${code}&client_id=" + ccdClientId +"&redirect_uri=" + ccdRedirectUri + "&client_secret=" + ccdGatewayClientSecret)
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .header("Content-Length", "0")
+      .check(status is 200)
+      .check(jsonPath("$.access_token").saveAs("access_token")))
+      .exitHereIfFailed
+
+  val CCDAPI_ProbateSolicitorCreate =
+
+    exec(http("API_Probate_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/solicitorCreateApplication/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken")))
+
+    .exec(http("API_Probate_SolCreateCase")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(StringBody("{\n  \"data\": {\n    \"solsSolicitorFirmName\": \"test firm\",\n    \"solsSolicitorIsExec\": \"Yes\",\n    \"solsSOTForenames\": \"John\",\n    \"solsSOTSurname\": \"Smith\",\n    \"solsSolicitorIsMainApplicant\": \"Yes\",\n    \"solsSolicitorAddress\": {\n      \"AddressLine1\": \"Flat 1\",\n      \"AddressLine2\": \"Bramber House\",\n      \"AddressLine3\": \"Seven Kings Way\",\n      \"PostTown\": \"Kingston Upon Thames\",\n      \"County\": \"\",\n      \"PostCode\": \"KT2 5BU\",\n      \"Country\": \"United Kingdom\"\n    },\n    \"solsSolicitorAppReference\": \"perftest\",\n    \"solsSolicitorEmail\": \"john@test.com\",\n    \"solsSolicitorPhoneNumber\": null\n  },\n  \"event\": {\n    \"id\": \"solicitorCreateApplication\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": \"DRAFT168458\"\n}"))
+      .check(jsonPath("$.id").saveAs("caseId")))
+
+    .pause(Environment.constantthinkTime)
+
+  val CCDAPI_ProbateSolicitorCaseEvents = 
+
+    exec(http("API_Probate_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/solicitorUpdateApplication/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken2")))
+
+    .exec(http("API_Probate_SolUpdateApp")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(ElFileBody("CCD_Probate_SolUpdateApp.json"))
+      .check(jsonPath("$.id").saveAs("caseId")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_Probate_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/solicitorUpdateProbate/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken3")))
+
+    .exec(http("API_Probate_SolUpdateProbate")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(ElFileBody("CCD_Probate_SolUpdateProbate.json"))
+      .check(jsonPath("$.id").saveAs("caseId")))
+
+    .pause(Environment.constantthinkTime)
+
+    .exec(http("API_Probate_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/event-triggers/solicitorReviewAndConfirm/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken4")))
+
+    .exec(http("API_Probate_SolSubmitApp")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(ElFileBody("CCD_Probate_SolSubmitApp.json"))
+      .check(jsonPath("$.id").saveAs("caseId")))
 
     .pause(Environment.constantthinkTime)
 
@@ -616,7 +746,7 @@ val CDSGetRequest =
       .check(jsonPath("$.access_token").saveAs("access_token")))
       .exitHereIfFailed
 
-  val CCDAPI_DivorceCreate =
+  val CCDAPI_DivorceSolicitorCreate =
 
     exec(http("API_Divorce_GetEventToken")
       .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/event-triggers/solicitorCreate/token")
@@ -625,7 +755,7 @@ val CDSGetRequest =
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken")))
 
-    .exec(http("API_Divorce_CreateCase")
+    .exec(http("API_Divorce_SolCreateCase")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -637,7 +767,7 @@ val CDSGetRequest =
 
     .pause(Environment.constantthinkTime)
 
-  val CCDAPI_DivorceCaseEvents = 
+  val CCDAPI_DivorceSolicitorCaseEvents = 
 
     // exec(http("API_Divorce_GetEventToken")
     //   .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/event-triggers/uploadDocument/token")
@@ -710,7 +840,7 @@ val CDSGetRequest =
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken2")))
 
-    .exec(http("API_Divorce_UpdateLanguage")
+    .exec(http("API_Divorce_SolUpdateLanguage")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/events")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
@@ -726,7 +856,7 @@ val CDSGetRequest =
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken3")))
 
-    .exec(http("API_Divorce_CaseSubmit")
+    .exec(http("API_Divorce_SolCaseSubmit")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${DVJurisdiction}/case-types/${DVCaseType}/cases/${caseId}/events")
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")

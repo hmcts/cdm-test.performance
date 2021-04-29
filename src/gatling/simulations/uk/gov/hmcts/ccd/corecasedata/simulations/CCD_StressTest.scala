@@ -55,6 +55,16 @@ class CCD_StressTest extends Simulation  {
       }
     }
 
+  val API_ProbateSolicitorCreate = scenario("Probate Solicitor Case Create")
+    .repeat(1) {
+      exec(ccddatastore.CCDLogin_ProbateSolicitor)
+      .repeat(api_probateIteration) {
+        exec(ccddatastore.CCDAPI_ProbateSolicitorCreate)
+        .exec(ccddatastore.CCDAPI_ProbateSolicitorCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
+      }
+    }
+
   val API_SSCSCreateCase = scenario("SSCS Case Create")
     .repeat(1) {
       exec(ccddatastore.CCDLogin_SSCS)
@@ -65,12 +75,12 @@ class CCD_StressTest extends Simulation  {
       }
     }
 
-  val API_DivorceCreateCase = scenario("Divorce Case Create")
+  val API_DivorceSolicitorCreateCase = scenario("Divorce Case Create")
     .repeat(1) {
       exec(ccddatastore.CCDLogin_Divorce)
       .repeat(api_divorceIteration) { //api_divorceIteration
-        exec(ccddatastore.CCDAPI_DivorceCreate)
-        .exec(ccddatastore.CCDAPI_DivorceCaseEvents)
+        exec(ccddatastore.CCDAPI_DivorceSolicitorCreate)
+        .exec(ccddatastore.CCDAPI_DivorceSolicitorCaseEvents)
         .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
@@ -286,7 +296,13 @@ class CCD_StressTest extends Simulation  {
         .eachLevelLasting(5.minutes)
         .separatedByRampsLasting(5.minutes)
         .startingFrom(10)),
-    API_DivorceCreateCase.inject(
+    API_DivorceSolicitorCreateCase.inject(
+      incrementConcurrentUsers(50)
+        .times(40)
+        .eachLevelLasting(5.minutes)
+        .separatedByRampsLasting(5.minutes)
+        .startingFrom(10)),
+    API_ProbateSolicitorCreate.inject(
       incrementConcurrentUsers(50)
         .times(40)
         .eachLevelLasting(5.minutes)

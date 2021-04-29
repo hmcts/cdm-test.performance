@@ -56,6 +56,16 @@ class CCD_PerformanceRegression extends Simulation  {
       }
     }
 
+  val API_ProbateSolicitorCreate = scenario("Probate Solicitor Case Create")
+    .repeat(1) {
+      exec(ccddatastore.CCDLogin_ProbateSolicitor)
+      .repeat(api_probateIteration) {
+        exec(ccddatastore.CCDAPI_ProbateSolicitorCreate)
+        .exec(ccddatastore.CCDAPI_ProbateSolicitorCaseEvents)
+        .exec(WaitforNextIteration.waitforNextIteration)
+      }
+    }
+
   val API_SSCSCreateCase = scenario("SSCS Case Create")
     .repeat(1) {
       exec(ccddatastore.CCDLogin_SSCS)
@@ -235,7 +245,7 @@ class CCD_PerformanceRegression extends Simulation  {
     // API_SSCSCreateCase.inject(rampUsers(1) during (10 minutes)),
     // API_CMCCreateCase.inject(rampUsers(1) during (10 minutes)),
     // API_ProbateCreateCase.inject(rampUsers(1) during (10 seconds)),
-    API_DivorceCreateCase.inject(rampUsers(1) during (10 seconds)),
+    API_ProbateSolicitorCreate.inject(rampUsers(1) during (10 seconds)),
     // API_FRCreateCase.inject(rampUsers(1) during (10 minutes)),
     )
   .protocols(httpProtocol)
