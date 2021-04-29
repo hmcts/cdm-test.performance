@@ -150,7 +150,7 @@ class CCD_SearchSimulation extends Simulation  {
     .repeat(1) {
       exec(ccddatastore.CCDLogin_Divorce)
       .repeat(divorceIteration) {
-        exec(ccddatastore.CCDAPI_DivorceCreate)
+        exec(ccddatastore.CCDAPI_DivorceSolicitorCreate)
         // .exec(ccddatastore.CCDAPI_DivorceCaseEvents)
       }
     }
