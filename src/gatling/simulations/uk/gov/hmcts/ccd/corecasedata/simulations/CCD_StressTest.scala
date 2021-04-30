@@ -203,28 +203,14 @@ class CCD_StressTest extends Simulation  {
     }
 
   setUp(
-    //Solicitor journeys doubled to cater for higher Solicitor target load
     API_DivorceSolicitorCreateCase.inject(
-      incrementConcurrentUsers(50)
+      incrementConcurrentUsers(100)
         .times(40)
         .eachLevelLasting(5.minutes)
         .separatedByRampsLasting(2.minutes)
         .startingFrom(10)),
     API_ProbateSolicitorCreate.inject(
-      incrementConcurrentUsers(50)
-        .times(40)
-        .eachLevelLasting(5.minutes)
-        .separatedByRampsLasting(2.minutes)
-        .startingFrom(10)),
-    API_DivorceSolicitorCreateCase.inject(
-      incrementConcurrentUsers(50)
-        .times(40)
-        .eachLevelLasting(5.minutes)
-        .separatedByRampsLasting(2.minutes)
-        .startingFrom(10)),
-
-    API_ProbateSolicitorCreate.inject(
-      incrementConcurrentUsers(50)
+      incrementConcurrentUsers(100)
         .times(40)
         .eachLevelLasting(5.minutes)
         .separatedByRampsLasting(2.minutes)
