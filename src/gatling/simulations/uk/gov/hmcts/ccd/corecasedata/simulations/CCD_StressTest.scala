@@ -293,5 +293,5 @@ class CCD_StressTest extends Simulation  {
         .startingFrom(10)))
     
   .protocols(httpProtocol)
-  .maxDuration(120 minutes)
+  .maxDuration(600 minutes)
 }
