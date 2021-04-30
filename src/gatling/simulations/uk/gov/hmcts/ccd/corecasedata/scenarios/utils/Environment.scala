@@ -18,15 +18,15 @@ object Environment {
   val minThinkTime = 10 //10
   val maxThinkTime = 30 //30
 
-  val constantthinkTime = 7 //7
+  val constantthinkTime = 10 //7
 
   val xuiCaseActivityPause = 5 //5
   val xuiCaseActivityListPause = 30 //30
   val ccdCaseActivityPause = 5
   val caseActivityPause = 5
 
-  val minWaitForNextIteration = 20 //60
-  val maxWaitForNextIteration = 40 //120
+  val minWaitForNextIteration = 120 //60
+  val maxWaitForNextIteration = 240 //120
   val HttpProtocol = http
 
   val commonHeader = Map(
