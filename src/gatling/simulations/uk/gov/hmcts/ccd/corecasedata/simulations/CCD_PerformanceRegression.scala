@@ -14,8 +14,8 @@ class CCD_PerformanceRegression extends Simulation  {
   val api_probateIteration = 1 //40
   val api_sscsIteration = 1 //40
   val api_divorceIteration = 10 //40
-  val api_iacIteration = 1 //40
-  val api_fplIteration = 10 //40
+  val api_iacIteration = 3 //40
+  val api_fplIteration = 1 //40
   val api_frIteration = 1 //40
   val api_cmcIteration = 1 //40
 
@@ -245,7 +245,7 @@ class CCD_PerformanceRegression extends Simulation  {
     // API_SSCSCreateCase.inject(rampUsers(1) during (10 minutes)),
     // API_CMCCreateCase.inject(rampUsers(1) during (10 minutes)),
     // API_ProbateCreateCase.inject(rampUsers(1) during (10 seconds)),
-    API_ProbateSolicitorCreate.inject(rampUsers(1) during (10 seconds)),
+    API_IACCreateCase.inject(rampUsers(1) during (10 seconds)),
     // API_FRCreateCase.inject(rampUsers(1) during (10 minutes)),
     )
   .protocols(httpProtocol)
