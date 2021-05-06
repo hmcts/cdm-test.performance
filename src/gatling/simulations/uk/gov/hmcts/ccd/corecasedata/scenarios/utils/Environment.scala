@@ -20,7 +20,7 @@ object Environment {
 
   val constantthinkTime = 10 //7
 
-  val xuiCaseActivityPause = 15 //5
+  val xuiCaseActivityPause = 10 //5
   val xuiCaseActivityListPause = 30 //30
   val ccdCaseActivityPause = 5
   val caseActivityPause = 5
