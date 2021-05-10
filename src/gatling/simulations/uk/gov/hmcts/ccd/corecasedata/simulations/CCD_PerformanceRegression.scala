@@ -51,7 +51,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_probateIteration) { //api_probateIteration
         exec(ccddatastore.CCDAPI_ProbateCreate)
         .exec(ccddatastore.CCDAPI_ProbateCaseEvents)
-        // .exec(ccddatastore.CCDAPI_ProbateDocUpload)
+        .exec(ccddatastore.CCDAPI_ProbateDocUpload)
         .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
@@ -137,7 +137,7 @@ class CCD_PerformanceRegression extends Simulation  {
         .exec(PBGoR.PBStopCase)
         .exec(PBGoR.PBSearch)
         .exec(PBGoR.PBView)
-        // .exec(WaitforNextIteration.waitforNextIteration)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
@@ -219,33 +219,33 @@ class CCD_PerformanceRegression extends Simulation  {
 
   setUp(
     //CCD API scenarios
-    /*API_ProbateCreateCase.inject(rampUsers(20) during (10 minutes)),
-    API_SSCSCreateCase.inject(rampUsers(20) during (10 minutes)),
-    API_DivorceCreateCase.inject(rampUsers(20) during (10 minutes)),
-    API_IACCreateCase.inject(rampUsers(20) during (10 minutes)),
+    API_ProbateCreateCase.inject(rampUsers(40) during (10 minutes)),
+    API_SSCSCreateCase.inject(rampUsers(40) during (10 minutes)),
+    API_DivorceCreateCase.inject(rampUsers(40) during (10 minutes)),
+    // API_IACCreateCase.inject(rampUsers(30) during (10 minutes)),
     // API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
-    API_FRCreateCase.inject(rampUsers(20) during (10 minutes)),
-    API_CMCCreateCase.inject(rampUsers(20) during (10 minutes)),
+    // API_FRCreateCase.inject(rampUsers(20) during (10 minutes)),
+    API_CMCCreateCase.inject(rampUsers(40) during (10 minutes)),
 
     //CCD UI scenarios
-    UI_CCDProbateScenario.inject(rampUsers(20) during (10 minutes)),
-    UI_CCDSSCSScenario.inject(rampUsers(20) during (10 minutes)),
-    UI_CCDCMCScenario.inject(rampUsers(20) during (10 minutes)),
+    UI_CCDProbateScenario.inject(rampUsers(30) during (10 minutes)),
+    UI_CCDSSCSScenario.inject(rampUsers(30) during (10 minutes)),
+    UI_CCDCMCScenario.inject(rampUsers(30) during (10 minutes)),
     // UI_CCDDivScenario.inject(rampUsers(15) during (10 minutes)),
 
     //Case Activity Requests
     CaseActivityScn.inject(rampUsers(1000) during (10 minutes)),
 
     //CCD Searches
-    CCDSearchView.inject(rampUsers(20) during (10 minutes)),
-    CCDElasticSearch.inject(rampUsers(150) during (10 minutes))*/
+    CCDSearchView.inject(rampUsers(50) during (10 minutes)),
+    CCDElasticSearch.inject(rampUsers(150) during (10 minutes))
     
     //Debugging requests (leave commented out for test runs please)
     // API_IACCreateCase.inject(rampUsers(1) during (10 minutes)),
     // API_SSCSCreateCase.inject(rampUsers(1) during (10 minutes)),
     // API_CMCCreateCase.inject(rampUsers(1) during (10 minutes)),
     // API_ProbateCreateCase.inject(rampUsers(1) during (10 seconds)),
-    API_IACCreateCase.inject(rampUsers(1) during (10 seconds)),
+    // API_IACCreateCase.inject(rampUsers(1) during (10 seconds)),
     // API_FRCreateCase.inject(rampUsers(1) during (10 minutes)),
     )
   .protocols(httpProtocol)
