@@ -51,7 +51,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_probateIteration) { //api_probateIteration
         exec(ccddatastore.CCDAPI_ProbateCreate)
         .exec(ccddatastore.CCDAPI_ProbateCaseEvents)
-        .exec(ccddatastore.CCDAPI_ProbateDocUpload)
+        // .exec(ccddatastore.CCDAPI_ProbateDocUpload) //10/05/2021 - not currently working
         .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
