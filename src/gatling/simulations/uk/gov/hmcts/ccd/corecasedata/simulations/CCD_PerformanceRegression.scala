@@ -127,6 +127,7 @@ class CCD_PerformanceRegression extends Simulation  {
 
   //CCD UI Requests
   val UI_CCDProbateScenario = scenario("CCDPB")
+    .repeat(1) {
       exec(Browse.Homepage)
       .exec(PBGoR.submitLogin)
       .repeat(ui_PBiteration) {
