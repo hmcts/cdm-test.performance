@@ -204,7 +204,7 @@ class CCD_PerformanceRegression extends Simulation  {
       exec(ccddatastore.CCDLogin_Ethos)
       .repeat(ccdSearchIteration) {
         exec(ccddatastore.CCDAPI_EthosJourney)
-        // .exec(WaitforNextIteration.waitforNextIteration)
+        .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
