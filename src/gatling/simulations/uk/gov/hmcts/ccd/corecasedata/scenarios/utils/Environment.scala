@@ -25,8 +25,8 @@ object Environment {
   val ccdCaseActivityPause = 5
   val caseActivityPause = 5
 
-  val minWaitForNextIteration = 120 //60
-  val maxWaitForNextIteration = 240 //120
+  val minWaitForNextIteration = 60 //60
+  val maxWaitForNextIteration = 80 //80
   val HttpProtocol = http
 
   val commonHeader = Map(

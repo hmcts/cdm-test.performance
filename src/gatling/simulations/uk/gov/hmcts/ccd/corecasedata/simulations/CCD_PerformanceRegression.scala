@@ -52,7 +52,7 @@ class CCD_PerformanceRegression extends Simulation  {
         exec(ccddatastore.CCDAPI_ProbateCreate)
         .exec(ccddatastore.CCDAPI_ProbateCaseEvents)
         // .exec(ccddatastore.CCDAPI_ProbateDocUpload) //10/05/2021 - not currently working
-        .exec(WaitforNextIteration.waitforNextIteration)
+        // .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -72,7 +72,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_sscsIteration) { //api_sscsIteration
         exec(ccddatastore.CCDAPI_SSCSCreate)
         .exec(ccddatastore.CCDAPI_SSCSCaseEvents)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        // .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -82,7 +82,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_divorceIteration) { //api_divorceIteration
         exec(ccddatastore.CCDAPI_DivorceSolicitorCreate)
         .exec(ccddatastore.CCDAPI_DivorceSolicitorCaseEvents)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        // .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -121,13 +121,12 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_cmcIteration) { //api_cmcIteration
         exec(ccddatastore.CCDAPI_CMCCreate)
         .exec(ccddatastore.CCDAPI_CMCCaseEvents)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        // .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
   //CCD UI Requests
   val UI_CCDProbateScenario = scenario("CCDPB")
-    .repeat(1) {
       exec(Browse.Homepage)
       .exec(PBGoR.submitLogin)
       .repeat(ui_PBiteration) {
@@ -137,7 +136,7 @@ class CCD_PerformanceRegression extends Simulation  {
         .exec(PBGoR.PBStopCase)
         .exec(PBGoR.PBSearch)
         .exec(PBGoR.PBView)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        // .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
@@ -150,7 +149,7 @@ class CCD_PerformanceRegression extends Simulation  {
         exec(SSCS.SSCSCreateCase)
         .exec(SSCS.SSCSDocUpload)
         .exec(SSCS.SSCSSearchAndView)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        // .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
     }
@@ -165,7 +164,7 @@ class CCD_PerformanceRegression extends Simulation  {
         // .exec(CMC.CMCAttachScannedDocs)// Not currently working 10/05/2021
         .exec(CMC.CMCSupportUpdate)
         .exec(CMC.CMCSearchAndView)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        // .exec(WaitforNextIteration.waitforNextIteration)
       }
       .exec(Logout.ccdLogout)
   }
@@ -179,7 +178,7 @@ class CCD_PerformanceRegression extends Simulation  {
           .exec(DVExcep.DVDocUpload)
           .exec(DVExcep.DVSearch)
           .exec(DVExcep.DVView)
-          .exec(WaitforNextIteration.waitforNextIteration)
+          // .exec(WaitforNextIteration.waitforNextIteration)
         }
         .exec(Logout.ccdLogout)
     }
@@ -204,7 +203,7 @@ class CCD_PerformanceRegression extends Simulation  {
       exec(ccddatastore.CCDLogin_Ethos)
       .repeat(ccdSearchIteration) {
         exec(ccddatastore.CCDAPI_EthosJourney)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        // .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
