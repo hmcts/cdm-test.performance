@@ -11,13 +11,13 @@ import scala.concurrent.duration._
 class CCD_PerformanceRegression extends Simulation  {
 
   //Iteration Settings
-  val api_probateIteration = 1 //40
-  val api_sscsIteration = 1 //40
-  val api_divorceIteration = 10 //40
-  val api_iacIteration = 3 //40
-  val api_fplIteration = 1 //40
-  val api_frIteration = 1 //40
-  val api_cmcIteration = 1 //40
+  val api_probateIteration = 40 //40
+  val api_sscsIteration = 40 //40
+  val api_divorceIteration = 40 //40
+  val api_iacIteration = 40 //40
+  val api_fplIteration = 40 //40
+  val api_frIteration = 40 //40
+  val api_cmcIteration = 40 //40
 
   val ui_PBiteration = 15
   val ui_SSCSiteration = 15
@@ -162,7 +162,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(ui_CMCiteration) {
         exec(CMC.CMCCreateCase)
         .exec(CMC.CMCStayCase)
-        .exec(CMC.CMCAttachScannedDocs)
+        // .exec(CMC.CMCAttachScannedDocs)// Not currently working 10/05/2021
         .exec(CMC.CMCSupportUpdate)
         .exec(CMC.CMCSearchAndView)
         .exec(WaitforNextIteration.waitforNextIteration)
