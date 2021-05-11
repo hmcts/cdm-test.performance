@@ -19,10 +19,10 @@ class CCD_PerformanceRegression extends Simulation  {
   val api_frIteration = 40 //40
   val api_cmcIteration = 40 //40
 
-  val ui_PBiteration = 15
-  val ui_SSCSiteration = 15
-  val ui_CMCiteration = 15
-  val ui_Diviteration = 15
+  val ui_PBiteration = 12
+  val ui_SSCSiteration = 14
+  val ui_CMCiteration = 14
+  val ui_Diviteration = 14
 
   val caseActivityIteration = 120
   val caseActivityListIteration = 12
@@ -219,26 +219,26 @@ class CCD_PerformanceRegression extends Simulation  {
 
   setUp(
     //CCD API scenarios
-    API_ProbateCreateCase.inject(rampUsers(40) during (10 minutes)),
-    API_SSCSCreateCase.inject(rampUsers(40) during (10 minutes)),
-    API_DivorceCreateCase.inject(rampUsers(40) during (10 minutes)),
+    API_ProbateCreateCase.inject(rampUsers(50) during (10 minutes)),
+    API_SSCSCreateCase.inject(rampUsers(50) during (10 minutes)),
+    API_DivorceCreateCase.inject(rampUsers(50) during (10 minutes)),
     // API_IACCreateCase.inject(rampUsers(30) during (10 minutes)),
     // API_FPLCreateCase.inject(rampUsers(12) during (10 minutes)),
     // API_FRCreateCase.inject(rampUsers(20) during (10 minutes)),
-    API_CMCCreateCase.inject(rampUsers(40) during (10 minutes)),
+    API_CMCCreateCase.inject(rampUsers(50) during (10 minutes)),
 
     //CCD UI scenarios
-    UI_CCDProbateScenario.inject(rampUsers(30) during (10 minutes)),
-    UI_CCDSSCSScenario.inject(rampUsers(30) during (10 minutes)),
-    UI_CCDCMCScenario.inject(rampUsers(30) during (10 minutes)),
+    UI_CCDProbateScenario.inject(rampUsers(40) during (10 minutes)),
+    UI_CCDSSCSScenario.inject(rampUsers(40) during (10 minutes)),
+    UI_CCDCMCScenario.inject(rampUsers(40) during (10 minutes)),
     // UI_CCDDivScenario.inject(rampUsers(15) during (10 minutes)),
 
     //Case Activity Requests
     CaseActivityScn.inject(rampUsers(1000) during (10 minutes)),
 
     //CCD Searches
-    CCDSearchView.inject(rampUsers(50) during (10 minutes)),
-    CCDElasticSearch.inject(rampUsers(150) during (10 minutes))
+    CCDSearchView.inject(rampUsers(10) during (10 minutes)),
+    CCDElasticSearch.inject(rampUsers(200) during (10 minutes))
     
     //Debugging requests (leave commented out for test runs please)
     // API_IACCreateCase.inject(rampUsers(1) during (10 minutes)),
