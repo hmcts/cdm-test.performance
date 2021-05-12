@@ -13,11 +13,11 @@ class CCDUIPTSimulation extends Simulation  {
   val config: Config = ConfigFactory.load()
   val BaseURL = Environment.baseURL
 
-  val PBiteration = 1 //7
-  val SSCSiteration = 1 //14
-  val CMCiteration = 1 //8
-  val Diviteration = 1 //15
-  val Fpliteration = 1 //10
+  val PBiteration = 7 //7
+  val SSCSiteration = 14 //14
+  val CMCiteration = 8 //8
+  val Diviteration = 15 //15
+  val Fpliteration = 10 //10
 
   val Ethositeration = 26 //26
   val LFUiteration = 10 //8
