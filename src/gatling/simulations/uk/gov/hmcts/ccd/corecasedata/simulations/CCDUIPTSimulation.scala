@@ -83,7 +83,7 @@ class CCDUIPTSimulation extends Simulation  {
         .exec(CMC.CMCWaitingTransfer)
         .exec(CMC.CMCCaseActivity)
         //.exec(CMC.CMCTransfer)
-        .exec(CMC.CMCAttachScannedDocs)
+        // .exec(CMC.CMCAttachScannedDocs)
         .exec(CMC.CMCCaseActivity)
         .exec(CMC.CMCSupportUpdate)
         .exec(CMC.CMCCaseActivity)
