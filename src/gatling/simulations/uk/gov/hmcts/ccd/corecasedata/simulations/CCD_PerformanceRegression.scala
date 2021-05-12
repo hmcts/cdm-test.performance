@@ -11,13 +11,13 @@ import scala.concurrent.duration._
 class CCD_PerformanceRegression extends Simulation  {
 
   //Iteration Settings
-  val api_probateIteration = 40 //40
-  val api_sscsIteration = 40 //40
-  val api_divorceIteration = 40 //40
+  val api_probateIteration = 60 //60
+  val api_sscsIteration = 50 //50
+  val api_divorceIteration = 60 //60
   val api_iacIteration = 40 //40
   val api_fplIteration = 40 //40
   val api_frIteration = 40 //40
-  val api_cmcIteration = 40 //40
+  val api_cmcIteration = 45 //45
 
   val ui_PBiteration = 12
   val ui_SSCSiteration = 14
@@ -26,7 +26,7 @@ class CCD_PerformanceRegression extends Simulation  {
 
   val caseActivityIteration = 120
   val caseActivityListIteration = 12
-  val ccdSearchIteration = 35
+  val ccdSearchIteration = 40
   val elasticSearchIteration = 300
 
   //Gatling specific configs, required for perf testing
@@ -126,7 +126,7 @@ class CCD_PerformanceRegression extends Simulation  {
     }
 
   //CCD UI Requests
-  val UI_CCDProbateScenario = scenario("CCDPB")
+  val UI_CCDProbateScenario = scenario("CCD UI Probate")
     .repeat(1) {
       exec(Browse.Homepage)
       .exec(PBGoR.submitLogin)
@@ -142,7 +142,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .exec(Logout.ccdLogout)
   }
 
-  val UI_CCDSSCSScenario = scenario("CCDSSCS")
+  val UI_CCDSSCSScenario = scenario("CCD UI SSCS")
     .repeat(1) {
      exec(Browse.Homepage)
       .exec(SSCS.SSCSLogin)
@@ -155,7 +155,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .exec(Logout.ccdLogout)
     }
 
-  val UI_CCDCMCScenario = scenario("CCDCMC")
+  val UI_CCDCMCScenario = scenario("CCD UI CMC")
     .repeat(1) {
       exec(Browse.Homepage)
       .exec(CMC.CMCLogin)
@@ -170,7 +170,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .exec(Logout.ccdLogout)
   }
 
-  val UI_CCDDivScenario = scenario("CCDDIV")
+  val UI_CCDDivScenario = scenario("CCD UI Divorce")
     .repeat(1) {
       exec(Browse.Homepage)
         .exec(DVExcep.submitLogin)
