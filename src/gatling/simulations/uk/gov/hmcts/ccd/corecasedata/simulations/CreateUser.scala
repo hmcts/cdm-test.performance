@@ -47,7 +47,7 @@ class CreateUser extends Simulation  {
   }
 
   val CreateUserTestingSupport = scenario("Create User in Idam")
-    .repeat(50) {
+    .repeat(1) {
       exec(CreateUser.CreateUserInIdam)
     }
 
@@ -59,8 +59,8 @@ class CreateUser extends Simulation  {
   setUp(
     // GrantRole.inject(rampUsers(1) during (1 minutes)))
     // DeleteRole.inject(rampUsers(1) during (1 minutes)))
-    // CreateUserTestingSupport.inject(rampUsers(1) during (1 minutes)))
+    CreateUserTestingSupport.inject(rampUsers(1) during (1 minutes)))
     // DeleteUserTestingSupport.inject(rampUsers(1) during (1 minutes)))
-    GetUserID.inject(rampUsers(1) during (1 minutes)))
+    // GetUserID.inject(rampUsers(1) during (1 minutes)))
     .protocols(httpProtocol)
 }

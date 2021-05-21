@@ -1,6 +1,6 @@
 {
-  "email": "PerfTest_SeniorTribunal_${userNumber}@justice.gov.uk",
-  "forename": "PerfTest",
+  "email": "PerfSeniorTribunal_006@justice.gov.uk",
+  "forename": "Perf",
   "surname": "Caseworker",
   "password": "Password12",
   "roles": [
@@ -11,7 +11,7 @@
       "code": "caseworker-ia"
     }, 
     {
-      "code": "caseworker-ia-caseofficer"
+      "code": "caseworker-ia-legalrep-solicitor"
     }
 ]
 }

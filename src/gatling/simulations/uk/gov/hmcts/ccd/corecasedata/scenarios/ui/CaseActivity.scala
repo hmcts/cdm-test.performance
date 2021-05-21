@@ -78,48 +78,135 @@ val submitLogin = group("CCD_Login") {
     //.exitHereIfFailed
 
     .exec(http("CCD_020_030_Login")
-      .options(BaseURL + "/data/caseworkers/:uid/profile"))
+      // .options(BaseURL + "/data/caseworkers/:uid/profile"))
+      .options(BaseURL + "/data/internal/profile"))
+    //.exitHereIfFailed
+
+    .exec(http("CCD_020_031_Login")
+      .options(BaseURL + "/activity/cases/0/activity")
+      .headers(CommonHeader))
     //.exitHereIfFailed
 
     .exec(http("CCD_020_035_Login")
-      .get(BaseURL + "/data/caseworkers/:uid/profile")
+      // .get(BaseURL + "/data/caseworkers/:uid/profile")
+      .get(BaseURL + "/data/internal/profile")
+      .headers(LoginHeader.new_headers_14))
+    //.exitHereIfFailed
+
+    .exec(http("CCD_020_036_Login")
+      .get(BaseURL + "/activity/cases/0/activity")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("CCD_020_037_Login")
+      .options(BaseURL + "/data/internal/jurisdiction-ui-configs/?ids=PROBATE&ids=AUTOTEST1&ids=DIVORCE&ids=SSCS")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("CCD_020_038_Login")
+      .get(BaseURL + "/data/internal/jurisdiction-ui-configs/?ids=PROBATE&ids=AUTOTEST1&ids=DIVORCE&ids=SSCS")
+      .headers(LoginHeader.new_headers_16))
+    //.exitHereIfFailed
+
+    .exec(http("CCD_020_039_Login")
+      .options(BaseURL + "/data/internal/jurisdiction-ui-configs/?ids=PROBATE&ids=AUTOTEST1&ids=DIVORCE&ids=SSCS")
       .headers(CommonHeader))
     //.exitHereIfFailed
 
     .exec(http("CCD_020_040_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types?access=read"))
+      .options(BaseURL + "/data/internal/banners/?ids=PROBATE&ids=AUTOTEST1&ids=DIVORCE&ids=SSCS")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("CCD_020_041_Login")
+      .options(BaseURL + "/data/internal/jurisdiction-ui-configs/?ids=PROBATE&ids=AUTOTEST1&ids=DIVORCE&ids=SSCS")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("CCD_020_042_Login")
+      .get(BaseURL + "/data/internal/jurisdiction-ui-configs/?ids=PROBATE&ids=AUTOTEST1&ids=DIVORCE&ids=SSCS")
+      .headers(LoginHeader.new_headers_16))
+    //.exitHereIfFailed
+
+    .exec(http("CCD_020_043_Login")
+      .get(BaseURL + "/data/internal/banners/?ids=PROBATE&ids=AUTOTEST1&ids=DIVORCE&ids=SSCS")
+      .headers(LoginHeader.new_headers_20))
+    //.exitHereIfFailed
+
+    .exec(http("CCD_020_044_Login")
+      .get(BaseURL + "/data/internal/jurisdiction-ui-configs/?ids=PROBATE&ids=AUTOTEST1&ids=DIVORCE&ids=SSCS")
+      .headers(LoginHeader.new_headers_16))
+    //.exitHereIfFailed
 
     .exec(http("CCD_020_045_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types?access=read")
+      .options(BaseURL + "/data/internal/case-types/Legacy/work-basket-inputs")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("CCD_020_046_Login")
+      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-typesLegacy/cases?view=WORKBASKET&state=ReadOnly&page=1"))
+
+    .exec(http("CCD_020_047_Login")
+      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/Legacy/cases/pagination_metadata?state=ReadOnly")
+      .headers(CommonHeader))
+    //.exitHereIfFailed
+
+    .exec(http("CCD_020_048_Login")
+      .get(BaseURL + "/data/internal/case-types/Legacy/work-basket-inputs")
+      .headers(LoginHeader.new_headers_27))
+    //.exitHereIfFailed
+
+    .exec(http("CCD_020_049_Login")
+      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/Legacy/cases/pagination_metadata?state=ReadOnly")
       .headers(CommonHeader))
     //.exitHereIfFailed
 
     .exec(http("CCD_020_050_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/work-basket-inputs"))
-    //.exitHereIfFailed
+      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/Legacy/cases?view=WORKBASKET&state=ReadOnly&page=1")
+      .headers(LoginHeader.new_headers_9))
 
-    .exec(http("CCD_020_055_Login")
-      .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases?view=WORKBASKET&state=BOCaseStopped&page=1"))
-    //.exitHereIfFailed
 
-    .exec(http("CCD_020_060_Login")
-      .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/pagination_metadata?state=BOCaseStopped"))
-    //.exitHereIfFailed
+    
 
-    .exec(http("CCD_020_065_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/work-basket-inputs")
-      .headers(CommonHeader))
-    //.exitHereIfFailed
+    // .exec(http("CCD_020_038_Login")
+    //   .get(BaseURL + "/data/internal/jurisdiction-ui-configs/?ids=PROBATE&ids=AUTOTEST1&ids=DIVORCE&ids=SSCS")
+    //   .headers(CommonHeader))
+    // //.exitHereIfFailed
 
-    .exec(http("CCD_020_070_Login")
-      .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases?view=WORKBASKET&state=BOCaseStopped&page=1")
-      .headers(CommonHeader))
-    //.exitHereIfFailed
+    // .exec(http("CCD_020_040_Login")
+    //   .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types?access=read"))
 
-    .exec(http("CCD_020_075_Login")
-      .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/pagination_metadata?state=BOCaseStopped")
-      .headers(CommonHeader))
-    //.exitHereIfFailed
+    // .exec(http("CCD_020_045_Login")
+    //   .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types?access=read")
+    //   .headers(CommonHeader))
+    // //.exitHereIfFailed
+
+    // .exec(http("CCD_020_050_Login")
+    //   .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/work-basket-inputs"))
+    // //.exitHereIfFailed
+
+    // .exec(http("CCD_020_055_Login")
+    //   .options(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases?view=WORKBASKET&state=BOCaseStopped&page=1"))
+    // //.exitHereIfFailed
+
+    // .exec(http("CCD_020_060_Login")
+    //   .options(BaseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/pagination_metadata?state=BOCaseStopped"))
+    // //.exitHereIfFailed
+
+    // .exec(http("CCD_020_065_Login")
+    //   .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/work-basket-inputs")
+    //   .headers(CommonHeader))
+    // //.exitHereIfFailed
+
+    // .exec(http("CCD_020_070_Login")
+    //   .get(BaseURL + "/aggregated/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases?view=WORKBASKET&state=BOCaseStopped&page=1")
+    //   .headers(CommonHeader))
+    // //.exitHereIfFailed
+
+    // .exec(http("CCD_020_075_Login")
+    //   .get(BaseURL + "/data/caseworkers/:uid/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases/pagination_metadata?state=BOCaseStopped")
+    //   .headers(CommonHeader))
+    // //.exitHereIfFailed
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
   }

@@ -141,15 +141,15 @@ object CreateUser {
       .body(ElFileBody("Idam_CreateUserBody.json")))
 
     //Outputs the user email and idam id to a CSV, can be commented out if not needed  
-    .exec {
-      session =>
-        val fw = new BufferedWriter(new FileWriter("CreatedIdamUsers.csv", true))
-        try {
-          fw.write("PerfTest_SeniorTribunal_" + session("userNumber").as[String] + "@justice.gov.uk" + "\r\n")
-        }
-        finally fw.close()
-        session
-    }
+    // .exec {
+    //   session =>
+    //     val fw = new BufferedWriter(new FileWriter("CreatedIdamUsers.csv", true))
+    //     try {
+    //       fw.write("PerfTest_SeniorTribunal_" + session("userNumber").as[String] + "@justice.gov.uk" + "\r\n")
+    //     }
+    //     finally fw.close()
+    //     session
+    // }
 
   val DeleteUserInIdam =
 
