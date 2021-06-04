@@ -204,11 +204,11 @@ class CCD_StressTest extends Simulation  {
 
   setUp(
     API_DivorceSolicitorCreateCase.inject(
-      incrementConcurrentUsers(200)
+      incrementConcurrentUsers(100)
         .times(40)
         .eachLevelLasting(5.minutes)
         .separatedByRampsLasting(2.minutes)
-        .startingFrom(20)),
+        .startingFrom(10)),
     API_ProbateSolicitorCreate.inject(
       incrementConcurrentUsers(100)
         .times(40)
