@@ -58,7 +58,7 @@ class CCD_StressTest extends Simulation  {
   val API_ProbateSolicitorCreate = scenario("Probate Solicitor Case Create")
     .repeat(1) {
       exec(ccddatastore.CCDLogin_ProbateSolicitor)
-      .repeat(api_probateIteration) {
+      .repeat(api_probateIteration) { //api_probateIteration
         exec(ccddatastore.CCDAPI_ProbateSolicitorCreate)
         .exec(ccddatastore.CCDAPI_ProbateSolicitorCaseEvents)
         .exec(WaitforNextIteration.waitforNextIteration)
@@ -209,12 +209,12 @@ class CCD_StressTest extends Simulation  {
         .eachLevelLasting(5.minutes)
         .separatedByRampsLasting(2.minutes)
         .startingFrom(20)),
-    // API_ProbateSolicitorCreate.inject(
-    //   incrementConcurrentUsers(100)
-    //     .times(40)
-    //     .eachLevelLasting(5.minutes)
-    //     .separatedByRampsLasting(2.minutes)
-    //     .startingFrom(10)),
+    API_ProbateSolicitorCreate.inject(
+      incrementConcurrentUsers(100)
+        .times(40)
+        .eachLevelLasting(5.minutes)
+        .separatedByRampsLasting(2.minutes)
+        .startingFrom(10)),
     API_CMCCreateCase.inject(
       incrementConcurrentUsers(50)
         .times(40)
@@ -291,7 +291,12 @@ class CCD_StressTest extends Simulation  {
         .eachLevelLasting(5.minutes)
         .separatedByRampsLasting(2.minutes)
         .startingFrom(10)))
+
+  //This used for debugging only
+  /*setUp(
     
+    API_ProbateSolicitorCreate.inject(rampUsers(1) during (1 minutes))
+  )*/
   .protocols(httpProtocol)
   .maxDuration(360 minutes)
 }
