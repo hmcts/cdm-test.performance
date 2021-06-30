@@ -49,8 +49,8 @@
     "natureOfApplication3b": "No mortgage details",
     "orderForChildrenQuestion1": "No",
     "consentOrder": {
-      "document_url": "http://dm-store-perftest.service.core-compute-perftest.internal/documents/${consentOrderDocumentId}",
-      "document_binary_url": "http://dm-store-perftest.service.core-compute-perftest.internal/documents/${consentOrderDocumentId}/binary",
+      "document_url": "${consentOrderDocumentId}",
+      "document_binary_url": "${consentOrderDocumentId}/binary",
       "document_filename": "1MB.pdf"
     },
     "d81Question": "Yes",

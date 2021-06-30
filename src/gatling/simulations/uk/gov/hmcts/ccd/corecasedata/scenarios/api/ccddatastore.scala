@@ -8,6 +8,8 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import uk.gov.hmcts.ccd.corecasedata.scenarios.utils._
 import java.io.{BufferedWriter, FileWriter}
+import io.gatling.core.check.jsonpath.JsonPathCheckType
+import com.fasterxml.jackson.databind.JsonNode
 
 object ccddatastore {
 
@@ -1211,7 +1213,8 @@ val CDSGetRequest =
       .header("Content-Type","application/json")
       .check(jsonPath("$.token").saveAs("eventToken2"))
       .check(regex("""/documents/(.+?)","document_filename""").find(0).saveAs("d81JointDocumentId"))
-      .check(regex("""latestConsentOrder":\\{"document_url":"${dmStoreUrl}/documents/([a-z0-9-]+?)"""").saveAs("consentOrderDocumentId")))
+      // .check(regex(s"""latestConsentOrder":\\{"document_url":"${dmStoreUrl}/documents/([a-z0-9-]+?)"""").saveAs("consentOrderDocumentId"))
+      .check(jsonPath("$.case_details.case_data.latestConsentOrder.document_url").saveAs("consentOrderDocumentId")))
 
     .exec(http("API_FR_AmendApplicationDetails")
       .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FRJurisdiction}/case-types/${FRCaseType}/cases/${caseId}/events")
