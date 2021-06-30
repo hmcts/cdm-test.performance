@@ -100,7 +100,7 @@ class CCD_PerformanceRegression extends Simulation  {
       exec(ccddatastore.CCDLogin_FPL)
       .repeat(api_fplIteration) { //api_fplIteration
         exec(ccddatastore.CCDAPI_FPLCreate)
-        // .exec(ccddatastore.CCDAPI_FPLCaseEvents)
+        .exec(ccddatastore.CCDAPI_FPLCaseEvents)
         // .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
@@ -111,7 +111,7 @@ class CCD_PerformanceRegression extends Simulation  {
       .repeat(api_frIteration) { //api_frIteration
         exec(ccddatastore.CCDAPI_FRCreate)
         .exec(ccddatastore.CCDAPI_FRCaseEvents)
-        .exec(WaitforNextIteration.waitforNextIteration)
+        // .exec(WaitforNextIteration.waitforNextIteration)
       }
     }
 
@@ -241,7 +241,7 @@ class CCD_PerformanceRegression extends Simulation  {
     CCDElasticSearch.inject(rampUsers(200) during (10 minutes))
     
     //Debugging requests (leave commented out for test runs please)
-    // CCDElasticSearch.inject(atOnceUsers(1)).disablePauses
+    // API_FPLCreateCase.inject(atOnceUsers(1)).disablePauses
     )
   .protocols(httpProtocol)
 }
