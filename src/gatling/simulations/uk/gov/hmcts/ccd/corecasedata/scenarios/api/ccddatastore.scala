@@ -15,9 +15,6 @@ object ccddatastore {
 
 val config: Config = ConfigFactory.load()
 
-//val s2sToken = CcdTokenGenerator.generateS2SToken()
-//val IdAMToken = CcdTokenGenerator.generateSIDAMUserTokenInternal()
-
 val IdamURL = Environment.idamURL
 val IdamAPI = Environment.idamAPI
 val CCDEnvurl = Environment.ccdEnvurl
@@ -49,10 +46,6 @@ val feedEthosSearchData = csv("EthosSearchData.csv").random
 val MinThinkTime = Environment.minThinkTime
 val MaxThinkTime = Environment.maxThinkTime
 val constantThinkTime = Environment.constantthinkTime
-val MinWaitForNextIteration = Environment.minWaitForNextIteration
-val MaxWaitForNextIteration = Environment.maxWaitForNextIteration
-
-// val timeStamp = sdfDate.format(now)
 
 val headers_0 = Map( //Authorization token needs to be generated with idam login
   "Authorization" -> "AdminApiAuthToken ",
@@ -260,7 +253,7 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
-      .body(ElFileBody("CCD_PaymentSuccess.json"))
+      .body(ElFileBody("bodies/probate/CCD_PaymentSuccess.json"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
     .pause(Environment.constantthinkTime)
@@ -407,7 +400,7 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
-      .body(ElFileBody("CCD_Probate_SolUpdateApp.json"))
+      .body(ElFileBody("bodies/probate/CCD_Probate_SolUpdateApp.json"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
     .pause(Environment.constantthinkTime)
@@ -424,7 +417,7 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
-      .body(ElFileBody("CCD_Probate_SolUpdateProbate.json"))
+      .body(ElFileBody("bodies/probate/CCD_Probate_SolUpdateProbate.json"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
     .pause(Environment.constantthinkTime)
@@ -441,7 +434,7 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")
-      .body(ElFileBody("CCD_Probate_SolSubmitApp.json"))
+      .body(ElFileBody("bodies/probate/CCD_Probate_SolSubmitApp.json"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
     .pause(Environment.constantthinkTime)
@@ -765,7 +758,7 @@ val CDSGetRequest =
       .header("Content-Type","application/json")
       // .body(StringBody("{\n  \"data\": {\n    \"PetitionerSolicitorName\": \"john smith\",\n    \"PetitionerSolicitorFirm\": \"solicitor ltd\",\n    \"DerivedPetitionerSolicitorAddr\": \"12 test street, solicitor lane, kt25bu\",\n    \"D8SolicitorReference\": \"0123456\",\n    \"PetitionerSolicitorPhone\": \"07123456789\",\n    \"PetitionerSolicitorEmail\": \"johnsmith@solicitorltd.com\",\n    \"SolicitorAgreeToReceiveEmails\": \"Yes\",\n    \"D8PetitionerFirstName\": \"Jane\",\n    \"D8PetitionerLastName\": \"Deer\",\n    \"D8PetitionerNameDifferentToMarriageCert\": \"No\",\n    \"D8DivorceWho\": \"husband\",\n    \"D8InferredPetitionerGender\": \"female\",\n    \"D8MarriageIsSameSexCouple\": \"No\",\n    \"D8DerivedPetitionerHomeAddress\": \"14 divorce street, london, kt25bu\",\n    \"D8PetitionerPhoneNumber\": null,\n    \"D8PetitionerEmail\": null,\n    \"D8PetitionerContactDetailsConfidential\": \"keep\",\n    \"D8RespondentFirstName\": \"Steve\",\n    \"D8RespondentLastName\": \"Smith\",\n    \"D8RespondentNameAsOnMarriageCertificate\": \"No\",\n    \"D8InferredRespondentGender\": \"male\",\n    \"D8DerivedRespondentHomeAddress\": null,\n    \"D8RespondentCorrespondenceSendToSol\": \"No\",\n    \"D8DerivedRespondentCorrespondenceAddr\": \"14 divorcee street, london, kt25bu\",\n    \"D8MarriageDate\": \"2000-10-02\",\n    \"D8MarriagePetitionerName\": \"Jane Deer\",\n    \"D8MarriageRespondentName\": \"Steve Smith\",\n    \"D8MarriedInUk\": \"Yes\",\n    \"D8JurisdictionConnection\": [\n      \"G\"\n    ],\n    \"D8ReasonForDivorce\": \"unreasonable-behaviour\",\n    \"D8ReasonForDivorceBehaviourDetails\": \"bad behaviour\",\n    \"D8LegalProceedings\": \"No\",\n    \"D8FinancialOrder\": \"No\",\n    \"D8DivorceCostsClaim\": \"No\",\n    \"D8DocumentsUploaded\": []\n  },\n  \"event\": {\n    \"id\": \"solicitorCreate\",\n    \"summary\": \"\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
       // .body(StringBody("{\n  \"data\": {\n    \"LanguagePreferenceWelsh\": \"No\"\n  },\n  \"event\": {\n    \"id\": \"hwfCreate\",\n    \"summary\": \"perf test case\",\n    \"description\": \"\"\n  },\n  \"event_token\": \"${eventToken}\",\n  \"ignore_warning\": false,\n  \"draft_id\": null\n}"))
-      .body(ElFileBody("CCD_DivorceCreateSol.json"))
+      .body(ElFileBody("bodies/divorce/CCD_DivorceCreateSol.json"))
       .check(jsonPath("$.id").saveAs("caseId")))
 
     .pause(Environment.constantthinkTime)
@@ -816,7 +809,7 @@ val CDSGetRequest =
     //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
     //   .header("Authorization", "Bearer ${access_token}")
     //   .header("Content-Type","application/json")      
-    //   .body(ElFileBody("CCD_Divorce_AddNote.json")))
+    //   .body(ElFileBody("bodies/divorce/CCD_Divorce_AddNote.json")))
 
     // .pause(Environment.constantthinkTime)
 
@@ -832,7 +825,7 @@ val CDSGetRequest =
     //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
     //   .header("Authorization", "Bearer ${access_token}")
     //   .header("Content-Type","application/json")      
-    //   .body(ElFileBody("CCD_Divorce_GeneralApplicationReceived.json")))
+    //   .body(ElFileBody("bodies/divorce/CCD_Divorce_GeneralApplicationReceived.json")))
 
     // .pause(Environment.constantthinkTime)
 
@@ -996,7 +989,7 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")      
-      .body(ElFileBody("CCD_FPL_EnterChildren.json")))
+      .body(ElFileBody("bodies/fpl/CCD_FPL_EnterChildren.json")))
 
     .pause(Environment.constantthinkTime)
 
@@ -1012,7 +1005,7 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")      
-      .body(ElFileBody("CCD_FPL_EnterRespondents.json")))
+      .body(ElFileBody("bodies/fpl/CCD_FPL_EnterRespondents.json")))
 
     .pause(Environment.constantthinkTime)
 
@@ -1028,7 +1021,7 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")      
-      .body(ElFileBody("CCD_FPL_EnterGrounds.json")))
+      .body(ElFileBody("bodies/fpl/CCD_FPL_EnterGrounds.json")))
 
     .pause(Environment.constantthinkTime)
 
@@ -1060,7 +1053,7 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")      
-      .body(ElFileBody("CCD_FPL_UploadDocuments.json")))
+      .body(ElFileBody("bodies/fpl/CCD_FPL_UploadDocuments.json")))
 
     .pause(Environment.constantthinkTime)
 
@@ -1076,7 +1069,7 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")      
-      .body(ElFileBody("CCD_FPL_OrdersNeeded.json")))
+      .body(ElFileBody("bodies/fpl/CCD_FPL_OrdersNeeded.json")))
 
     .pause(Environment.constantthinkTime)
 
@@ -1092,7 +1085,7 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")      
-      .body(ElFileBody("CCD_FPL_HearingNeeded.json")))
+      .body(ElFileBody("bodies/fpl/CCD_FPL_HearingNeeded.json")))
 
     .pause(Environment.constantthinkTime)
 
@@ -1108,7 +1101,7 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")      
-      .body(ElFileBody("CCD_FPL_OrganisationDetails.json")))
+      .body(ElFileBody("bodies/fpl/CCD_FPL_OrganisationDetails.json")))
 
     .pause(Environment.constantthinkTime)
 
@@ -1124,27 +1117,29 @@ val CDSGetRequest =
       .header("ServiceAuthorization", "Bearer ${bearerToken}")
       .header("Authorization", "Bearer ${access_token}")
       .header("Content-Type","application/json")      
-      .body(ElFileBody("CCD_FPL_OtherProposal.json")))
+      .body(ElFileBody("bodies/fpl/CCD_FPL_OtherProposal.json")))
 
     .pause(Environment.constantthinkTime)
 
-    // .exec(http("API_FPL_GetEventToken")
-    //   .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/submitApplication/token")
-    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
-    //   .header("Authorization", "Bearer ${access_token}")
-    //   .header("Content-Type","application/json")
-    //   .check(jsonPath("$.token").saveAs("eventToken8"))
-    //   .check(regex("""documents/(.*)","document_filename":"draft""").saveAs("documentId"))
-    //   .check(regex("""document_filename":"draft(.+?)","document_binary_url""").saveAs("documentName")))
+    .exec(http("API_FPL_GetEventToken")
+      .get(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/event-triggers/submitApplication/token")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .check(jsonPath("$.token").saveAs("eventToken8"))
+      // .check(regex("""documents/(.*)","document_filename":"draft""").saveAs("documentId"))
+      // .check(regex("""document_sssssfilename":"draft(.+?)","documeeeeeeent_binary_url""").saveAs("documentName"))
+      .check(jsonPath("$.case_details.case_data.draftApplicationDocument.document_url").saveAs("documentUrl"))
+      .check(jsonPath("$.case_details.case_data.draftApplicationDocument.document_filename").saveAs("documentFilename")))
 
-    // .exec(http("API_FPL_SubmitApplication")
-    //   .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
-    //   .header("ServiceAuthorization", "Bearer ${bearerToken}")
-    //   .header("Authorization", "Bearer ${access_token}")
-    //   .header("Content-Type","application/json")
-    //   .body(ElFileBody("CCD_FPL_SubmitApplication.json")))
+    .exec(http("API_FPL_SubmitApplication")
+      .post(ccdDataStoreUrl + "/caseworkers/${idamId}/jurisdictions/${FPLJurisdiction}/case-types/${FPLCaseType}/cases/${caseId}/events")
+      .header("ServiceAuthorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer ${access_token}")
+      .header("Content-Type","application/json")
+      .body(ElFileBody("bodies/fpl/CCD_FPL_SubmitApplication.json")))
 
-    // .pause(Environment.constantthinkTime)
+    .pause(Environment.constantthinkTime)
 
   val CCDLogin_FR =
 

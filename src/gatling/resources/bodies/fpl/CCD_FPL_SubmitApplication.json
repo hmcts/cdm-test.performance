@@ -4,9 +4,9 @@
       "agree"
     ],
     "draftApplicationDocument": {
-      "document_url": "http://dm-store-perftest.service.core-compute-perftest.internal/documents/${documentId}",
-      "document_filename": "draft${documentName}",
-      "document_binary_url": "http://dm-store-perftest.service.core-compute-perftest.internal/documents/${documentId}/binary"
+      "document_url": "${documentUrl}",
+      "document_filename": "${documentFilename}",
+      "document_binary_url": "${documentUrl}/binary"
     },
     "submissionConsentLabel": "I, sdsdsdsd hjhjhjhj, believe that the facts stated in this application are true.",
     "displayAmountToPay": "Yes",
